@@ -47,6 +47,7 @@ export default function Reset() {
 
             {!successfulCreation && (
                 <>
+                    <Text>Email Address</Text>
                     <TextInput autoCapitalize="none" placeholder="youremail@email.com" value={emailAddress} onChangeText={setEmailAddress} style={styles.inputField} placeholderTextColor={'#888'} />
                     <Pressable style={styles.resetButton} onPress={onRequestReset}><Text style={styles.resetButtonText}>Send Reset Email</Text></Pressable>
                 </>
