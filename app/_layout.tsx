@@ -3,8 +3,11 @@ import 'react-native-reanimated';
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+const queryClient = new QueryClient();
 
 const tokenCache = {
 	async getToken(key: string) {
@@ -48,8 +51,10 @@ function InitalLayout() {
 
 export default function RootLayout() {
 	return (
-		<ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
-			<InitalLayout />
-		</ClerkProvider>
+		<QueryClientProvider client={queryClient}>
+			<ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
+				<InitalLayout />
+			</ClerkProvider>
+		</QueryClientProvider>
 	);
 }
