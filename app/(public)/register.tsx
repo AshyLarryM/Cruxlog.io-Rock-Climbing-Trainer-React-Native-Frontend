@@ -3,9 +3,11 @@ import { useSignUp } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useState } from 'react';
 import { Stack } from 'expo-router';
+import { useCreateUser } from '@/lib/state/serverState/user/userCreateUser';
 
 export default function Register() {
     const { isLoaded, signUp, setActive } = useSignUp();
+    const createUserMutation = useCreateUser();
 
     const [emailAddress, setEmailAddress] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -20,12 +22,21 @@ export default function Register() {
         setLoading(true);
 
         try {
-            await signUp.create({
+            const signUpResult = await signUp.create({
                 emailAddress,
                 password,
             });
 
             await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
+
+            if (!signUpResult.id) {
+                throw new Error("User id from clerk is undefined");
+            }
+
+            createUserMutation.mutate({
+                clerkUserId: signUpResult.id,
+                email: emailAddress,
+            })
 
             // change the ui to verify the email address
             setPendingVerification(true);

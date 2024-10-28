@@ -7,7 +7,7 @@ interface ApiResponse {
 }
 
 async function fetchApiMessage(token: string): Promise<ApiResponse> {
-    const response = await fetch(`${baseUrl}${apiTestUrl}`, {
+    const response = await fetch(`http://192.168.1.5:3000${apiTestUrl}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${token}`,
