@@ -1,4 +1,4 @@
-import { Button, TextInput, View, StyleSheet, Pressable, Text } from 'react-native';
+import { TextInput, View, StyleSheet, Pressable, Text } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useState } from 'react';
@@ -20,24 +20,12 @@ export default function Register() {
             return;
         }
         setLoading(true);
-
         try {
-            const signUpResult = await signUp.create({
+            await signUp.create({
                 emailAddress,
                 password,
             });
-
             await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
-
-            if (!signUpResult.id) {
-                throw new Error("User id from clerk is undefined");
-            }
-
-            createUserMutation.mutate({
-                clerkUserId: signUpResult.id,
-                email: emailAddress,
-            })
-
             // change the ui to verify the email address
             setPendingVerification(true);
         } catch (err: any) {
@@ -59,6 +47,15 @@ export default function Register() {
             });
 
             await setActive({ session: completeSignUp.createdSessionId });
+
+            if (!completeSignUp.id) {
+                throw new Error("User id from clerk is undefined");
+            }
+
+            createUserMutation.mutate({
+                clerkUserId: completeSignUp.id,
+                email: emailAddress,
+            });
         } catch (err: any) {
             alert(err.errors[0].message)
         } finally {
@@ -109,7 +106,7 @@ export default function Register() {
                 </>
             )}
         </View>
-    )
+    );
 }
 
 

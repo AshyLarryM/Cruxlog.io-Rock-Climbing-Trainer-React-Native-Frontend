@@ -16,7 +16,7 @@ async function createUser(token: string, payload: CreateUserPayload): Promise<Ap
 
     console.log("Received request to create user");
 
-    const response = await fetch(`${baseUrl}/api/createUser`, {
+    const response = await fetch(`http://192.168.1.5:3000/api/createUser`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
@@ -40,6 +40,12 @@ export function useCreateUser() {
                 throw new Error("Token not available");
             }
             return createUser(token, payload);
+        },
+        onSuccess: (data) => {
+            console.log("Mutation succeeded with response:", data);
+        },
+        onError: (error) => {
+            console.error("Mutation error:", error);
         },
     });
 }
