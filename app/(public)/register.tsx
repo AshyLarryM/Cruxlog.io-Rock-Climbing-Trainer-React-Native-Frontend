@@ -7,7 +7,7 @@ import { useCreateUser } from '@/lib/state/serverState/user/useCreateUser';
 
 export default function Register() {
     const { isLoaded, signUp, setActive } = useSignUp();
-    const createUserMutation = useCreateUser();
+    const createUser = useCreateUser();
 
     const [emailAddress, setEmailAddress] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -52,7 +52,7 @@ export default function Register() {
                 throw new Error("User id from clerk is undefined");
             }
 
-            createUserMutation.mutate({
+            createUser.mutate({
                 userId: completeSignUp.createdUserId,
                 email: emailAddress,
             });
