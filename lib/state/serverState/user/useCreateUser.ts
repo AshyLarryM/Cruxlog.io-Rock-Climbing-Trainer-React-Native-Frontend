@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { baseUrl } from "@/constants/apiRepository";
+import { baseUrl, createUserApi } from "@/constants/apiRepository";
 import { useAuth } from "@clerk/clerk-expo";
 
 interface CreateUserPayload {
-    clerkUserId: string;
+    userId: string;
     email: string;
     fullName?: string;
 }
@@ -16,7 +16,7 @@ async function createUser(token: string, payload: CreateUserPayload): Promise<Ap
 
     console.log("Received request to create user");
 
-    const response = await fetch(`http://192.168.1.5:3000/api/createUser`, {
+    const response = await fetch(`${baseUrl}${createUserApi}`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,

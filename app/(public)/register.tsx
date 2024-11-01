@@ -3,7 +3,7 @@ import { useSignUp } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useState } from 'react';
 import { Stack } from 'expo-router';
-import { useCreateUser } from '@/lib/state/serverState/user/userCreateUser';
+import { useCreateUser } from '@/lib/state/serverState/user/useCreateUser';
 
 export default function Register() {
     const { isLoaded, signUp, setActive } = useSignUp();
@@ -48,14 +48,15 @@ export default function Register() {
 
             await setActive({ session: completeSignUp.createdSessionId });
 
-            if (!completeSignUp.id) {
+            if (!completeSignUp.createdUserId) {
                 throw new Error("User id from clerk is undefined");
             }
 
             createUserMutation.mutate({
-                clerkUserId: completeSignUp.id,
+                userId: completeSignUp.createdUserId,
                 email: emailAddress,
             });
+            
         } catch (err: any) {
             alert(err.errors[0].message)
         } finally {
