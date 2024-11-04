@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, Button, Modal } from 'react-native'
 import React from 'react'
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser'
 import { useAuth } from '@clerk/clerk-expo';
+import { router } from 'expo-router';
 
 export default function Profile() {
 
@@ -18,7 +19,7 @@ export default function Profile() {
     }
 
     function handleEditProfile() {
-
+        router.push('/(auth)/profile/edit')
     }
 
     return (
