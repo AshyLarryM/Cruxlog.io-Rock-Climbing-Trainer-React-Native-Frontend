@@ -1,6 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Image, Button, Modal } from 'react-native'
 import React from 'react'
-import { LogoutButton } from './_layout'
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser'
 import { useAuth } from '@clerk/clerk-expo';
 
@@ -8,7 +7,8 @@ export default function Profile() {
 
     const { userId } = useAuth();
     const { data, error, isLoading } = useMeUser(userId);
-    
+
+
     if (isLoading) {
         return <Text>Loading...</Text>;
     }
@@ -17,20 +17,46 @@ export default function Profile() {
         return <Text>Error loading profile data.</Text>;
     }
 
+    function handleEditProfile() {
+
+    }
+
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>Email: {data?.user?.email || 'No email provided'}</Text>
-            <Text style={styles.label}>Full Name: {data?.user?.fullName || 'No full name provided'}</Text>
-            <Text style={styles.label}>Age: {data?.user?.age || 'No age provided'}</Text>
-            <Text style={styles.label}>Height: {data?.user?.height || 'No Height Provided'}</Text>
-            <Text style={styles.label}>Weight: {data?.user?.weight || 'No Weight Provided'}</Text>
-            <Text style={styles.label}>Ape Index: {data?.user?.apeIndex || 'No Ape Index Provided'}</Text>
+
+            {/* Circular Profile Picture */}
+            <View style={styles.profilePictureContainer}>
+                <Image
+                    source={{ uri: 'https://picsum.photos/200/300' }}
+                    style={styles.profilePicture}
+                />
+            </View>
+
+            {/* Name and Age Row */}
+            <View style={styles.row}>
+                <Text style={styles.label}>{data?.user?.fullName || 'Add'}</Text>
+                <Text style={styles.label}> | </Text>
+                <Text style={styles.label}>{data?.user?.age ? `${data.user.age} years` : 'Add'}</Text>
+            </View>
+
+            {/* Height and Weight Row */}
+            <View style={styles.row}>
+                <Text style={styles.label}>Height: {data?.user?.height || 'Add'}</Text>
+                <Text style={styles.label}> | </Text>
+                <Text style={styles.label}>Weight: {data?.user?.weight || 'Add'}</Text>
+            </View>
+
+            {/* Other Profile Details */}
+            <Text style={styles.label}>Ape Index: {data?.user?.apeIndex || 'Add'}</Text>
             <Text style={styles.label}>
                 Grading Preference: {data?.user?.gradingPreference ? 'French' : 'YDS/V Scale'}
             </Text>
             <Text style={styles.label}>
                 Measurement System: {data?.user?.measurementSystem ? 'Metric' : 'Imperial'}
             </Text>
+
+            <Button title='Edit Profile' onPress={handleEditProfile} />
+
         </View>
     );
 }
@@ -38,15 +64,28 @@ export default function Profile() {
 const styles = StyleSheet.create({
     container: {
         padding: 20,
+        alignItems: 'center',
     },
-    header: {
+    profilePictureContainer: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        overflow: 'hidden',
+        marginBottom: 16,
+    },
+    profilePicture: {
+        width: '100%',
+        height: '100%',
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: 8,
     },
     label: {
         fontSize: 18,
-        marginBottom: 16,
-    }
+        marginHorizontal: 4,
+    },
 });
+
