@@ -1,13 +1,11 @@
 import { useAuth } from "@clerk/clerk-expo";
 import { baseUrl } from "@/constants/apiRepository";
 import { useQuery } from "@tanstack/react-query";
+import { User } from "@/lib/utils/types";
 
 interface ApiResponse {
     message: string;
-    user?: {
-        email: string;
-        fullName?: string;
-    };
+    user?: Partial<User>;
 }
 
 async function getUser(token: string, userId: string | null | undefined): Promise<ApiResponse> {
