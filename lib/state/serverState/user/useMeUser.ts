@@ -17,7 +17,7 @@ async function getUser(token: string, userId: string | null | undefined): Promis
         },
     });
 
-    if (!response.ok) throw new Error('Failed to fetch API');
+    if (!response.ok) throw new Error('Failed to get user data!');
     const data = await response.json();
     return data;
 }
