@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Button, Modal } from 'react-native'
+import { StyleSheet, Text, View, Image, Button, Modal, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser'
 import { useAuth } from '@clerk/clerk-expo';
@@ -11,7 +11,7 @@ export default function Profile() {
 
 
     if (isLoading) {
-        return <Text>Loading...</Text>;
+        return <ActivityIndicator />;
     }
 
     if (error) {

@@ -4,6 +4,7 @@ import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
 import { useUpdateUser } from '@/lib/state/serverState/user/useUpdateUser';
 import { useAuth } from '@clerk/clerk-expo';
 import { router } from 'expo-router';
+import Toast from 'react-native-toast-message';
 
 export default function EditProfile() {
     const { userId } = useAuth();
@@ -34,9 +35,19 @@ export default function EditProfile() {
             {
                 onSuccess: () => {
                     router.back();
+					Toast.show({
+						type: "success",
+						text1: "Updated",
+						text2: "User Profile Updated!"
+					})
                 },
                 onError: (error) => {
                     console.error('Failed to update profile:', error);
+					Toast.show({
+						type: "error",
+						text1: "Error",
+						text2: "Failed to Update Profile!"
+					})
                 },
             }
         );

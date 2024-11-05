@@ -17,8 +17,6 @@ async function updateUser(token: string, userId: string | null | undefined, user
         body: JSON.stringify(userData),
     });
 
-    console.log("user data: ", userData);
-
     if (!response.ok) throw ('Failed to update user data!');
     const data = await response.json();
     return data;
