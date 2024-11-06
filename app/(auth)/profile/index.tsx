@@ -11,7 +11,7 @@ export default function Profile() {
 
 
     if (isLoading) {
-        return <ActivityIndicator />;
+        return <ActivityIndicator size="large" color="#0000ff" />;
     }
 
     if (error) {

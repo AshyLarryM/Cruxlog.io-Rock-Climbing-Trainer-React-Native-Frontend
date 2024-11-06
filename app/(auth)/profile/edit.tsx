@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Button, StyleSheet, Switch } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Switch, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
 import { useUpdateUser } from '@/lib/state/serverState/user/useUpdateUser';
@@ -18,10 +18,9 @@ export default function EditProfile() {
     const [gradingPreference, setGradingPreference] = useState(data?.user?.gradingPreference || false);
     const [measurementSystem, setMeasurementSystem] = useState(data?.user?.measurementSystem || false);
 
+	const { mutate: updateUser, isPending } = useUpdateUser(userId);
 
-	const { mutate: updateUser } = useUpdateUser(userId);
-
-	async function handleSave() {
+    async function handleSave() {
         updateUser(
             {
                 fullName,
@@ -35,19 +34,19 @@ export default function EditProfile() {
             {
                 onSuccess: () => {
                     router.back();
-					Toast.show({
-						type: "success",
-						text1: "Updated",
-						text2: "User Profile Updated!"
-					})
+                    Toast.show({
+                        type: "success",
+                        text1: "Updated",
+                        text2: "User Profile Updated!"
+                    });
                 },
                 onError: (error) => {
                     console.error('Failed to update profile:', error);
-					Toast.show({
-						type: "error",
-						text1: "Error",
-						text2: "Failed to Update Profile!"
-					})
+                    Toast.show({
+                        type: "error",
+                        text1: "Error",
+                        text2: "Failed to Update Profile!"
+                    });
                 },
             }
         );
@@ -114,7 +113,11 @@ export default function EditProfile() {
                 />
             </View>
 
-            <Button title="Save" onPress={handleSave} />
+            {isPending ? (
+                <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+                <Button title="Save" onPress={handleSave} disabled={isPending} />
+            )}
         </View>
     );
 }
