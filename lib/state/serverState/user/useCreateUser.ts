@@ -14,8 +14,6 @@ interface ApiResponse {
 
 async function createUser(token: string, payload: CreateUserPayload): Promise<ApiResponse> {
 
-    console.log("Received request to create user");
-
     const response = await fetch(`${baseUrl}${createUserApi}`, {
         method: 'POST',
         headers: {

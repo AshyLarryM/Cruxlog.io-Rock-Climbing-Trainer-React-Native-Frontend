@@ -1,7 +1,7 @@
 import { useFetchApiMessage } from "@/lib/state/serverState/test";
 import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 import { Pressable } from "react-native";
 
 export function LogoutButton() {
@@ -41,7 +41,7 @@ export default function TabsPage() {
             <Tabs.Screen
                 name="profile"
                 options={{
-                    headerTitle: 'My Profile',
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => <Ionicons name="person-outline" size={size} color={color} />,
                     tabBarLabel: 'My Profile',
                     headerRight: () => <LogoutButton />,

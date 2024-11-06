@@ -4,6 +4,7 @@ import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Toast from 'react-native-toast-message';
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -54,6 +55,7 @@ export default function RootLayout() {
 		<QueryClientProvider client={queryClient}>
 			<ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
 				<InitalLayout />
+				<Toast />
 			</ClerkProvider>
 		</QueryClientProvider>
 	);
