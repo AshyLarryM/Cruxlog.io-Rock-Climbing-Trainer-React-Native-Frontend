@@ -70,6 +70,7 @@ export default function TabsPage() {
                             <Ionicons name="add-circle-outline" size={size} color={pathname === "/session" ? "#6c47ff" : color} />
                         ),
                         tabBarLabel: 'New Session',
+                        headerShown: false,
                     }}
                 />
 
