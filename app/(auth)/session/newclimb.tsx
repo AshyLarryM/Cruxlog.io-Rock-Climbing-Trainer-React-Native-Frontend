@@ -3,43 +3,43 @@ import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-nat
 import { Picker } from '@react-native-picker/picker';
 import { useAuth } from '@clerk/clerk-expo';
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
+import { ClimbStyleEnum, ClimbTypeEnum, boulderGradeMapping, routeGradeMapping } from '@/lib/utils/types';
 
-export const ClimbTypeEnum = {
-    BOULDER: 'Boulder',
-    TOP_ROPE: 'Top Rope',
-    LEAD: 'Lead',
-};
-
-export const ClimbStyleEnum = {
-    SLAB: 'Slab',
-    VERTICAL: 'Vertical',
-    OVERHANG: 'Overhang',
-    CAVE: 'Cave',
-};
 
 export default function NewClimb() {
-    const VScaleGrades = ['V0', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17'];
-    const FrenchGrades = ['5', '5a', '5b', '5c', '6a', '6b', '6c', '7a', '7b', '7c', '8a', '8b', '8c', '9a', '9b', '9c'];
 
     const { userId } = useAuth();
     const { data } = useMeUser(userId);
 
     const initGradingSystem = data?.user?.gradingPreference === false ? 'VScale' : 'French';
+    const isFrenchGrading = initGradingSystem === 'French';
 
-   
+
     const [climbName, setClimbName] = useState<string>('');
-    const [type, setType] = useState(Object.values(ClimbTypeEnum)[0]);
-    const [style, setStyle] = useState(Object.values(ClimbStyleEnum)[0]);
+    const [type, setType] = useState<ClimbTypeEnum | undefined>();
+    const [style, setStyle] = useState<ClimbStyleEnum | undefined>();
     const [grade, setGrade] = useState('');
     const [attempts, setAttempts] = useState('1');
     const [gradingSystem, setGradingSystem] = useState(initGradingSystem);
 
 
+    function convertGradeForSaving(selectedGrade: string): string {
+        if (type === ClimbTypeEnum.BOULDER) {
+            return isFrenchGrading ? Object.keys(boulderGradeMapping).find(key => boulderGradeMapping[key] === selectedGrade) || selectedGrade : selectedGrade;
+        } else if (type === ClimbTypeEnum.LEAD || ClimbTypeEnum.TOP_ROPE) {
+            return isFrenchGrading ? Object.keys(routeGradeMapping).find(key => routeGradeMapping[key] === selectedGrade) || selectedGrade : selectedGrade;
+        }
+        return selectedGrade;
+    }
+
     function handleSave() {
+
+        const standarizedGrade = convertGradeForSaving(grade);
+
         console.log({
             type,
             style,
-            grade,
+            grade: standarizedGrade,
             attempts: parseInt(attempts),
             gradingSystem,
         });
@@ -59,7 +59,7 @@ export default function NewClimb() {
             <Text style={styles.label}>Climb Type</Text>
             <Picker
                 selectedValue={type}
-                onValueChange={(itemValue) => setType(itemValue)}
+                onValueChange={(itemValue) => setType(itemValue as ClimbTypeEnum)}
                 style={styles.picker}
             >
                 {Object.values(ClimbTypeEnum).map((climbType) => (
@@ -70,7 +70,7 @@ export default function NewClimb() {
             <Text style={styles.label}>Climb Style</Text>
             <Picker
                 selectedValue={style}
-                onValueChange={(itemValue) => setStyle(itemValue)}
+                onValueChange={(itemValue) => setStyle(itemValue as ClimbStyleEnum)}
                 style={styles.picker}
             >
                 {Object.values(ClimbStyleEnum).map((climbStyle) => (
@@ -84,9 +84,14 @@ export default function NewClimb() {
                 onValueChange={(itemValue) => setGrade(itemValue)}
                 style={styles.picker}
             >
-                {(gradingSystem === 'VScale' ? VScaleGrades : FrenchGrades).map((gradeOption) => (
-                    <Picker.Item key={gradeOption} label={gradeOption} value={gradeOption} />
+                {Object.entries(type === ClimbTypeEnum.BOULDER ? boulderGradeMapping : routeGradeMapping).map(([vScale, frenchScale]) => (
+                    <Picker.Item
+                        key={vScale}
+                        label={isFrenchGrading ? frenchScale : vScale}
+                        value={isFrenchGrading ? frenchScale : vScale}
+                    />
                 ))}
+
             </Picker>
 
             <Text style={styles.label}>Attempts</Text>
