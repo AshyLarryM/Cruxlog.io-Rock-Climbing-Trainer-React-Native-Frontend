@@ -121,9 +121,7 @@ export default function NewClimb() {
                 <TouchableOpacity onPress={incrementAttempts} style={styles.attemptButton}>
                     <Text style={styles.buttonText}>+</Text>
                 </TouchableOpacity>
-            </View>
-
-
+            </View>     
             <Button title="Add Climb" onPress={handleSave} />
         </ScrollView>
     );
@@ -138,11 +136,11 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 16,
-        marginVertical: 2,
+        marginVertical: 0,
         textAlign: 'center',
     },
     picker: {
-        marginVertical: 8,
+        marginVertical: 0,
     },
     input: {
         height: 40,
@@ -151,6 +149,7 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         paddingHorizontal: 8,
         borderRadius: 24,
+        textAlign: 'center',
     },
     inlineContainer: {
         flexDirection: 'row',
