@@ -28,8 +28,8 @@ export interface Climb {
 }
 
 export enum ClimbTypeEnum {
-    BOULDER = 'Boulder',
     LEAD = 'Lead',
+    BOULDER = 'Boulder',
     TOP_ROPE = 'Top Rope',
 }
 

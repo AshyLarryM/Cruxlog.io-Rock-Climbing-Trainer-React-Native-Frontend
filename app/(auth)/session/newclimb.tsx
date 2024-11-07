@@ -14,10 +14,9 @@ export default function NewClimb() {
     const initGradingSystem = data?.user?.gradingPreference === false ? 'VScale' : 'French';
     const isFrenchGrading = initGradingSystem === 'French';
 
-
     const [climbName, setClimbName] = useState<string>('');
-    const [type, setType] = useState<ClimbTypeEnum | undefined>();
-    const [style, setStyle] = useState<ClimbStyleEnum | undefined>();
+    const [type, setType] = useState<ClimbTypeEnum | undefined>(Object.values(ClimbTypeEnum)[1]);
+    const [style, setStyle] = useState<ClimbStyleEnum | undefined>(Object.values(ClimbStyleEnum)[1]);
     const [grade, setGrade] = useState('');
     const [attempts, setAttempts] = useState<number>(1);
     const [gradingSystem, setGradingSystem] = useState(initGradingSystem);
@@ -60,10 +59,11 @@ export default function NewClimb() {
                 style={styles.input}
                 value={climbName}
                 onChangeText={setClimbName}
-                placeholder="Climb Name"
+                placeholder="Enter Climb Name..."
+                placeholderTextColor="#888"
                 keyboardType="default"
             />
-    
+
             <View style={styles.inlineContainer}>
                 <View style={styles.pickerContainer}>
                     <Text style={styles.label}>Type</Text>
@@ -77,7 +77,7 @@ export default function NewClimb() {
                         ))}
                     </Picker>
                 </View>
-    
+
                 <View style={styles.pickerContainer}>
                     <Text style={styles.label}>Style</Text>
                     <Picker
@@ -105,10 +105,9 @@ export default function NewClimb() {
                         value={isFrenchGrading ? frenchScale : vScale}
                     />
                 ))}
-
             </Picker>
 
-            <Text style={styles.label}>Attempts</Text>
+            <Text style={styles.attemptsLabel}>Attempts</Text>
             <View style={styles.attemptsContainer}>
                 <TouchableOpacity
                     onPress={decrementAttempts}
@@ -121,8 +120,12 @@ export default function NewClimb() {
                 <TouchableOpacity onPress={incrementAttempts} style={styles.attemptButton}>
                     <Text style={styles.buttonText}>+</Text>
                 </TouchableOpacity>
-            </View>     
-            <Button title="Add Climb" onPress={handleSave} />
+            </View>
+            <TouchableOpacity onPress={handleSave}
+                style={styles.addButton}>
+                <Text style={styles.addButtonText}>Add Climb</Text>
+            </TouchableOpacity>
+            {/* <Button title="Add Climb" onPress={handleSave} /> */}
         </ScrollView>
     );
 }
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         justifyContent: 'center',
-        padding: 16,
+        paddingHorizontal: 24,
         backgroundColor: '#fff',
     },
     label: {
@@ -140,12 +143,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     picker: {
-        marginVertical: 0,
+        marginTop: -20,
+        marginBottom: -30,
     },
     input: {
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,
+        fontSize: 18,
         marginVertical: 8,
         paddingHorizontal: 8,
         borderRadius: 24,
@@ -160,6 +165,11 @@ const styles = StyleSheet.create({
         flex: 1,
         marginHorizontal: 4,
     },
+    attemptsLabel: {
+        fontSize: 16,
+        marginTop: 16,
+        textAlign: 'center',
+    },
     attemptsContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -171,10 +181,10 @@ const styles = StyleSheet.create({
         marginHorizontal: 24,
     },
     attemptButton: {
-        width: 64,
-        height: 64,
+        width: 50,
+        height: 50,
         backgroundColor: '#6c47ff',
-        borderRadius: 32,
+        borderRadius: 25,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -185,4 +195,17 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 32,
     },
+    addButton: {
+        marginTop: 12,
+        backgroundColor: '#6c47ff',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+    },
+    addButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    }
 });
