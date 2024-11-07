@@ -28,14 +28,14 @@ export interface Climb {
 }
 
 export enum ClimbTypeEnum {
-    TOP_ROPE = 'Top Rope',
-    LEAD = 'Lead',
     BOULDER = 'Boulder',
+    LEAD = 'Lead',
+    TOP_ROPE = 'Top Rope',
 }
 
 export enum ClimbStyleEnum {
     SLAB = 'Slab',
-    VERTICAL = 'Verical',
+    VERTICAL = 'Vertical',
     OVERHANG = 'Overhang',
     CAVE = 'Cave',
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useAuth } from '@clerk/clerk-expo';
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
@@ -19,7 +19,7 @@ export default function NewClimb() {
     const [type, setType] = useState<ClimbTypeEnum | undefined>();
     const [style, setStyle] = useState<ClimbStyleEnum | undefined>();
     const [grade, setGrade] = useState('');
-    const [attempts, setAttempts] = useState('1');
+    const [attempts, setAttempts] = useState<number>(1);
     const [gradingSystem, setGradingSystem] = useState(initGradingSystem);
 
 
@@ -32,6 +32,14 @@ export default function NewClimb() {
         return selectedGrade;
     }
 
+    function incrementAttempts() {
+        setAttempts(prev => prev + 1);
+    }
+
+    function decrementAttempts() {
+        setAttempts(prev => Math.max(1, prev - 1))
+    }
+
     function handleSave() {
 
         const standarizedGrade = convertGradeForSaving(grade);
@@ -40,7 +48,7 @@ export default function NewClimb() {
             type,
             style,
             grade: standarizedGrade,
-            attempts: parseInt(attempts),
+            attempts: attempts,
             gradingSystem,
         });
     }
@@ -95,15 +103,22 @@ export default function NewClimb() {
             </Picker>
 
             <Text style={styles.label}>Attempts</Text>
-            <TextInput
-                style={styles.input}
-                value={attempts}
-                onChangeText={setAttempts}
-                placeholder="Enter Attempts"
-                keyboardType="numeric"
-            />
+            <View style={styles.attemptsContainer}>
+                <TouchableOpacity
+                    onPress={decrementAttempts}
+                    disabled={attempts === 1}
+                    style={[styles.attemptButton, attempts === 1 && styles.disabledButton]}
+                >
+                    <Text style={styles.buttonText}>-</Text>
+                </TouchableOpacity>
+                <Text style={styles.attemptsText}>{attempts}</Text>
+                <TouchableOpacity onPress={incrementAttempts} style={styles.attemptButton}>
+                    <Text style={styles.buttonText}>+</Text>
+                </TouchableOpacity>
+            </View>
 
-            <Button title="Save Climb" onPress={handleSave} />
+
+            <Button title="Add Climb" onPress={handleSave} />
         </ScrollView>
     );
 }
@@ -119,6 +134,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginVertical: 4,
         textAlign: 'center',
+        borderRadius: 16,
     },
     picker: {
         marginVertical: 8,
@@ -129,5 +145,31 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginVertical: 8,
         paddingHorizontal: 8,
+        borderRadius: 24
+    },
+    attemptsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 8,
+    },
+    attemptsText: {
+        fontSize: 24,
+        marginHorizontal: 24,
+    },
+    attemptButton: {
+        width: 64,
+        height: 64,
+        backgroundColor: '#6c47ff',
+        borderRadius: 32,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    disabledButton: {
+        backgroundColor: '#ccc',
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 32,
     },
 });
