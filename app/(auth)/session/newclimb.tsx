@@ -63,28 +63,34 @@ export default function NewClimb() {
                 placeholder="Climb Name"
                 keyboardType="default"
             />
-
-            <Text style={styles.label}>Climb Type</Text>
-            <Picker
-                selectedValue={type}
-                onValueChange={(itemValue) => setType(itemValue as ClimbTypeEnum)}
-                style={styles.picker}
-            >
-                {Object.values(ClimbTypeEnum).map((climbType) => (
-                    <Picker.Item key={climbType} label={climbType} value={climbType} />
-                ))}
-            </Picker>
-
-            <Text style={styles.label}>Climb Style</Text>
-            <Picker
-                selectedValue={style}
-                onValueChange={(itemValue) => setStyle(itemValue as ClimbStyleEnum)}
-                style={styles.picker}
-            >
-                {Object.values(ClimbStyleEnum).map((climbStyle) => (
-                    <Picker.Item key={climbStyle} label={climbStyle} value={climbStyle} />
-                ))}
-            </Picker>
+    
+            <View style={styles.inlineContainer}>
+                <View style={styles.pickerContainer}>
+                    <Text style={styles.label}>Type</Text>
+                    <Picker
+                        selectedValue={type}
+                        onValueChange={(itemValue) => setType(itemValue as ClimbTypeEnum)}
+                        style={styles.picker}
+                    >
+                        {Object.values(ClimbTypeEnum).map((climbType) => (
+                            <Picker.Item key={climbType} label={climbType} value={climbType} />
+                        ))}
+                    </Picker>
+                </View>
+    
+                <View style={styles.pickerContainer}>
+                    <Text style={styles.label}>Style</Text>
+                    <Picker
+                        selectedValue={style}
+                        onValueChange={(itemValue) => setStyle(itemValue as ClimbStyleEnum)}
+                        style={styles.picker}
+                    >
+                        {Object.values(ClimbStyleEnum).map((climbStyle) => (
+                            <Picker.Item key={climbStyle} label={climbStyle} value={climbStyle} />
+                        ))}
+                    </Picker>
+                </View>
+            </View>
 
             <Text style={styles.label}>Grade</Text>
             <Picker
@@ -132,9 +138,8 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 16,
-        marginVertical: 4,
+        marginVertical: 2,
         textAlign: 'center',
-        borderRadius: 16,
     },
     picker: {
         marginVertical: 8,
@@ -145,7 +150,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginVertical: 8,
         paddingHorizontal: 8,
-        borderRadius: 24
+        borderRadius: 24,
+    },
+    inlineContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: 8,
+    },
+    pickerContainer: {
+        flex: 1,
+        marginHorizontal: 4,
     },
     attemptsContainer: {
         flexDirection: 'row',
