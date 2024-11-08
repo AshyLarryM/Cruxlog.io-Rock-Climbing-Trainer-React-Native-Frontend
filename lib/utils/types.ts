@@ -18,9 +18,9 @@ export interface Session {
 }
 
 export interface Climb {
-    id: number,
+    id: string | number[],
     name: string,
-    sessionId: number,
+    sessionId?: number,
     type: ClimbTypeEnum,
     style: ClimbStyleEnum,
     grade: string,

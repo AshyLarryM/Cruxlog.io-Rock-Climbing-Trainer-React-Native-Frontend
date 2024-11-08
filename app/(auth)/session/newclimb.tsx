@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity
 import { Picker } from '@react-native-picker/picker';
 import { useAuth } from '@clerk/clerk-expo';
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
-import { ClimbStyleEnum, ClimbTypeEnum, boulderGradeMapping, routeGradeMapping } from '@/lib/utils/types';
+import { Climb, ClimbStyleEnum, ClimbTypeEnum, boulderGradeMapping, routeGradeMapping } from '@/lib/utils/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import UUID from 'react-native-uuid';
@@ -19,9 +19,9 @@ export default function NewClimb() {
     const initGradingSystem = data?.user?.gradingPreference === false ? 'VScale' : 'French';
     const isFrenchGrading = initGradingSystem === 'French';
 
-    const [climbName, setClimbName] = useState<string>('');
-    const [type, setType] = useState<ClimbTypeEnum | undefined>(Object.values(ClimbTypeEnum)[1]);
-    const [style, setStyle] = useState<ClimbStyleEnum | undefined>(Object.values(ClimbStyleEnum)[1]);
+    const [name, setName] = useState<string>('');
+    const [type, setType] = useState<ClimbTypeEnum>(Object.values(ClimbTypeEnum)[1]);
+    const [style, setStyle] = useState<ClimbStyleEnum>(Object.values(ClimbStyleEnum)[1]);
     const [grade, setGrade] = useState('');
     const [attempts, setAttempts] = useState<number>(1);
     const [gradingSystem, setGradingSystem] = useState(initGradingSystem);
@@ -47,14 +47,13 @@ export default function NewClimb() {
     async function handleSave() {
         const standardizedGrade = convertGradeForSaving(grade);
     
-        const climbData = {
+        const climbData: Climb = {
             id: UUID.v4(),
-            climbName,
+            name,
             type,
             style,
             grade: standardizedGrade,
             attempts,
-            gradingSystem,
         };
     
         try {
@@ -64,14 +63,10 @@ export default function NewClimb() {
     
             // Add the new climb
             existingClimbs.push(climbData);
-    
-            // Save updated climbs back to AsyncStorage
             await AsyncStorage.setItem('climbs', JSON.stringify(existingClimbs));
     
-            // Optionally navigate back
-            // router.back(); // or navigation.goBack();
+
             console.log("Climb Data: ", climbData);
-            console.log("Stored Climbs: ", storedClimbs);
             router.back();
         } catch (error) {
             console.error("Error saving climb:", error);
@@ -84,8 +79,8 @@ export default function NewClimb() {
             <Text style={styles.label}>Name</Text>
             <TextInput
                 style={styles.input}
-                value={climbName}
-                onChangeText={setClimbName}
+                value={name}
+                onChangeText={setName}
                 placeholder="Enter Climb Name..."
                 placeholderTextColor="#888"
                 keyboardType="default"

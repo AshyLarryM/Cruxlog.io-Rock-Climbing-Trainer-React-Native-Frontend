@@ -6,7 +6,7 @@ import { Climb } from '@/lib/utils/types';
 
 
 export default function Session() {
-    const [climbs, setClimbs] = useState([]);
+    const [climbs, setClimbs] = useState<Climb[]>([]);
 
     useEffect(() => {
         async function loadClimbs() {
@@ -25,6 +25,8 @@ export default function Session() {
         try {
             const storedClimbs = await AsyncStorage.getItem('climbs');
             const parsedClimbs = storedClimbs ? JSON.parse(storedClimbs) : [];
+            console.log("stored climbs: ", storedClimbs);
+            console.log("parsed Climbs: ", parsedClimbs);
     
             // validate climbs
             const validClimbs: Climb[] = parsedClimbs.map((climb: Climb) => ({
