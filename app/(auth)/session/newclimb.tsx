@@ -4,13 +4,10 @@ import { Picker } from '@react-native-picker/picker';
 import { useAuth } from '@clerk/clerk-expo';
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
 import { Climb, ClimbStyleEnum, ClimbTypeEnum, boulderGradeMapping, routeGradeMapping } from '@/lib/utils/types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import UUID from 'react-native-uuid';
 import { useCreateClimb } from '@/lib/state/serverState/user/session/useCreateClimb';
 import Toast from 'react-native-toast-message';
-
-
 
 export default function NewClimb() {
 
@@ -28,7 +25,7 @@ export default function NewClimb() {
     const [grade, setGrade] = useState('V0');
     const [attempts, setAttempts] = useState<number>(1);
     const [send, setSend] = useState<boolean>(false);
-    const [gradingSystem, setGradingSystem] = useState(initGradingSystem);
+    // const [gradingSystem, setGradingSystem] = useState(initGradingSystem);
 
 
     function convertGradeForSaving(selectedGrade: string): string {
@@ -69,7 +66,7 @@ export default function NewClimb() {
                     text1: "Saved Climb",
                     swipeable: true,
                 });
-                router.back(); // Navigate back after successful save
+                router.back();
             },
             onError: (error) => {
                 console.error("Error saving climb:", error);
