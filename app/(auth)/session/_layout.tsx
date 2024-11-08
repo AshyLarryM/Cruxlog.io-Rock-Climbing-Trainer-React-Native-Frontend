@@ -1,6 +1,21 @@
-import { Stack } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { Stack, useRouter } from "expo-router";
+import { Pressable } from "react-native";
+
+export function FinishSessionButton() {
+    const router = useRouter();
+    function reviewSession() {
+        router.push('/(auth)/session/review')
+    }
+    return (
+        <Pressable onPress={reviewSession} style={{ marginRight: 10 }}>
+            <Ionicons name="checkmark" size={24} color={'#fff'} />
+        </Pressable>
+    )
+}
 
 export default function SessionLayout() {
+
     return (
         <Stack
             screenOptions={{
@@ -14,12 +29,19 @@ export default function SessionLayout() {
                 name="index"
                 options={{
                     title: "Session",
+                    headerRight: () => <FinishSessionButton />
                 }}
             />
             <Stack.Screen
                 name="newclimb"
                 options={{
                     title: "New Climb",
+                }}
+            />
+            <Stack.Screen
+                name="review"
+                options={{
+                    title: "Review Session",
                 }}
             />
         </Stack>
