@@ -4,12 +4,17 @@ import { Picker } from '@react-native-picker/picker';
 import { useAuth } from '@clerk/clerk-expo';
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
 import { ClimbStyleEnum, ClimbTypeEnum, boulderGradeMapping, routeGradeMapping } from '@/lib/utils/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
+import UUID from 'react-native-uuid';
+
 
 
 export default function NewClimb() {
 
     const { userId } = useAuth();
     const { data } = useMeUser(userId);
+    const router = useRouter();
 
     const initGradingSystem = data?.user?.gradingPreference === false ? 'VScale' : 'French';
     const isFrenchGrading = initGradingSystem === 'French';
@@ -39,18 +44,40 @@ export default function NewClimb() {
         setAttempts(prev => Math.max(1, prev - 1))
     }
 
-    function handleSave() {
-
-        const standarizedGrade = convertGradeForSaving(grade);
-
-        console.log({
+    async function handleSave() {
+        const standardizedGrade = convertGradeForSaving(grade);
+    
+        const climbData = {
+            id: UUID.v4(),
+            climbName,
             type,
             style,
-            grade: standarizedGrade,
-            attempts: attempts,
+            grade: standardizedGrade,
+            attempts,
             gradingSystem,
-        });
+        };
+    
+        try {
+            // Retrieve existing climbs or default to an empty array
+            const storedClimbs = await AsyncStorage.getItem('climbs');
+            const existingClimbs = storedClimbs ? JSON.parse(storedClimbs) : [];
+    
+            // Add the new climb
+            existingClimbs.push(climbData);
+    
+            // Save updated climbs back to AsyncStorage
+            await AsyncStorage.setItem('climbs', JSON.stringify(existingClimbs));
+    
+            // Optionally navigate back
+            // router.back(); // or navigation.goBack();
+            console.log("Climb Data: ", climbData);
+            console.log("Stored Climbs: ", storedClimbs);
+            router.back();
+        } catch (error) {
+            console.error("Error saving climb:", error);
+        }
     }
+    
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
