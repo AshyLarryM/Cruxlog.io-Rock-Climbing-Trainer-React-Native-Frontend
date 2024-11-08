@@ -10,7 +10,7 @@ interface ApiResponse {
 
 async function createClimb(token: string, userId: string | null | undefined, payload: Climb): Promise<ApiResponse> {
 
-    const response = await fetch(`${baseUrl}/api/user/${userId}`, {
+    const response = await fetch(`${baseUrl}/api/user/${userId}/session`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,

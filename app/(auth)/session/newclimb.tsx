@@ -7,6 +7,8 @@ import { Climb, ClimbStyleEnum, ClimbTypeEnum, boulderGradeMapping, routeGradeMa
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import UUID from 'react-native-uuid';
+import { useCreateClimb } from '@/lib/state/serverState/user/session/useCreateClimb';
+import Toast from 'react-native-toast-message';
 
 
 
@@ -14,6 +16,7 @@ export default function NewClimb() {
 
     const { userId } = useAuth();
     const { data } = useMeUser(userId);
+    const createClimbMutation = useCreateClimb();
     const router = useRouter();
 
     const initGradingSystem = data?.user?.gradingPreference === false ? 'VScale' : 'French';
@@ -58,21 +61,20 @@ export default function NewClimb() {
             send,
         };
 
-        try {
-            // Retrieve existing climbs or default to an empty array
-            const storedClimbs = await AsyncStorage.getItem('climbs');
-            const existingClimbs = storedClimbs ? JSON.parse(storedClimbs) : [];
-
-            // Add the new climb
-            existingClimbs.push(climbData);
-            await AsyncStorage.setItem('climbs', JSON.stringify(existingClimbs));
-
-
-            console.log("Climb Data: ", climbData);
-            router.back();
-        } catch (error) {
-            console.error("Error saving climb:", error);
-        }
+        createClimbMutation.mutate(climbData, {
+            onSuccess: () => {
+                console.log("Climb added successfully");
+                Toast.show({
+                    type: "success",
+                    text1: "Saved Climb",
+                    swipeable: true,
+                });
+                router.back(); // Navigate back after successful save
+            },
+            onError: (error) => {
+                console.error("Error saving climb:", error);
+            }
+        });
     }
 
 
