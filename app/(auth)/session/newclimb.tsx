@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity, Switch } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useAuth } from '@clerk/clerk-expo';
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
@@ -22,8 +22,9 @@ export default function NewClimb() {
     const [name, setName] = useState<string>('');
     const [type, setType] = useState<ClimbTypeEnum>(Object.values(ClimbTypeEnum)[1]);
     const [style, setStyle] = useState<ClimbStyleEnum>(Object.values(ClimbStyleEnum)[1]);
-    const [grade, setGrade] = useState('');
+    const [grade, setGrade] = useState('V0');
     const [attempts, setAttempts] = useState<number>(1);
+    const [send, setSend] = useState<boolean>(false);
     const [gradingSystem, setGradingSystem] = useState(initGradingSystem);
 
 
@@ -46,7 +47,7 @@ export default function NewClimb() {
 
     async function handleSave() {
         const standardizedGrade = convertGradeForSaving(grade);
-    
+
         const climbData: Climb = {
             id: UUID.v4(),
             name,
@@ -54,17 +55,18 @@ export default function NewClimb() {
             style,
             grade: standardizedGrade,
             attempts,
+            send,
         };
-    
+
         try {
             // Retrieve existing climbs or default to an empty array
             const storedClimbs = await AsyncStorage.getItem('climbs');
             const existingClimbs = storedClimbs ? JSON.parse(storedClimbs) : [];
-    
+
             // Add the new climb
             existingClimbs.push(climbData);
             await AsyncStorage.setItem('climbs', JSON.stringify(existingClimbs));
-    
+
 
             console.log("Climb Data: ", climbData);
             router.back();
@@ -72,7 +74,7 @@ export default function NewClimb() {
             console.error("Error saving climb:", error);
         }
     }
-    
+
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -129,25 +131,41 @@ export default function NewClimb() {
                 ))}
             </Picker>
 
-            <Text style={styles.attemptsLabel}>Attempts</Text>
             <View style={styles.attemptsContainer}>
-                <TouchableOpacity
-                    onPress={decrementAttempts}
-                    disabled={attempts === 1}
-                    style={[styles.attemptButton, attempts === 1 && styles.disabledButton]}
-                >
-                    <Text style={styles.buttonText}>-</Text>
-                </TouchableOpacity>
-                <Text style={styles.attemptsText}>{attempts}</Text>
-                <TouchableOpacity onPress={incrementAttempts} style={styles.attemptButton}>
-                    <Text style={styles.buttonText}>+</Text>
-                </TouchableOpacity>
+                <View style={styles.attemptWrapper}>
+                    <Text style={styles.attemptsLabel}>Attempts</Text>
+                    <View style={styles.attemptsControls}>
+                        <TouchableOpacity
+                            onPress={decrementAttempts}
+                            disabled={attempts === 1}
+                            style={[styles.attemptButton, attempts === 1 && styles.disabledButton]}
+                        >
+                            <Text style={styles.buttonText}>-</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.attemptsText}>{attempts}</Text>
+                        <TouchableOpacity onPress={incrementAttempts} style={styles.attemptButton}>
+                            <Text style={styles.buttonText}>+</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <View style={styles.sendWrapper}>
+                    <Text style={styles.label}>Send?</Text>
+                    <View style={styles.switchContainer}>
+                        <Switch
+                            value={send}
+                            onValueChange={setSend}
+                            style={styles.switch}
+                            trackColor={{ false: "#fff", true: "#6c47ff" }}
+                        />
+                    </View>
+                </View>
             </View>
+
             <TouchableOpacity onPress={handleSave}
                 style={styles.addButton}>
                 <Text style={styles.addButtonText}>Add Climb</Text>
             </TouchableOpacity>
-            {/* <Button title="Add Climb" onPress={handleSave} /> */}
         </ScrollView>
     );
 }
@@ -187,20 +205,37 @@ const styles = StyleSheet.create({
         flex: 1,
         marginHorizontal: 4,
     },
-    attemptsLabel: {
-        fontSize: 16,
-        marginTop: 16,
-        textAlign: 'center',
-    },
     attemptsContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: 'flex-start',
+        justifyContent: 'space-around',
         marginVertical: 8,
+    },
+    attemptWrapper: {
+        alignItems: 'center',
+    },
+    attemptsControls: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    sendWrapper: {
+        alignItems: 'center',
+    },
+    switchContainer: {
+        transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
+    },
+    switch: {
+        marginVertical: 16,
+        color: '#6c47ff',
+    },
+    attemptsLabel: {
+        fontSize: 16,
+        marginBottom: 8,
+        textAlign: 'center',
     },
     attemptsText: {
         fontSize: 24,
-        marginHorizontal: 24,
+        marginHorizontal: 16,
     },
     attemptButton: {
         width: 50,

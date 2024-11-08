@@ -25,6 +25,7 @@ export interface Climb {
     style: ClimbStyleEnum,
     grade: string,
     attempts: number,
+    send?: boolean,
 }
 
 export enum ClimbTypeEnum {
