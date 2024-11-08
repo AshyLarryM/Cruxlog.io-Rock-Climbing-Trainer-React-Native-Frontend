@@ -5,7 +5,7 @@ import { Pressable } from "react-native";
 export function FinishSessionButton() {
     const router = useRouter();
     function reviewSession() {
-        router.push('/(auth)/session/review')
+        router.push('/(auth)/session/summary')
     }
     return (
         <Pressable onPress={reviewSession} style={{ marginRight: 10 }}>
@@ -39,9 +39,9 @@ export default function SessionLayout() {
                 }}
             />
             <Stack.Screen
-                name="review"
+                name="summary"
                 options={{
-                    title: "Review Session",
+                    title: "Summary",
                 }}
             />
         </Stack>

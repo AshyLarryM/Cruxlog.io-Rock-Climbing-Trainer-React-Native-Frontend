@@ -1,11 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Climb } from '@/lib/utils/types';
+import { Ionicons } from '@expo/vector-icons';
 
 
 export default function Session() {
+    const router = useRouter();
     const [climbs, setClimbs] = useState<Climb[]>([]);
 
     useEffect(() => {
@@ -55,14 +57,35 @@ export default function Session() {
         }
     }
 
+    async function deleteClimb(climbId: string) {
+        try {
+            const updatedClimbs = climbs.filter(climb => climb.id !== climbId);
+            setClimbs(updatedClimbs);
+            await AsyncStorage.setItem('climbs', JSON.stringify(updatedClimbs));
+            console.log(`Climb with id ${climbId} deleted!`);
+        } catch (error) {
+            console.error("Error deleting climb: ", error);
+        }
+    }
+
+    // function editClimb(climb: Climb) {
+    //     router.push({
+    //         pathname: '/(auth)/session/newclimb',
+    //         params: { climbData: JSON.stringify(climb)}
+    //     })
+    // }
+
     // Render each climb as a card
     const renderClimb = ({ item }: any) => (
         <View style={styles.card}>
-            <Text style={styles.cardText}>Name: {item.climbName || 'Unnamed'}</Text>
-            <Text style={styles.cardText}>Type: {item.type}</Text>
-            <Text style={styles.cardText}>Style: {item.style}</Text>
-            <Text style={styles.cardText}>Grade: {item.grade}</Text>
+            <Text style={styles.cardText}>{item.name|| 'Unnamed'}</Text>
+            <Text style={styles.cardText}>{item.type}</Text>
+            <Text style={styles.cardText}>{item.style}</Text>
+            <Text style={styles.cardText}>{item.grade}</Text>
             <Text style={styles.cardText}>Attempts: {item.attempts}</Text>
+            <TouchableOpacity onPress={() => deleteClimb(item.id)} style={styles.deleteButton}>
+                <Ionicons name="trash-bin" size={24} color="red" />
+            </TouchableOpacity>
         </View>
     );
 
@@ -122,7 +145,7 @@ const styles = StyleSheet.create({
         marginVertical: 8,
     },
     cardText: {
-        fontSize: 14,
+        fontSize: 18,
         color: '#333',
     },
     clearButton: {
@@ -137,5 +160,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'center',
+    },
+    deleteButton: {
+        padding: 8,
     },
 });
