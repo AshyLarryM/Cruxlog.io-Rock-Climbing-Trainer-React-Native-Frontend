@@ -20,39 +20,43 @@ export default function Session() {
         }, [])
     );
 
-    const renderClimb = ({ item }: any) => (
-        <View style={styles.card}>
-            <View style={styles.header}>
-                <Text style={styles.title}>{item.name || 'Unnamed'}</Text>
-            </View>
-
-            <View style={styles.content}>
-                <View style={styles.gradeContainer}>
-                    <Text style={styles.gradeText}>Grade: {item.grade}</Text>
+    function renderClimb({ item }: { item: Climb }) {
+        return (
+            <View style={styles.card}>
+                <View style={styles.header}>
+                    <Text style={styles.title}>{item.name || 'Unnamed'}</Text>
+                    <Text style={styles.title}>{item.style || 'Unnamed'}</Text>
                 </View>
-                <View style={styles.attemptsContainer}>
-                    <Text style={styles.attemptsLabel}>Attempts</Text>
-                    <Text style={styles.attemptsCount}>{item.attempts}</Text>
+    
+                <View style={styles.content}>
+                    <View style={styles.gradeContainer}>
+                        <Text style={styles.gradeText}>Grade: {item.grade}</Text>
+                    </View>
+                    <View style={styles.attemptsContainer}>
+                        <Text style={styles.attemptsLabel}>Attempts</Text>
+                        <Text style={styles.attemptsCount}>{item.attempts}</Text>
+                    </View>
+                </View>
+    
+                {item.attempts === 1 && item.send && (
+                    <View style={styles.flashContainer}>
+                        <Ionicons name="flash" size={20} color="#ffcc00" />
+                        <Text style={styles.flashText}>Flash!</Text>
+                    </View>
+                )}
+    
+                <View
+                    style={[
+                        styles.footer,
+                        { backgroundColor: item.send ? "#ffcf4d" : '#fff' }
+                    ]}
+                >
+                    <Text style={styles.sentStatus}>{item.send ? 'Sent: Yes' : 'Sent: No'}</Text>
                 </View>
             </View>
-
-            {item.attempts === 1 && item.send && (
-                <View style={styles.flashContainer}>
-                    <Ionicons name="flash" size={20} color="#ffcc00" />
-                    <Text style={styles.flashText}>Flash!</Text>
-                </View>
-            )}
-
-            <View
-                style={[
-                    styles.footer,
-                    { backgroundColor: item.send ? "#ffcf4d" : '#fff' }
-                ]}
-            >
-                <Text style={styles.sentStatus}>{item.send ? 'Sent: Yes' : 'Sent: No'}</Text>
-            </View>
-        </View>
-    );
+        );
+    }
+    
 
     return (
         <View style={styles.container}>
