@@ -14,19 +14,6 @@ export function ReviewSessionButton() {
     )
 }
 
-export function CompleteSessionButton() {
-    const router = useRouter();
-    function completeSession() {
-        
-        router.push('/(auth)/home');
-    }
-    return (
-        <Pressable onPress={completeSession} style={{ marginRight: 10 }}>
-            <Ionicons name="checkmark" size={24} color={'#42f587'} />
-        </Pressable>
-    )
-}
-
 export default function SessionLayout() {
 
     return (
@@ -55,7 +42,6 @@ export default function SessionLayout() {
                 name="summary"
                 options={{
                     title: "Session Summary",
-                    headerRight: () => <CompleteSessionButton />
                 }}
             />
         </Stack>

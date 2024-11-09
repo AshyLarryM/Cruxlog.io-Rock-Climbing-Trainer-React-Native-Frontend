@@ -1,18 +1,31 @@
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, TextInput, Button, Pressable } from 'react-native';
 import { useFetchSession } from '@/lib/state/serverState/user/session/useFetchSession';
 import Slider from '@react-native-community/slider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUpdateSession } from '@/lib/state/serverState/user/session/useUpdateSession';
+import { useNavigation } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Summary() {
     const { data: climbingSession, isLoading, isError } = useFetchSession();
     const { mutate: updateSession } = useUpdateSession();
+    const navigation = useNavigation();
     const [sessionName, setSessionName] = useState('');
     const [intensity, setIntensity] = useState(5);
     const [notes, setNotes] = useState('');
 
     if (isLoading) return <ActivityIndicator />;
     if (isError) return <Text>Error loading session summary</Text>;
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity onPress={submitSessionUpdate}>
+                    <Ionicons name="checkmark" size={24} color={'#42f587'} />
+                </TouchableOpacity>
+            ),
+        });
+    }, [navigation, sessionName, intensity, notes]);
 
     const formatDate = (dateString?: string) => {
         if (!dateString) return "Date not available";
@@ -64,8 +77,7 @@ export default function Summary() {
                 value={notes}
                 onChangeText={setNotes}
                 multiline
-                blurOnSubmit={true}       // Allows keyboard dismissal on return
-
+                blurOnSubmit={true}
             />
 
             {/* List of Climbs */}
@@ -89,6 +101,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10,
 
+    },
+    headerButton: {
+        color: '#6c47ff',
+        fontSize: 16,
+        marginRight: 10,
     },
     date: {
         fontSize: 16,
