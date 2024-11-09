@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Climb } from '@/lib/utils/types';
 import { Ionicons } from '@expo/vector-icons';
 import { useFetchSession } from '@/lib/state/serverState/user/session/useFetchSession';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 export default function Session() {
@@ -13,19 +14,20 @@ export default function Session() {
 
     const climbingSession = useFetchSession();
 
-    console.log("Climbing session: ", climbingSession.data?.climbs)
-    
+    useFocusEffect(
+        React.useCallback(() => {
+            climbingSession.refetch();
+        }, [])
+    );
 
-
-    // Render each climb as a card
     const renderClimb = ({ item }: any) => (
         <View style={styles.card}>
-            <Text style={styles.cardText}>{item.name|| 'Unnamed'}</Text>
+            <Text style={styles.cardText}>{item.name || 'Unnamed'}</Text>
             <Text style={styles.cardText}>{item.type}</Text>
             <Text style={styles.cardText}>{item.style}</Text>
             <Text style={styles.cardText}>{item.grade}</Text>
             <Text style={styles.cardText}>Attempts: {item.attempts}</Text>
-            
+
         </View>
     );
 

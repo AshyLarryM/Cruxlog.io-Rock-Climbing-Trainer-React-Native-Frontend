@@ -47,5 +47,6 @@ export function useFetchSession() {
 
             return fetchSessionAndClimbs(token, userId);
         },
+        refetchOnWindowFocus: false,
     });
 }
