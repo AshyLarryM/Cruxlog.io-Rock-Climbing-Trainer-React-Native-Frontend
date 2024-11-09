@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";
 import { Pressable } from "react-native";
 
-export function FinishSessionButton() {
+export function ReviewSessionButton() {
     const router = useRouter();
     function reviewSession() {
         router.push('/(auth)/session/summary')
@@ -10,6 +10,19 @@ export function FinishSessionButton() {
     return (
         <Pressable onPress={reviewSession} style={{ marginRight: 10 }}>
             <Ionicons name="checkmark" size={24} color={'#fff'} />
+        </Pressable>
+    )
+}
+
+export function CompleteSessionButton() {
+    const router = useRouter();
+    function completeSession() {
+        
+        router.push('/(auth)/home');
+    }
+    return (
+        <Pressable onPress={completeSession} style={{ marginRight: 10 }}>
+            <Ionicons name="checkmark" size={24} color={'#42f587'} />
         </Pressable>
     )
 }
@@ -29,7 +42,7 @@ export default function SessionLayout() {
                 name="index"
                 options={{
                     title: "Session",
-                    headerRight: () => <FinishSessionButton />
+                    headerRight: () => <ReviewSessionButton />
                 }}
             />
             <Stack.Screen
@@ -41,7 +54,8 @@ export default function SessionLayout() {
             <Stack.Screen
                 name="summary"
                 options={{
-                    title: "Summary",
+                    title: "Session Summary",
+                    headerRight: () => <CompleteSessionButton />
                 }}
             />
         </Stack>

@@ -12,6 +12,7 @@ export interface User {
 export interface Session {
     id: number,
     userId: string,
+    sessionName?: string,
     intensity: number,
     notes?: string,
     createdAt: Date,
