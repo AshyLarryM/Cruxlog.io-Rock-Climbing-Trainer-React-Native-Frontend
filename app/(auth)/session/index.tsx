@@ -22,12 +22,35 @@ export default function Session() {
 
     const renderClimb = ({ item }: any) => (
         <View style={styles.card}>
-            <Text style={styles.cardText}>{item.name || 'Unnamed'}</Text>
-            <Text style={styles.cardText}>{item.type}</Text>
-            <Text style={styles.cardText}>{item.style}</Text>
-            <Text style={styles.cardText}>{item.grade}</Text>
-            <Text style={styles.cardText}>Attempts: {item.attempts}</Text>
+            <View style={styles.header}>
+                <Text style={styles.title}>{item.name || 'Unnamed'}</Text>
+            </View>
 
+            <View style={styles.content}>
+                <View style={styles.gradeContainer}>
+                    <Text style={styles.gradeText}>Grade: {item.grade}</Text>
+                </View>
+                <View style={styles.attemptsContainer}>
+                    <Text style={styles.attemptsLabel}>Attempts</Text>
+                    <Text style={styles.attemptsCount}>{item.attempts}</Text>
+                </View>
+            </View>
+
+            {item.attempts === 1 && item.send && (
+                <View style={styles.flashContainer}>
+                    <Ionicons name="flash" size={20} color="#ffcc00" />
+                    <Text style={styles.flashText}>Flash!</Text>
+                </View>
+            )}
+
+            <View
+                style={[
+                    styles.footer,
+                    { backgroundColor: item.send ? "#ffcf4d" : '#fff' }
+                ]}
+            >
+                <Text style={styles.sentStatus}>{item.send ? 'Sent: Yes' : 'Sent: No'}</Text>
+            </View>
         </View>
     );
 
@@ -81,12 +104,6 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 16,
     },
-    card: {
-        backgroundColor: '#eee',
-        padding: 16,
-        borderRadius: 8,
-        marginVertical: 8,
-    },
     cardText: {
         fontSize: 18,
         color: '#333',
@@ -104,7 +121,91 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    card: {
+        width: '100%',
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        marginVertical: 12,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    header: {
+        backgroundColor: '#6c47ff',
+        paddingVertical: 10,
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+    },
+    title: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    content: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 28,
+    },
+    gradeContainer: {
+        backgroundColor: '#fff',
+        paddingHorizontal: 24,
+        paddingVertical: 4,
+        borderRadius: 12,
+    },
+    gradeText: {
+        color: '#4caf50',
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
+    attemptsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    attemptsLabel: {
+        fontSize: 16,
+        color: '#333',
+        marginRight: 8,
+    },
+    attemptsButton: {
+        fontSize: 20,
+        color: '#333',
+        paddingHorizontal: 8,
+    },
+    attemptsCount: {
+        fontSize: 18,
+        color: '#333',
+        fontWeight: 'bold',
+        paddingHorizontal: 8,
+    },
     deleteButton: {
-        padding: 8,
+        color: 'red',
+        fontSize: 20,
+    },
+    footer: {
+        backgroundColor: '#a5d6a7',
+        paddingVertical: 10,
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+    },
+    sentStatus: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#333',
+    },
+    flashContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 0,
+        marginBottom: 8,
+    },
+    flashText: {
+        marginLeft: 4,
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
