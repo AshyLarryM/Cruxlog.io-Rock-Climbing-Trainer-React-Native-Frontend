@@ -3,8 +3,9 @@ import { useFetchSession } from '@/lib/state/serverState/user/session/useFetchSe
 import Slider from '@react-native-community/slider';
 import { useEffect, useState } from 'react';
 import { useUpdateSession } from '@/lib/state/serverState/user/session/useUpdateSession';
-import { useNavigation } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import Toast from 'react-native-toast-message';
 
 export default function Summary() {
     const { data: climbingSession, isLoading, isError } = useFetchSession();
@@ -34,12 +35,29 @@ export default function Summary() {
     };
 
     function submitSessionUpdate() {
-        updateSession({
-            sessionName,
-            intensity,
-            notes,
-            completed: true,
-        })
+        updateSession(
+            {
+                sessionName,
+                intensity,
+                notes,
+                completed: true,
+            },
+            {
+                onSuccess: () => {
+                    Toast.show({
+                        type: "success",
+                        text1: "Session Saved",
+                    });
+                    router.push('/(auth)/home');
+                },
+                onError: () => {
+                    Toast.show({
+                        type: "error",
+                        text1: "Session Failed to Save",
+                    });
+                },
+            }
+        );
     }
 
     return (
