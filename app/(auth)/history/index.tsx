@@ -2,11 +2,19 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { useFetchAllSessions } from '@/lib/state/serverState/user/session/useFetchAllSessions';
 import { SessionItem } from '@/components/session/SessionItem';
+import { useFocusEffect } from 'expo-router';
 
 
-export default function Home() {
+export default function History() {
     const { data, error, isLoading, refetch } = useFetchAllSessions();
     const [refreshing, setRefreshing] = useState<boolean>(false);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            console.log("refresh history");
+            refetch();
+        }, [refetch]) // TODO: May trigger too many api calls?
+    );
 
     async function onRefresh() {
         setRefreshing(true),

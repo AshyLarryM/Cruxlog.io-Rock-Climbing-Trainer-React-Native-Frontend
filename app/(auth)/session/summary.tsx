@@ -48,7 +48,7 @@ export default function Summary() {
                         type: "success",
                         text1: "Session Saved",
                     });
-                    router.push('/(auth)/home');
+                    router.push('/(auth)/history');
                 },
                 onError: () => {
                     Toast.show({

@@ -40,7 +40,7 @@ function InitalLayout() {
 		console.log("isSignedIn:", isSignedIn);
 
 		if (isSignedIn && !inTabsGroup) {
-			router.replace('/home');
+			router.replace('/(auth)/history');
 		} else if (!isSignedIn) {
 			router.replace('/login');
 		}

@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
-import { router, Stack, Tabs, usePathname, useRouter } from "expo-router";
+import { Tabs, usePathname, useRouter } from "expo-router";
 import { useState } from "react";
 import { Modal, Pressable, TouchableOpacity, StyleSheet, View, Text } from "react-native";
 
@@ -44,11 +44,12 @@ export default function TabsPage() {
                     headerTintColor: '#fff',
                 }}>
                 <Tabs.Screen
-                    name="home"
+                    name="history"
                     options={{
-                        headerTitle: 'Home',
+                        headerTitle: 'History',
                         tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
-                        tabBarLabel: 'Home',
+                        tabBarLabel: 'History',
+                        headerShown: false,
                     }}
                     redirect={!isSignedIn}
                 />
