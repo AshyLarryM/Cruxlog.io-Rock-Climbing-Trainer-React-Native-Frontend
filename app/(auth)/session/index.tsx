@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFetchSession } from '@/lib/state/serverState/user/session/useFetchSession';
 import { useFocusEffect } from '@react-navigation/native';
 import { Climb } from '@/lib/utils/models/climbModels';
+import { ClimbCard } from '@/components/cards/ClimbCard';
 
 
 export default function Session() {
@@ -19,44 +20,6 @@ export default function Session() {
             climbingSession.refetch();
         }, [])
     );
-
-    function renderClimb({ item }: { item: Climb }) {
-        return (
-            <View style={styles.card}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>{item.name || 'Unnamed'}</Text>
-                    <Text style={styles.title}>{item.style || 'Unnamed'}</Text>
-                </View>
-    
-                <View style={styles.content}>
-                    <View style={styles.gradeContainer}>
-                        <Text style={styles.gradeText}>Grade: {item.grade}</Text>
-                    </View>
-                    <View style={styles.attemptsContainer}>
-                        <Text style={styles.attemptsLabel}>Attempts</Text>
-                        <Text style={styles.attemptsCount}>{item.attempts}</Text>
-                    </View>
-                </View>
-    
-                {item.attempts === 1 && item.send && (
-                    <View style={styles.flashContainer}>
-                        <Ionicons name="flash" size={20} color="#ffcc00" />
-                        <Text style={styles.flashText}>Flash!</Text>
-                    </View>
-                )}
-    
-                <View
-                    style={[
-                        styles.footer,
-                        { backgroundColor: item.send ? "#ffcf4d" : '#fff' }
-                    ]}
-                >
-                    <Text style={styles.sentStatus}>{item.send ? 'Sent: Yes' : 'Sent: No'}</Text>
-                </View>
-            </View>
-        );
-    }
-    
 
     return (
         <View style={styles.container}>
@@ -73,7 +36,7 @@ export default function Session() {
             ) : climbingSession.data?.climbs?.length ? (
                 <FlatList
                     data={climbingSession.data.climbs}
-                    renderItem={renderClimb}
+                    renderItem={({ item }) => <ClimbCard climb={item} />}
                     keyExtractor={(item) => item.id.toString()}
                     contentContainerStyle={styles.climbList}
                 />
