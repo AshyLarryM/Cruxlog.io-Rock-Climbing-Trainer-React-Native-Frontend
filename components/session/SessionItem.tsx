@@ -1,6 +1,6 @@
 import { Session } from "@/lib/utils/models/sessionModels";
 import { useRouter } from "expo-router";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 interface SessionItemProps {
     session: Session;
@@ -12,7 +12,11 @@ export function SessionItem({ session }: SessionItemProps) {
     function navigateToSession() {
         router.push({
             pathname: '/(auth)/history/[sessionId]',
-            params: { sessionId: session.id.toString() },
+            params:
+            {
+                sessionId: session.id.toString(),
+                sessionName: session.sessionName || 'Unnamed Session'
+            },
         });
     };
 

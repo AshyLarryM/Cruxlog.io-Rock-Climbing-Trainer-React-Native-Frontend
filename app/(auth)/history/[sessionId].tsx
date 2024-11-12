@@ -1,22 +1,35 @@
-import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { useFetchClimbsBySession } from '@/lib/state/serverState/user/session/useFetchClimbsBySession';
+import { ClimbCard } from '@/components/cards/ClimbCard';
 
 export default function SessionDetails() {
-    const { sessionId } = useLocalSearchParams();
+    const { sessionId, sessionName } = useLocalSearchParams();
+    const { data, isLoading, error } = useFetchClimbsBySession(Number(sessionId));
+    const navigation = useNavigation();
 
-    const { data, isLoading, error } = useFetchClimbsBySession((Number(sessionId)))
+    useEffect(() => {
+        navigation.setOptions({
+            title: sessionName || `Session ${sessionId} Details`,
+        });
+    }, [navigation, sessionName, sessionId]);
 
     if (isLoading) return <ActivityIndicator />;
     if (error) return <Text>Error loading session climbs</Text>;
 
-    console.log(`climb data for sessionId: ${sessionId}`, data?.climbs);
-
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Session Details</Text>
-            <Text>Session ID: {sessionId}</Text>
+            {data?.climbs?.length ? (
+                <FlatList
+                    data={data.climbs}
+                    renderItem={({ item }) => <ClimbCard climb={item} />}
+                    keyExtractor={(item) => item.id.toString()}
+                    contentContainerStyle={styles.climbList}
+                />
+            ) : (
+                <Text>No climbs for this session yet.</Text>
+            )}
         </View>
     );
 }
@@ -27,9 +40,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    header: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
+    climbList: {
+        width: '100%',
+        paddingHorizontal: 16,
     },
 });

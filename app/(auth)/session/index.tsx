@@ -1,8 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Ionicons } from '@expo/vector-icons';
 import { useFetchSession } from '@/lib/state/serverState/user/session/useFetchSession';
 import { useFocusEffect } from '@react-navigation/native';
 import { Climb } from '@/lib/utils/models/climbModels';
