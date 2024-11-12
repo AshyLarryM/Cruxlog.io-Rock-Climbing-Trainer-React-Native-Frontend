@@ -2,10 +2,10 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator }
 import React, { useEffect, useState } from 'react';
 import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Climb } from '@/lib/utils/types';
 import { Ionicons } from '@expo/vector-icons';
 import { useFetchSession } from '@/lib/state/serverState/user/session/useFetchSession';
 import { useFocusEffect } from '@react-navigation/native';
+import { Climb } from '@/lib/utils/models/climbModels';
 
 
 export default function Session() {

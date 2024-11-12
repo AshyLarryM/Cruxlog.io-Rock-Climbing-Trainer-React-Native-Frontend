@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity
 import { Picker } from '@react-native-picker/picker';
 import { useAuth } from '@clerk/clerk-expo';
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
-import { Climb, ClimbStyleEnum, ClimbTypeEnum, boulderGradeMapping, routeGradeMapping } from '@/lib/utils/types';
+import { Climb, ClimbStyleEnum, ClimbTypeEnum, boulderGradeMapping, routeGradeMapping } from '@/lib/utils/models/climbModels';
 import { useRouter } from 'expo-router';
 import UUID from 'react-native-uuid';
 import { useCreateClimb } from '@/lib/state/serverState/user/session/useCreateClimb';

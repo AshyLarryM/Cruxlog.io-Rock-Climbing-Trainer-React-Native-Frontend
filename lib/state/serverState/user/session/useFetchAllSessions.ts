@@ -1,31 +1,11 @@
 import { baseUrl } from "@/constants/apiRepository"
-import { Climb } from "@/lib/utils/types"
+import { Session } from "@/lib/utils/models/sessionModels";
 import { useAuth } from "@clerk/clerk-expo";
 import { useQuery } from "@tanstack/react-query";
 
 interface ApiResponse {
     message: string,
-    sessions: [
-        {
-            id: number,
-            userId: string,
-            sessionName: string,
-            intensity: number,
-            notes: string,
-            createdAt: Date,
-            completed: boolean,
-            sessionStats: {
-                highestBoulderGrade: string | null,
-                highestRouteGrade: string | null,
-                totalClimbs: number,
-                totalAttempts: number,
-                completedBoulders: number,
-                completedRoutes: number,
-                totalSends: number,
-                totalFlashes: number,
-            },
-        },
-    ],
+    sessions: Session[],
 }
 
 async function fetchAllSessionsAndClimbs(token: string, userId: string | null | undefined): Promise<ApiResponse> {
