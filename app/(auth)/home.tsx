@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { useFetchAllSessions } from '@/lib/state/serverState/user/session/useFetchAllSessions';
 import { SessionItem } from '@/components/session/SessionItem';
 
 
 export default function Home() {
-    const { data, error, isLoading } = useFetchAllSessions();
+    const { data, error, isLoading, refetch } = useFetchAllSessions();
+    const [refreshing, setRefreshing] = useState<boolean>(false);
 
-    if (isLoading) {
+    async function onRefresh() {
+        setRefreshing(true),
+        await refetch();
+        setRefreshing(false);
+    }
+
+    if (isLoading && !refreshing) {
         return (
             <View style={styles.center}>
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" color="#000" />
                 <Text>Loading sessions...</Text>
             </View>
         );
@@ -38,6 +45,8 @@ export default function Home() {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => <SessionItem session={item} />}
             contentContainerStyle={styles.list}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
         />
     );
 }

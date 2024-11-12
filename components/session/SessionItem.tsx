@@ -17,8 +17,13 @@ export function SessionItem({ session }: SessionItemProps) {
 
             <View style={styles.statsContainer}>
                 <Text style={styles.statsHeader}>Session Stats:</Text>
-                <Text>Highest Boulder Grade: {session.sessionStats.highestBoulderGrade || 'N/A'}</Text>
-                <Text>Highest Route Grade: {session.sessionStats.highestRouteGrade || 'N/A'}</Text>
+                {session.sessionStats.highestBoulderGrade !== null && (
+                    <Text>Highest Boulder Grade: {session.sessionStats.highestBoulderGrade}</Text>
+                )}
+
+                {session.sessionStats.highestRouteGrade !== null && (
+                    <Text>Highest Route Grade: {session.sessionStats.highestRouteGrade}</Text>
+                )}
                 <Text>Total Climbs: {session.sessionStats.totalClimbs}</Text>
                 <Text>Total Attempts: {session.sessionStats.totalAttempts}</Text>
                 <Text>Completed Boulders: {session.sessionStats.completedBoulders}</Text>
