@@ -1,9 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
+import { useFetchClimbsBySession } from '@/lib/state/serverState/user/session/useFetchClimbsBySession';
 
 export default function SessionDetails() {
     const { sessionId } = useLocalSearchParams();
+
+    const { data, isLoading, error } = useFetchClimbsBySession((Number(sessionId)))
+
+    if (isLoading) return <ActivityIndicator />;
+    if (error) return <Text>Error loading session climbs</Text>;
+
+    console.log(`climb data for sessionId: ${sessionId}`, data?.climbs);
 
     return (
         <View style={styles.container}>
