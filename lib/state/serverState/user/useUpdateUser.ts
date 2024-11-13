@@ -22,8 +22,8 @@ async function updateUser(token: string, userId: string | null | undefined, user
     return data;
 }
 
-export function useUpdateUser(userId: string | null | undefined): UseMutationResult<ApiResponse, Error, Partial<User>> {
-    const { getToken } = useAuth();
+export function useUpdateUser(): UseMutationResult<ApiResponse, Error, Partial<User>> {
+    const { getToken, userId } = useAuth();
     const queryClient = useQueryClient();
 
     return useMutation<ApiResponse, Error, Partial<User>>({

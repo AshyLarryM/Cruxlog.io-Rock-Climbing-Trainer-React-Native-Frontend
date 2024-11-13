@@ -7,17 +7,5 @@ export interface User {
     apeIndex?: number,
     gradingPreference: boolean,
     measurementSystem: boolean,
-}
-
-export enum ClimbTypeEnum  {
-    TOP_ROPE = 'top rope',
-    LEAD = 'lead',
-    BOULDER = 'boulder',
-}
-
-export enum ClimbStyleEnum {
-    SLAB = 'slab',
-    VERTICAL= 'verical',
-    OVERHANG = 'overhang',
-    CAVE = 'cave',
+    profileImage?: string | null;
 }
