@@ -5,52 +5,85 @@ import { useUpdateUser } from '@/lib/state/serverState/user/useUpdateUser';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
+import { useGeneratePresignedUrl } from '@/lib/state/serverState/user/useGeneratePresignedUrl';
+import { useUploadImage } from '@/lib/state/serverState/user/useUploadImage';
 
 export default function EditProfile() {
     const { data } = useMeUser();
 
     const [fullName, setFullName] = useState(data?.user?.fullName || '');
-	const [age, setAge] = useState<number | undefined>(data?.user?.age);
+    const [age, setAge] = useState<number | undefined>(data?.user?.age);
     const [height, setHeight] = useState<number | undefined>(data?.user?.height);
     const [weight, setWeight] = useState<number | undefined>(data?.user?.weight);
     const [apeIndex, setApeIndex] = useState<number | undefined>(data?.user?.apeIndex);
     const [gradingPreference, setGradingPreference] = useState(data?.user?.gradingPreference || false);
     const [measurementSystem, setMeasurementSystem] = useState(data?.user?.measurementSystem || false);
-    const [profileImage, setProfileImage] = useState<string | null>(null);
+    const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
 
-	const { mutate: updateUser, isPending } = useUpdateUser();
+    const { mutate: updateUser, isPending } = useUpdateUser();
+    const { mutateAsync: generatePresignedUrl } = useGeneratePresignedUrl();
+    const { mutateAsync: uploadImage } = useUploadImage();
 
     async function handleSave() {
-        updateUser(
-            {
-                fullName,
-                age,
-                height,
-                weight,
-                apeIndex,
-                gradingPreference,
-                measurementSystem,
-            },
-            {
-                onSuccess: () => {
-                    router.back();
-                    Toast.show({
-                        type: "success",
-                        text1: "Updated",
-                        text2: "User Profile Updated!"
-                    });
-                },
-                onError: (error) => {
-                    console.error('Failed to update profile:', error);
+        try {
+            let profileImageUrl = profileImage;
+
+            if (profileImage) {
+                const { url, key } = await generatePresignedUrl();
+                try {
+                    await uploadImage({ url, imageUri: profileImage });
+                    profileImageUrl = `https://rock-climbing-app.s3.us-west-1.amazonaws.com/${key}`;
+                } catch (uploadError) {
+                    console.error("Image upload failed:", uploadError);
                     Toast.show({
                         type: "error",
                         text1: "Error",
-                        text2: "Failed to Update Profile!"
+                        text2: "Image upload failed!",
                     });
-                },
+                    return;
+                }
             }
-        );
+
+            updateUser(
+                {
+                    fullName,
+                    age,
+                    height,
+                    weight,
+                    apeIndex,
+                    gradingPreference,
+                    measurementSystem,
+                    profileImage: profileImageUrl,
+                },
+                {
+                    onSuccess: () => {
+                        router.back();
+                        Toast.show({
+                            type: "success",
+                            text1: "Updated",
+                            text2: "User Profile Updated!"
+                        });
+                    },
+                    onError: (error) => {
+                        console.error("Failed to update profile:", error);
+                        Toast.show({
+                            type: "error",
+                            text1: "Error",
+                            text2: "Failed to Update Profile!"
+                        });
+                    },
+                }
+            );
+        } catch (error) {
+            console.error("Error during profile update:", error);
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Failed to Update Profile!"
+            })
+        }
     }
+
 
     async function chooseImage() {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -63,14 +96,13 @@ export default function EditProfile() {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [1, 1],
-            quality: 0.5,
+            quality: 0.3,
         });
 
         if (!result.canceled) {
             setProfileImage(result.assets[0].uri);
-            console.log("Profile result", result.assets[0].uri);
         }
-        
+
     }
 
     return (

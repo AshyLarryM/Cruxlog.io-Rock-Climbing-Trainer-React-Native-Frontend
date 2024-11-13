@@ -24,7 +24,6 @@ export default function NewClimb() {
     const [grade, setGrade] = useState('V0');
     const [attempts, setAttempts] = useState<number>(1);
     const [send, setSend] = useState<boolean>(false);
-    // const [gradingSystem, setGradingSystem] = useState(initGradingSystem);
 
 
     function convertGradeForSaving(selectedGrade: string): string {

@@ -28,9 +28,14 @@ export default function Profile() {
             {/* Circular Profile Picture */}
             <View style={styles.profilePictureContainer}>
                 <Image
-                    source={{ uri: 'https://picsum.photos/200/300' }}
+                    source={
+                        data?.user?.profileImage
+                            ? { uri: data.user.profileImage }
+                            : { uri: '/assets/images/climberIcon.jpeg'}
+                    }
                     style={styles.profilePicture}
                 />
+
             </View>
 
             {/* Name and Age Row */}

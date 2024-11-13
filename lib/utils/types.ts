@@ -7,5 +7,5 @@ export interface User {
     apeIndex?: number,
     gradingPreference: boolean,
     measurementSystem: boolean,
-    profileImage?: string;
+    profileImage?: string | null;
 }
