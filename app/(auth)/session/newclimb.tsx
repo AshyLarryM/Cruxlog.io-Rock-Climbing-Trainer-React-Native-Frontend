@@ -11,8 +11,7 @@ import Toast from 'react-native-toast-message';
 
 export default function NewClimb() {
 
-    const { userId } = useAuth();
-    const { data } = useMeUser(userId);
+    const { data } = useMeUser();
     const createClimbMutation = useCreateClimb();
     const router = useRouter();
 

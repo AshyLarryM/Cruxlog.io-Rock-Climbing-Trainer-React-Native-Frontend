@@ -22,8 +22,8 @@ async function getUser(token: string, userId: string | null | undefined): Promis
     return data;
 }
 
-export function useMeUser(userId: string | null | undefined) {
-    const { getToken } = useAuth();
+export function useMeUser() {
+    const { getToken, userId } = useAuth();
 
     return useQuery({
         queryKey: ['user', userId],

@@ -7,7 +7,7 @@ import { router } from 'expo-router';
 export default function Profile() {
 
     const { userId } = useAuth();
-    const { data, error, isLoading } = useMeUser(userId);
+    const { data, error, isLoading } = useMeUser();
 
 
     if (isLoading) {

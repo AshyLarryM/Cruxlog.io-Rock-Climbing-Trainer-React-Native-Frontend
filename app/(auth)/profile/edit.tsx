@@ -8,7 +8,7 @@ import Toast from 'react-native-toast-message';
 
 export default function EditProfile() {
     const { userId } = useAuth();
-    const { data } = useMeUser(userId);
+    const { data } = useMeUser();
 
     const [fullName, setFullName] = useState(data?.user?.fullName || '');
 	const [age, setAge] = useState<number | undefined>(data?.user?.age);
@@ -18,7 +18,7 @@ export default function EditProfile() {
     const [gradingPreference, setGradingPreference] = useState(data?.user?.gradingPreference || false);
     const [measurementSystem, setMeasurementSystem] = useState(data?.user?.measurementSystem || false);
 
-	const { mutate: updateUser, isPending } = useUpdateUser(userId);
+	const { mutate: updateUser, isPending } = useUpdateUser();
 
     async function handleSave() {
         updateUser(
