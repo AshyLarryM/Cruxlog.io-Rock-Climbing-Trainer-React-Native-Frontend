@@ -1,13 +1,12 @@
-import { View, Text, TextInput, Button, StyleSheet, Switch, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Switch, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import React, { useState } from 'react';
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
 import { useUpdateUser } from '@/lib/state/serverState/user/useUpdateUser';
-import { useAuth } from '@clerk/clerk-expo';
+import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
 
 export default function EditProfile() {
-    const { userId } = useAuth();
     const { data } = useMeUser();
 
     const [fullName, setFullName] = useState(data?.user?.fullName || '');
@@ -17,6 +16,7 @@ export default function EditProfile() {
     const [apeIndex, setApeIndex] = useState<number | undefined>(data?.user?.apeIndex);
     const [gradingPreference, setGradingPreference] = useState(data?.user?.gradingPreference || false);
     const [measurementSystem, setMeasurementSystem] = useState(data?.user?.measurementSystem || false);
+    const [profileImage, setProfileImage] = useState<string | null>(null);
 
 	const { mutate: updateUser, isPending } = useUpdateUser();
 
@@ -52,9 +52,38 @@ export default function EditProfile() {
         );
     }
 
+    async function chooseImage() {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permissionResult.granted) {
+            alert("Permission to access media library is required!");
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.5,
+        });
+
+        if (!result.canceled) {
+            setProfileImage(result.assets[0].uri);
+            console.log("Profile result", result.assets[0].uri);
+        }
+        
+    }
+
     return (
         <View style={styles.container}>
-            <Text>Edit Profile</Text>
+            <TouchableOpacity onPress={chooseImage}>
+                <View style={styles.imageContainer}>
+                    {profileImage ? (
+                        <Image source={{ uri: profileImage }} style={styles.profileImage} />
+                    ) : (
+                        <Text style={styles.imagePlaceholder}>Upload Profile Image</Text>
+                    )}
+                </View>
+            </TouchableOpacity>
 
             <TextInput
                 style={styles.input}
@@ -138,5 +167,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 10,
+    },
+    imageContainer: {
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    profileImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+    },
+    imagePlaceholder: {
+        color: '#6c47ff',
+        fontSize: 16,
+        padding: 10,
     },
 });
