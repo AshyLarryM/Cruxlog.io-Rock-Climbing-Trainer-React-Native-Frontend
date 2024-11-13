@@ -1,5 +1,5 @@
 import { baseUrl } from "@/constants/apiRepository";
-import { Climb } from "@/lib/utils/types";
+import { Climb } from "@/lib/utils/models/climbModels";
 import { useAuth } from "@clerk/clerk-expo";
 import { useMutation } from "@tanstack/react-query";
 
