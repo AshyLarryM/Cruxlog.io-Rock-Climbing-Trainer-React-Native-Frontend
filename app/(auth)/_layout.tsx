@@ -74,6 +74,13 @@ export default function TabsPage() {
                         headerShown: false,
                     }}
                 />
+                <Tabs.Screen name="stats"
+                    options={{
+                        tabBarIcon: ({ color, size }) => <Ionicons name="stats-chart" size={size} color={color} />,
+                        tabBarLabel: 'Stats',
+                        headerShown: false,
+                    }}
+                />
 
                 <Tabs.Screen
                     name="profile"
