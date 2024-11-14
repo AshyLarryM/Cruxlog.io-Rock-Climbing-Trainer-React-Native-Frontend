@@ -1,5 +1,5 @@
 export interface Climb {
-    id: string | number[],
+    id: string
     name: string,
     sessionId?: number,
     type: ClimbTypeEnum,
@@ -7,6 +7,7 @@ export interface Climb {
     grade: string,
     attempts: number,
     send?: boolean,
+    climbImage?: string | null,
 }
 
 export enum ClimbTypeEnum {
