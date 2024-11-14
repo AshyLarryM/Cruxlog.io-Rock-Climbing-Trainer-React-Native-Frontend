@@ -7,8 +7,8 @@ interface PresignedUrlResponse {
     key: string;
 }
 
-async function generateProfilePresignedUrl(token: string, userId: string): Promise<PresignedUrlResponse> {
-    const response = await fetch(`${baseUrl}/api/user/${userId}/presignedProfile`, {
+async function generateClimbPresignedUrl(token: string, userId: string, climbId: string): Promise<PresignedUrlResponse> {
+    const response = await fetch(`${baseUrl}/api/user/${userId}/climbs/${climbId}/presignedClimb`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
@@ -21,17 +21,17 @@ async function generateProfilePresignedUrl(token: string, userId: string): Promi
     return data;
 }
 
-export function useGenerateProfilePresignedUrl(): UseMutationResult<PresignedUrlResponse, Error, void> {
+export function useGenerateClimbPresignedUrl(): UseMutationResult<PresignedUrlResponse, Error, string> {
     const { getToken, userId } = useAuth();
 
-    return useMutation<PresignedUrlResponse, Error, void>({
-        mutationFn: async () => {
+    return useMutation<PresignedUrlResponse, Error, string>({
+        mutationFn: async (climbId: string) => {
             const token = await getToken();
             if (!token) {
                 console.warn("No Token");
                 throw new Error("Token not available");
             }
-            return generateProfilePresignedUrl(token, userId ?? '');
+            return generateClimbPresignedUrl(token, userId ?? '', climbId);
         },
     });
 }
