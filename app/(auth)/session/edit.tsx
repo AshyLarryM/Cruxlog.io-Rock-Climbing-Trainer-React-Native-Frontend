@@ -85,10 +85,7 @@ export default function EditClimb() {
                 });
             },
         });
-
-
     }
-
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -176,11 +173,11 @@ export default function EditClimb() {
                 </View>
             </View>
 
-            <TouchableOpacity onPress={handleUpdateClimb} style={styles.addButton}>
+            <TouchableOpacity onPress={handleUpdateClimb} style={styles.updateButton}>
                 {isPending ? (
                     <ActivityIndicator size="small" color="#fff" />
                 ) : (
-                    <Text style={styles.addButtonText}>Update Climb</Text>
+                    <Text style={styles.updateButtonText}>Update Climb</Text>
                 )}
             </TouchableOpacity>
         </ScrollView>
@@ -269,14 +266,14 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 32,
     },
-    addButton: {
+    updateButton: {
         marginTop: 12,
         backgroundColor: '#6c47ff',
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 8,
     },
-    addButtonText: {
+    updateButtonText: {
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold',

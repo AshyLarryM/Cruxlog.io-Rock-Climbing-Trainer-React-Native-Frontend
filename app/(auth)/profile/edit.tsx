@@ -174,11 +174,13 @@ export default function EditProfile() {
                 />
             </View>
 
-            {isPending ? (
-                <ActivityIndicator size="large" color="#0000ff" />
-            ) : (
-                <Button title="Save" onPress={handleSave} disabled={isPending} />
-            )}
+            <TouchableOpacity onPress={handleSave} style={styles.updateButton}>
+                {isPending ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                    <Text style={styles.updateButtonText}>Update Profile</Text>
+                )}
+            </TouchableOpacity>
         </View>
     );
 }
@@ -214,4 +216,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         padding: 10,
     },
+    updateButton: {
+        marginTop: 12,
+        backgroundColor: '#6c47ff',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+    },
+    updateButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    }
 });

@@ -17,13 +17,6 @@ export function ClimbCard({ climb }: ClimbCardProps) {
 
     const isHistoryRoute = pathname.startsWith('/history');
 
-    // const handleEdit = () => {
-    //     router.push({
-    //         pathname: '/(auth)/session/edit',
-    //         params: { climbId: climb.id.toString() },
-    //     });
-    // };
-
     function handleEdit() {
         dispatch(setCurrentClimb(climb));
         router.push('/(auth)/session/edit');
