@@ -1,13 +1,27 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Climb } from '@/lib/utils/models/climbModels';
+import { useRouter, usePathname } from 'expo-router';
+import { useDispatch } from 'react-redux';
+import { setCurrentClimb } from '@/redux/climbSlice';
 
 interface ClimbCardProps {
     climb: Climb;
 }
 
 export function ClimbCard({ climb }: ClimbCardProps) {
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const isHistoryRoute = pathname.startsWith('/history');
+
+    function handleEdit() {
+        dispatch(setCurrentClimb(climb));
+        router.push('/(auth)/session/edit');
+    }
+
     return (
         <View style={styles.card}>
             <View style={styles.header}>
@@ -35,11 +49,23 @@ export function ClimbCard({ climb }: ClimbCardProps) {
             <View
                 style={[
                     styles.footer,
-                    { backgroundColor: climb.send ? "#ffcf4d" : '#fff' }
+                    {
+                        backgroundColor: climb.send ? "#ffcf4d" : '#fff',
+                        justifyContent: isHistoryRoute ? 'center' : 'space-around', // Use space-around to bring them closer
+                    }
                 ]}
             >
                 <Text style={styles.sentStatus}>{climb.send ? 'Sent: Yes' : 'Sent: No'}</Text>
+                {!isHistoryRoute && (
+                    <TouchableOpacity onPress={handleEdit} style={styles.editIcon}>
+                        <Text style={styles.editText}>Edit</Text>
+                        <Ionicons name="pencil" size={16} color="#333" />
+                    </TouchableOpacity>
+                )}
             </View>
+
+
+
         </View>
     );
 }
@@ -101,8 +127,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
     },
     footer: {
-        backgroundColor: '#a5d6a7',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
         paddingVertical: 10,
+        paddingHorizontal: 16,
         borderBottomLeftRadius: 12,
         borderBottomRightRadius: 12,
     },
@@ -122,5 +151,15 @@ const styles = StyleSheet.create({
         marginLeft: 4,
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    editIcon: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 8,
+    },
+    editText: {
+        marginHorizontal: 8,
+        color: '#333',
+        fontSize: 16,
     },
 });

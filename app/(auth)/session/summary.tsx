@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, TextInput, Button, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, TextInput, Button, Modal } from 'react-native';
 import { useFetchSession } from '@/lib/state/serverState/user/session/useFetchSession';
 import Slider from '@react-native-community/slider';
 import { useEffect, useState } from 'react';
@@ -9,11 +9,12 @@ import Toast from 'react-native-toast-message';
 
 export default function Summary() {
     const { data: climbingSession, isLoading, isError } = useFetchSession();
-    const { mutate: updateSession } = useUpdateSession();
+    const { mutate: updateSession, isPending } = useUpdateSession();
     const navigation = useNavigation();
     const [sessionName, setSessionName] = useState('');
     const [intensity, setIntensity] = useState(5);
     const [notes, setNotes] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
 
     if (isLoading) return <ActivityIndicator />;
     if (isError) return <Text>Error loading session summary</Text>;
@@ -21,7 +22,7 @@ export default function Summary() {
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <TouchableOpacity onPress={submitSessionUpdate}>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <Ionicons name="checkmark" size={24} color={'#42f587'} />
                 </TouchableOpacity>
             ),
@@ -106,6 +107,39 @@ export default function Summary() {
             ) : (
                 <Text>No climbs available</Text>
             )}
+
+            {/* Confirmation Modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalText}>Publish Climbing Session?</Text>
+                        <Text style={styles.modalSubText}>Climbs cannot be changed once published.</Text>
+                        <View style={styles.modalButtons}>
+                            <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+                                <Text style={styles.cancelButtonText}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.modalButton, styles.submitButton]}
+                                onPress={() => {
+                                    setModalVisible(false);
+                                    submitSessionUpdate();
+                                }}
+                            >
+                                {isPending ? (
+                                    <ActivityIndicator size="small" color="#fff" />
+                                ) : (
+                                    <Text style={styles.submitButtonText}>Submit</Text>
+                                )}
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 }
@@ -113,17 +147,6 @@ export default function Summary() {
 const styles = StyleSheet.create({
     container: {
         padding: 20,
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 10,
-
-    },
-    headerButton: {
-        color: '#6c47ff',
-        fontSize: 16,
-        marginRight: 10,
     },
     date: {
         fontSize: 16,
@@ -163,5 +186,53 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         backgroundColor: '#fff'
     },
-});
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        width: 300,
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    modalSubText: {
+        fontSize: 16,
+        color: '#666',
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    modalButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 35,
+        borderRadius: 5,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#6c47ff'
+    },
+    cancelButtonText: {
+        color: '#6c47ff',
+        fontSize: 16,
 
+    },
+    submitButton: {
+        backgroundColor: '#6c47ff',
+    },
+    submitButtonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
+});

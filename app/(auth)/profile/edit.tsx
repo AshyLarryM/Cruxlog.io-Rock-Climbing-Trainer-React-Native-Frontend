@@ -5,7 +5,7 @@ import { useUpdateUser } from '@/lib/state/serverState/user/useUpdateUser';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
-import { useGeneratePresignedUrl } from '@/lib/state/serverState/user/useGeneratePresignedUrl';
+import { useGenerateProfilePresignedUrl } from '@/lib/state/serverState/user/useGeneratePresignedUrl';
 import { useUploadImage } from '@/lib/state/serverState/user/useUploadImage';
 
 export default function EditProfile() {
@@ -21,7 +21,7 @@ export default function EditProfile() {
     const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
 
     const { mutate: updateUser, isPending } = useUpdateUser();
-    const { mutateAsync: generatePresignedUrl } = useGeneratePresignedUrl();
+    const { mutateAsync: generateProfilePresignedUrl } = useGenerateProfilePresignedUrl();
     const { mutateAsync: uploadImage } = useUploadImage();
 
     async function handleSave() {
@@ -29,7 +29,7 @@ export default function EditProfile() {
             let profileImageUrl = profileImage;
 
             if (profileImage) {
-                const { url, key } = await generatePresignedUrl();
+                const { url, key } = await generateProfilePresignedUrl();
                 try {
                     await uploadImage({ url, imageUri: profileImage });
                     profileImageUrl = `https://rock-climbing-app.s3.us-west-1.amazonaws.com/${key}`;
@@ -174,11 +174,13 @@ export default function EditProfile() {
                 />
             </View>
 
-            {isPending ? (
-                <ActivityIndicator size="large" color="#0000ff" />
-            ) : (
-                <Button title="Save" onPress={handleSave} disabled={isPending} />
-            )}
+            <TouchableOpacity onPress={handleSave} style={styles.updateButton}>
+                {isPending ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                    <Text style={styles.updateButtonText}>Update Profile</Text>
+                )}
+            </TouchableOpacity>
         </View>
     );
 }
@@ -214,4 +216,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         padding: 10,
     },
+    updateButton: {
+        marginTop: 12,
+        backgroundColor: '#6c47ff',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+    },
+    updateButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    }
 });

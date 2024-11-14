@@ -8,9 +8,6 @@ import { ClimbCard } from '@/components/cards/ClimbCard';
 
 
 export default function Session() {
-    const router = useRouter();
-    const [climbs, setClimbs] = useState<Climb[]>([]);
-
     const climbingSession = useFetchSession();
 
     useFocusEffect(
