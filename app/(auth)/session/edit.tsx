@@ -1,28 +1,40 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity, Switch } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity, Switch, ActivityIndicator } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { useAuth } from '@clerk/clerk-expo';
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
 import { Climb, ClimbStyleEnum, ClimbTypeEnum, boulderGradeMapping, routeGradeMapping } from '@/lib/utils/models/climbModels';
 import { useRouter } from 'expo-router';
 import UUID from 'react-native-uuid';
-import { useCreateClimb } from '@/lib/state/serverState/user/session/useCreateClimb';
 import Toast from 'react-native-toast-message';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { useUpdateClimb } from '@/lib/state/serverState/user/climb/useUpdateClimb';
 
 export default function EditClimb() {
     const { data } = useMeUser();
-    const createClimbMutation = useCreateClimb();
     const router = useRouter();
-
     const initGradingSystem = data?.user?.gradingPreference === false ? 'VScale' : 'French';
     const isFrenchGrading = initGradingSystem === 'French';
 
-    const [name, setName] = useState<string>('');
-    const [type, setType] = useState<ClimbTypeEnum>(Object.values(ClimbTypeEnum)[1]);
-    const [style, setStyle] = useState<ClimbStyleEnum>(Object.values(ClimbStyleEnum)[1]);
-    const [grade, setGrade] = useState('V0');
-    const [attempts, setAttempts] = useState<number>(1);
-    const [send, setSend] = useState<boolean>(false);
+    const currentClimb = useSelector((state: RootState) => state.climb.currentClimb);
+    const { mutate: updateClimb, isPending, isError, isSuccess } = useUpdateClimb(currentClimb!.id.toString());
+
+    const [name, setName] = useState<string>(currentClimb?.name || '');
+    const [type, setType] = useState<ClimbTypeEnum | ''>(currentClimb?.type || '');
+    const [style, setStyle] = useState<ClimbStyleEnum | ''>(currentClimb?.style || '');
+    const [grade, setGrade] = useState<string>(currentClimb?.grade || '');
+    const [attempts, setAttempts] = useState<number>(currentClimb?.attempts || 1);
+    const [send, setSend] = useState<boolean>(currentClimb?.send!);
+
+    useEffect(() => {
+        if (currentClimb) {
+            setName(currentClimb.name);
+            setStyle(currentClimb.style);
+            setGrade(currentClimb.grade);
+            setAttempts(currentClimb.attempts);
+            setSend(currentClimb.send!);
+        }
+    }, [currentClimb]);
 
 
     function convertGradeForSaving(selectedGrade: string): string {
@@ -42,33 +54,39 @@ export default function EditClimb() {
         setAttempts(prev => Math.max(1, prev - 1))
     }
 
-    async function handleSave() {
+    async function handleUpdateClimb() {
         const standardizedGrade = convertGradeForSaving(grade);
 
         const climbData: Climb = {
-            id: UUID.v4(),
-            name,
-            type,
-            style,
+            id: currentClimb?.id || UUID.v4(),
+            name: name || '',
+            sessionId: currentClimb?.sessionId,
+            type: type as ClimbTypeEnum,
+            style: type as ClimbStyleEnum,
             grade: standardizedGrade,
-            attempts,
-            send,
+            attempts: attempts,
+            send: send,
         };
 
-        createClimbMutation.mutate(climbData, {
+        updateClimb(climbData, {
             onSuccess: () => {
-                console.log("Climb added successfully");
                 Toast.show({
                     type: "success",
-                    text1: "Saved Climb",
+                    text1: "Climb updated successfully",
                     swipeable: true,
                 });
                 router.back();
             },
             onError: (error) => {
-                console.error("Error saving climb:", error);
-            }
+                Toast.show({
+                    type: "error",
+                    text1: "Error updating climb",
+                    text2: error.message,
+                });
+            },
         });
+
+
     }
 
 
@@ -158,9 +176,12 @@ export default function EditClimb() {
                 </View>
             </View>
 
-            <TouchableOpacity onPress={handleSave}
-                style={styles.addButton}>
-                <Text style={styles.addButtonText}>Add Climb</Text>
+            <TouchableOpacity onPress={handleUpdateClimb} style={styles.addButton}>
+                {isPending ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                    <Text style={styles.addButtonText}>Update Climb</Text>
+                )}
             </TouchableOpacity>
         </ScrollView>
     );

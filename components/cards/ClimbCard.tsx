@@ -3,23 +3,31 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Climb } from '@/lib/utils/models/climbModels';
 import { useRouter, usePathname } from 'expo-router';
+import { useDispatch } from 'react-redux';
+import { setCurrentClimb } from '@/redux/climbSlice';
 
 interface ClimbCardProps {
     climb: Climb;
 }
 
 export function ClimbCard({ climb }: ClimbCardProps) {
+    const dispatch = useDispatch();
     const router = useRouter();
     const pathname = usePathname();
 
     const isHistoryRoute = pathname.startsWith('/history');
 
-    const handleEdit = () => {
-        router.push({
-            pathname: '/(auth)/session/edit',
-            params: { climbId: climb.id.toString() },
-        });
-    };
+    // const handleEdit = () => {
+    //     router.push({
+    //         pathname: '/(auth)/session/edit',
+    //         params: { climbId: climb.id.toString() },
+    //     });
+    // };
+
+    function handleEdit() {
+        dispatch(setCurrentClimb(climb));
+        router.push('/(auth)/session/edit');
+    }
 
     return (
         <View style={styles.card}>
