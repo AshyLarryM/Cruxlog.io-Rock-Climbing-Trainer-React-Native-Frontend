@@ -3,6 +3,7 @@ import { Session } from "@/lib/utils/models/sessionModels";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { View, Text, StyleSheet, TouchableOpacity, LayoutAnimation, Platform, UIManager } from "react-native";
+import { IntensityBar } from "./IntensityBar";
 
 interface SessionItemProps {
     session: Session;
@@ -40,7 +41,8 @@ export function SessionItem({ session }: SessionItemProps) {
                 </Text>
                 <View style={styles.intensityContainer}>
                     <View style={styles.separator} />
-                    <Text>Intensity: {session.intensity}</Text>
+                    <Text style={styles.highlightHeader}>Intensity Rating</Text>
+                    <IntensityBar intensity={session.intensity} />
                 </View>
 
                 {/* Highlights Container */}
@@ -86,36 +88,54 @@ export function SessionItem({ session }: SessionItemProps) {
                     </View>
                 </View>
 
-                {/* More Button */}
+                {/* Conditional Stats Section */}
+                {isExpanded && (
+                    <View style={styles.statsContainer}>
+                        <Text style={styles.statsHeader}>Additional Session Data</Text>
+                        <View style={styles.statsRow}>
+                            <Text style={styles.statLabel}>Total Varied Climbs Attempted:</Text>
+                            <Text style={styles.statValue}>{session.sessionStats.totalClimbs}</Text>
+                        </View>
+                        <View style={styles.statsDivider} />
+                        <View style={styles.statsRow}>
+                            <Text style={styles.statLabel}>Total Attempts:</Text>
+                            <Text style={styles.statValue}>{session.sessionStats.totalAttempts}</Text>
+                        </View>
+                        <View style={styles.statsDivider} />
+                        {session.sessionStats.completedBoulders > 0 && (
+                            <>
+                                <View style={styles.statsRow}>
+                                    <Text style={styles.statLabel}>Completed Boulders:</Text>
+                                    <Text style={styles.statValue}>
+                                        {session.sessionStats.completedBoulders}
+                                    </Text>
+                                </View>
+                                <View style={styles.statsDivider} />
+                            </>
+                        )}
+                        {session.sessionStats.completedRoutes > 0 && (
+                            <>
+                                <View style={styles.statsRow}>
+                                    <Text style={styles.statLabel}>Completed Routes:</Text>
+                                    <Text style={styles.statValue}>
+                                        {session.sessionStats.completedRoutes}
+                                    </Text>
+                                </View>
+                                <View style={styles.statsDivider} />
+                            </>
+                        )}
+                        {session.notes && (
+                            <View style={styles.notesContainer}>
+                                <Text style={styles.notesText}>Notes: {session.notes}</Text>
+                            </View>
+                        )}
+                    </View>
+                )}
                 <TouchableOpacity onPress={toggleMoreStats} style={styles.moreButton}>
                     <Text style={styles.moreText}>
                         {isExpanded ? <Ionicons name="chevron-up" size={16} /> : <Ionicons name="chevron-down" size={16} />}
                     </Text>
                 </TouchableOpacity>
-
-                {/* Conditional Stats Section */}
-                {isExpanded && (
-                    <View style={styles.statsContainer}>
-                        <Text style={styles.statsHeader}>Session Stats:</Text>
-                        {session.sessionStats.highestBoulderGrade !== null && (
-                            <Text>Highest Boulder Grade: {session.sessionStats.highestBoulderGrade}</Text>
-                        )}
-
-                        {session.sessionStats.highestRouteGrade !== null && (
-                            <Text>Highest Route Grade: {session.sessionStats.highestRouteGrade}</Text>
-                        )}
-                        <Text>Total Climbs: {session.sessionStats.totalClimbs}</Text>
-                        <Text>Total Attempts: {session.sessionStats.totalAttempts}</Text>
-                        {session.sessionStats.completedBoulders > 0 && (
-                            <Text>Completed Boulders: {session.sessionStats.completedBoulders}</Text>
-                        )}
-                        {session.sessionStats.completedRoutes > 0 && (
-                            <Text>Completed Routes: {session.sessionStats.completedRoutes}</Text>
-                        )}
-                        <Text>Total Sends: {session.sessionStats.totalSends}</Text>
-                        <Text>Total Flashes: {session.sessionStats.totalFlashes}</Text>
-                    </View>
-                )}
             </View>
         </TouchableOpacity>
     );
@@ -158,7 +178,7 @@ const styles = StyleSheet.create({
         padding: 8,
     },
     statsContainer: {
-        marginTop: 12,
+        marginTop: 8,
     },
     hardestBoulderText: {
         paddingTop: 4,
@@ -177,7 +197,8 @@ const styles = StyleSheet.create({
     statsHeader: {
         fontSize: 16,
         fontWeight: "bold",
-        marginBottom: 4,
+        textAlign: 'center',
+        marginBottom: 8,
     },
     highlightsContainer: {
         flexDirection: "row",
@@ -215,5 +236,41 @@ const styles = StyleSheet.create({
     moreText: {
         fontSize: 16,
         color: "#6c47ff",
+    },
+    statsRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginVertical: 8,
+    },
+    statsDivider: {
+        borderBottomWidth: 1,
+        borderBottomColor: "#ccc",
+        marginVertical: 8,
+    },
+    statLabel: {
+        fontSize: 14,
+        color: "#555",
+        fontWeight: "600",
+    },
+    statValue: {
+        fontSize: 16,
+        fontWeight: "bold",
+    },
+    notesContainer: {
+        marginTop: 16,
+        padding: 8,
+        backgroundColor: "#fff",
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        shadowColor: "#000",
+        shadowOpacity: 0.05,
+        shadowRadius: 4,
+    },
+    notesText: {
+        fontSize: 14,
+        color: "#666",
+        lineHeight: 20,
     },
 });
