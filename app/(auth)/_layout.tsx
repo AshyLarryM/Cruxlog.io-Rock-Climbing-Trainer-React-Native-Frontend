@@ -4,19 +4,7 @@ import { Tabs, usePathname, useRouter } from "expo-router";
 import { useState } from "react";
 import { Modal, Pressable, TouchableOpacity, StyleSheet, View, Text } from "react-native";
 
-export function LogoutButton() {
-    const { signOut } = useAuth();
 
-    function doLogout() {
-        signOut();
-    }
-
-    return (
-        <Pressable onPress={doLogout} style={{ marginRight: 10 }}>
-            <Ionicons name="log-out-outline" size={24} color={'#fff'} />
-        </Pressable>
-    );
-};
 
 export default function TabsPage() {
     const { isSignedIn } = useAuth();
@@ -81,7 +69,7 @@ export default function TabsPage() {
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => <Ionicons name="person-outline" size={size} color={color} />,
                         tabBarLabel: 'My Profile',
-                        headerRight: () => <LogoutButton />,
+                        
                     }}
                     redirect={!isSignedIn}
                 />
