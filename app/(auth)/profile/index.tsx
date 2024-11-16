@@ -4,11 +4,16 @@ import { useMeUser } from '@/lib/state/serverState/user/useMeUser'
 import { useAuth } from '@clerk/clerk-expo';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useUserPr } from '@/lib/state/serverState/user/stats/useUserPr';
+import HardestGrades from '@/components/profile/HardestGrades';
 
 export default function Profile() {
 
     const { userId } = useAuth();
     const { data, error, isLoading } = useMeUser();
+    const { data: userPr} = useUserPr();
+
+    console.log("User PRs:", userPr?.userHardestGrades.boulder)
 
 
     if (isLoading) {
@@ -36,7 +41,6 @@ export default function Profile() {
                         }
                         style={styles.profilePicture}
                     />
-
                 </View>
 
                 {/* Name and Age Row */}
@@ -77,6 +81,7 @@ export default function Profile() {
                     </View>
                 </TouchableOpacity>
             </View>
+            <HardestGrades userPr={userPr} />
         </View>
     );
 }
