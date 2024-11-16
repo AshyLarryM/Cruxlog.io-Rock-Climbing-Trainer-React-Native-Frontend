@@ -17,6 +17,7 @@ export default function EditClimb() {
     const isFrenchGrading = initGradingSystem === 'French';
 
     const currentClimb = useSelector((state: RootState) => state.climb.currentClimb);
+    console.log("CurrentClimb: ", currentClimb);
     const { mutate: updateClimb, isPending } = useUpdateClimb(currentClimb!.id.toString());
 
     const [name, setName] = useState<string>(currentClimb?.name || '');
@@ -29,6 +30,7 @@ export default function EditClimb() {
     useEffect(() => {
         if (currentClimb) {
             setName(currentClimb.name);
+            setType(currentClimb.type);
             setStyle(currentClimb.style);
             setGrade(currentClimb.grade);
             setAttempts(currentClimb.attempts);
@@ -62,7 +64,7 @@ export default function EditClimb() {
             name: name || '',
             sessionId: currentClimb?.sessionId,
             type: type as ClimbTypeEnum,
-            style: type as ClimbStyleEnum,
+            style: style as ClimbStyleEnum,
             grade: standardizedGrade,
             attempts: attempts,
             send: send,

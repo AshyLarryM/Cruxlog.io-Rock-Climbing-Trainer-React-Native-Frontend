@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 16,
-        alignItems: 'center',
         backgroundColor: '#fff',
     },
     button: {
@@ -55,6 +54,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 8,
         marginBottom: 16,
+        alignSelf: 'center',
+        maxWidth: 300,
     },
     buttonClimbText: {
         color: 'white',
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     },
     climbList: {
         width: '100%',
-        paddingHorizontal: 16,
+        paddingHorizontal: 24,
     },
     cardText: {
         fontSize: 18,

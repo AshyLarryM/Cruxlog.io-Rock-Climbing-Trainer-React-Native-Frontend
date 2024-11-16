@@ -83,8 +83,8 @@ export default function Summary() {
                 step={1}
                 value={intensity}
                 onValueChange={(value: number) => setIntensity(value)}
-                minimumTrackTintColor="#6c47ff"
-                maximumTrackTintColor="#6c47ff"
+                minimumTrackTintColor="#DE4372"
+                maximumTrackTintColor="#DE4372"
             />
             <Text style={styles.intensity}>Selected Intensity: {intensity}</Text>
 
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     label: {
+        textAlign: 'center',
         fontSize: 18,
         marginVertical: 10,
     },
@@ -162,6 +163,7 @@ const styles = StyleSheet.create({
         height: 40,
     },
     intensity: {
+        textAlign: 'center',
         fontSize: 16,
         marginBottom: 20,
     },

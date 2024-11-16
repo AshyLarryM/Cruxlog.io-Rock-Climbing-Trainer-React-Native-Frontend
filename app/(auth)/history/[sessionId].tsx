@@ -37,11 +37,10 @@ export default function SessionDetails() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         justifyContent: 'center',
     },
     climbList: {
         width: '100%',
-        paddingHorizontal: 16,
+        paddingHorizontal: 24,
     },
 });
