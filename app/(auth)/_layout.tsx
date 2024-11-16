@@ -29,6 +29,7 @@ export default function TabsPage() {
                     headerStyle: {
                         backgroundColor: '#6c47ff',
                     },
+                    tabBarActiveTintColor: '#6c47ff',
                     headerTintColor: '#fff',
                 }}>
                 <Tabs.Screen

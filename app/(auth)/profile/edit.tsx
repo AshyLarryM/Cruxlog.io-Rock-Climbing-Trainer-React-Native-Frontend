@@ -172,7 +172,7 @@ export default function EditProfile() {
             </View>
             {/* Grading Preference Switch */}
             <View style={styles.switchContainer}>
-                <Text style={styles.label}>Grading Preference (French / YDS - V Scale)</Text>
+                <Text style={styles.label}>Grading Preference (YDS - V Scale / French)</Text>
                 <Switch
                     value={gradingPreference}
                     onValueChange={setGradingPreference}
