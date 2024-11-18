@@ -15,7 +15,7 @@ export default function SessionDetails() {
         });
     }, [navigation, sessionName, sessionId]);
 
-    if (isLoading) return <ActivityIndicator />;
+    if (isLoading) return <ActivityIndicator size={'large'} />;
     if (error) return <Text>Error loading session climbs</Text>;
 
     return (
@@ -28,7 +28,7 @@ export default function SessionDetails() {
                     contentContainerStyle={styles.climbList}
                 />
             ) : (
-                <Text>No climbs for this session yet.</Text>
+                <Text style={styles.noClimbsText}>No climbs for this session yet.</Text>
             )}
         </View>
     );
@@ -43,4 +43,9 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 24,
     },
+    noClimbsText: {
+        fontSize: 16,
+        fontWeight: '500',
+        textAlign: 'center',
+    }
 });

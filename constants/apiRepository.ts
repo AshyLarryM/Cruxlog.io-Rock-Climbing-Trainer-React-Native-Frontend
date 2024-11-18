@@ -1,4 +1,5 @@
-export const baseUrl: string = 'http://192.168.1.5:3000' // TODO: Get ENVs working properly.
+export const baseUrl: string = 'http://192.168.1.5:3000'
+// 'http://192.168.1.5:3000' 
 
 export const apiTestUrl: string = '/api/test'
 

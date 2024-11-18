@@ -23,23 +23,25 @@ export default function Session() {
                     <Text style={styles.buttonClimbText}>New Climb</Text>
                 </TouchableOpacity>
             </Link>
-
-            {climbingSession.isLoading ? (
-                <ActivityIndicator />
-            ) : climbingSession.isError ? (
-                <Text>Error loading climbs</Text>
-            ) : climbingSession.data?.climbs?.length ? (
-                <FlatList
-                    data={climbingSession.data.climbs}
-                    renderItem={({ item }) => <ClimbCard climb={item} />}
-                    keyExtractor={(item) => item.id.toString()}
-                    contentContainerStyle={styles.climbList}
-                />
-            ) : (
-                <Text>No climbs added yet. Start by adding a new climb!</Text>
-            )}
+            
+                {climbingSession.isLoading || climbingSession.isFetching ? (
+                    <View><Text style={styles.statusText}>Fetching Previous Session...</Text><ActivityIndicator size={'large'} /></View>
+                ) : climbingSession.isError ? (
+                    <Text>Error loading climbs</Text>
+                ) : climbingSession.data?.climbs?.length ? (
+                    <FlatList
+                        data={climbingSession.data.climbs}
+                        renderItem={({ item }) => <ClimbCard climb={item} />}
+                        keyExtractor={(item) => item.id.toString()}
+                        contentContainerStyle={styles.climbList}
+                    />
+                ) : (
+                    <Text style={styles.statusText}>No climbs added yet. Start by adding a new climb!</Text>
+                )}
+            
         </View>
     );
+
 }
 
 const styles = StyleSheet.create({
@@ -171,4 +173,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    statusText: {
+        fontSize: 16,
+        fontWeight: '500',
+        textAlign: 'center',
+        marginBottom: 8,
+    }
 });
