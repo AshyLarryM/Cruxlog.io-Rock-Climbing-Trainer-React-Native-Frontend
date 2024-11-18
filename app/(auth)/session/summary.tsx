@@ -23,7 +23,7 @@ export default function Summary() {
         navigation.setOptions({
             headerRight: () => (
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Ionicons name="checkmark" size={24} color={'#42f587'} />
+                    <Ionicons name="checkmark" size={24} color={'#89DE43'} />
                 </TouchableOpacity>
             ),
         });
@@ -72,7 +72,7 @@ export default function Summary() {
                 onChangeText={setSessionName}
             />
 
-            <Text style={styles.date}>Date: {formatDate(climbingSession?.session?.createdAt)}</Text>
+            <Text style={styles.date}>{formatDate(climbingSession?.session?.createdAt)}</Text>
 
             {/* Intensity Slider */}
             <Text style={styles.label}>How did it feel?</Text>
@@ -83,8 +83,8 @@ export default function Summary() {
                 step={1}
                 value={intensity}
                 onValueChange={(value: number) => setIntensity(value)}
-                minimumTrackTintColor="#6c47ff"
-                maximumTrackTintColor="#6c47ff"
+                minimumTrackTintColor="#DE4372"
+                maximumTrackTintColor="#DE4372"
             />
             <Text style={styles.intensity}>Selected Intensity: {intensity}</Text>
 
@@ -152,8 +152,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#666',
         marginBottom: 10,
+        textAlign: 'center',
     },
     label: {
+        textAlign: 'center',
         fontSize: 18,
         marginVertical: 10,
     },
@@ -162,6 +164,7 @@ const styles = StyleSheet.create({
         height: 40,
     },
     intensity: {
+        textAlign: 'center',
         fontSize: 16,
         marginBottom: 20,
     },

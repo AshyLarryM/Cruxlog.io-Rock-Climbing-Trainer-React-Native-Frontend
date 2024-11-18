@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Climb } from '@/lib/utils/models/climbModels';
 import { useRouter, usePathname } from 'expo-router';
@@ -26,18 +26,33 @@ export function ClimbCard({ climb }: ClimbCardProps) {
         <View style={styles.card}>
             <View style={styles.header}>
                 <Text style={styles.title}>{climb.name || 'Unnamed'}</Text>
-                <Text style={styles.title}>{climb.style || 'Unnamed'}</Text>
             </View>
+            <View style={styles.typeContainer}>
+                <Text style={styles.typeLabel}>Type: </Text>
+                <Text style={styles.typeValue}>{climb.style} {climb.type}</Text>
+            </View>
+            <View style={styles.divider} />
 
             <View style={styles.content}>
                 <View style={styles.gradeContainer}>
                     <Text style={styles.gradeText}>Grade: {climb.grade}</Text>
                 </View>
                 <View style={styles.attemptsContainer}>
-                    <Text style={styles.attemptsLabel}>Attempts</Text>
+                    <Text style={styles.attemptsLabel}>Attempts: </Text>
                     <Text style={styles.attemptsCount}>{climb.attempts}</Text>
                 </View>
             </View>
+
+            {climb.climbImage && (
+                <View style={styles.climbImageContainer}>
+                    <Image
+                        source={{ uri: climb.climbImage }}
+                        style={styles.climbImage}
+                        resizeMode="cover"
+                    />
+                </View>
+            )}
+
 
             {climb.attempts === 1 && climb.send && (
                 <View style={styles.flashContainer}>
@@ -46,12 +61,14 @@ export function ClimbCard({ climb }: ClimbCardProps) {
                 </View>
             )}
 
+
+
             <View
                 style={[
                     styles.footer,
                     {
                         backgroundColor: climb.send ? "#ffcf4d" : '#fff',
-                        justifyContent: isHistoryRoute ? 'center' : 'space-around', // Use space-around to bring them closer
+                        justifyContent: isHistoryRoute ? 'center' : 'space-around',
                     }
                 ]}
             >
@@ -88,43 +105,77 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,
     },
+    divider: {
+        borderBottomWidth: 1,
+        borderBottomColor: "#ccc",
+        marginVertical: 8,
+    },
     title: {
         color: 'white',
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    typeContainer: {
+        marginTop: 8,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    typeLabel: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#555',
+    },
+    typeValue: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#000',
+    },
     content: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingVertical: 28,
+        justifyContent: 'center',
+        paddingVertical: 16,
     },
     gradeContainer: {
-        backgroundColor: '#fff',
-        paddingHorizontal: 24,
-        paddingVertical: 4,
-        borderRadius: 12,
-    },
-    gradeText: {
-        color: '#4caf50',
-        fontWeight: 'bold',
-        fontSize: 18,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 8,
     },
     attemptsContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 8,
+    },
+    gradeText: {
+        color: '#4caf50',
+        fontWeight: 'bold',
+        fontSize: 20,
     },
     attemptsLabel: {
-        fontSize: 16,
-        color: '#333',
+        fontSize: 20,
+        fontWeight: "500",
+        color: '#555',
         marginRight: 8,
     },
     attemptsCount: {
-        fontSize: 18,
-        color: '#333',
+        fontSize: 20,
         fontWeight: 'bold',
-        paddingHorizontal: 8,
+    },
+    climbImageContainer: {
+        paddingHorizontal: 16,
+        paddingTop: 4,
+        alignItems: 'center',
+    },
+    climbImage: {
+        padding: 4,
+        width: 275,
+        height: 200,
+        borderRadius: 12,
+        marginVertical: 10,
     },
     footer: {
         flexDirection: 'row',

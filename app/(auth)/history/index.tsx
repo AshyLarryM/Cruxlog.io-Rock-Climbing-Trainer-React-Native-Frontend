@@ -6,7 +6,7 @@ import { useFocusEffect } from 'expo-router';
 
 
 export default function History() {
-    const { data, error, isLoading, refetch } = useFetchAllSessions();
+    const { data, error, isFetching, isLoading, refetch } = useFetchAllSessions();
     const [refreshing, setRefreshing] = useState<boolean>(false);
 
     useFocusEffect(
@@ -22,7 +22,7 @@ export default function History() {
         setRefreshing(false);
     }
 
-    if (isLoading && !refreshing) {
+    if (isLoading || isFetching && !refreshing) {
         return (
             <View style={styles.center}>
                 <ActivityIndicator size="large" color="#000" />

@@ -117,48 +117,62 @@ export default function EditProfile() {
                 </View>
             </TouchableOpacity>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Full Name"
-                value={fullName}
-                onChangeText={setFullName}
-            />
+            <View style={styles.inputGroup}>
+                <Text style={styles.label}>Full Name</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your full name"
+                    value={fullName}
+                    onChangeText={setFullName}
+                />
+            </View>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Age"
-                keyboardType="numeric"
-                value={age !== undefined ? age.toString() : ''}
-                onChangeText={(text) => setAge(text ? Number(text) : undefined)}
-            />
+            <View style={styles.inputGroup}>
+                <Text style={styles.label}>Age</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your age"
+                    keyboardType="numeric"
+                    value={age !== undefined ? age.toString() : ''}
+                    onChangeText={(text) => setAge(text ? Number(text) : undefined)}
+                />
+            </View>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Height"
-                keyboardType="numeric"
-                value={height !== undefined ? height.toString() : ''}
-                onChangeText={(text) => setHeight(text ? Number(text) : undefined)}
-            />
+            <View style={styles.inputGroup}>
+                <Text style={styles.label}>Height</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your height"
+                    keyboardType="numeric"
+                    value={height !== undefined ? height.toString() : ''}
+                    onChangeText={(text) => setHeight(text ? Number(text) : undefined)}
+                />
+            </View>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Weight"
-                keyboardType="numeric"
-                value={weight !== undefined ? weight.toString() : ''}
-                onChangeText={(text) => setWeight(text ? Number(text) : undefined)}
-            />
+            <View style={styles.inputGroup}>
+                <Text style={styles.label}>Weight</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your weight"
+                    keyboardType="numeric"
+                    value={weight !== undefined ? weight.toString() : ''}
+                    onChangeText={(text) => setWeight(text ? Number(text) : undefined)}
+                />
+            </View>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Ape Index"
-                keyboardType="numeric"
-                value={apeIndex !== undefined ? apeIndex.toString() : ''}
-                onChangeText={(text) => setApeIndex(text ? Number(text) : undefined)}
-            />
-
+            <View style={styles.inputGroup}>
+                <Text style={styles.label}>Ape Index</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your ape index"
+                    keyboardType="numeric"
+                    value={apeIndex !== undefined ? apeIndex.toString() : ''}
+                    onChangeText={(text) => setApeIndex(text ? Number(text) : undefined)}
+                />
+            </View>
             {/* Grading Preference Switch */}
             <View style={styles.switchContainer}>
-                <Text>Grading Preference (French / YDS-V Scale)</Text>
+                <Text style={styles.label}>Grading Preference (YDS - V Scale / French)</Text>
                 <Switch
                     value={gradingPreference}
                     onValueChange={setGradingPreference}
@@ -167,7 +181,7 @@ export default function EditProfile() {
 
             {/* Measurement System Switch */}
             <View style={styles.switchContainer}>
-                <Text>Measurement System (Metric / Imperial)</Text>
+                <Text style={styles.label}>Measurement System (Metric / Imperial)</Text>
                 <Switch
                     value={measurementSystem}
                     onValueChange={setMeasurementSystem}
@@ -189,12 +203,27 @@ const styles = StyleSheet.create({
     container: {
         padding: 20,
     },
+    inputGroup: {
+        marginBottom: 15,
+        alignItems: 'center',
+    },
+    label: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#333',
+        marginBottom: 5,
+    },
     input: {
         height: 40,
-        borderColor: '#ccc',
+        width: 200,
+        borderColor: '#6c47ff',
         borderWidth: 1,
-        marginBottom: 10,
-        paddingHorizontal: 8,
+        borderRadius: 16,
+        paddingHorizontal: 10,
+        backgroundColor: '#fff',
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: '500',
     },
     switchContainer: {
         flexDirection: 'row',

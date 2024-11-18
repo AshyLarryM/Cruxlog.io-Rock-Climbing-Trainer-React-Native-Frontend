@@ -1,3 +1,4 @@
+import { LogoutButton } from "@/components/buttons/LogoutButton";
 import { Stack } from "expo-router";
 
 export default function ProfileLayout() {
@@ -14,6 +15,7 @@ export default function ProfileLayout() {
                 name="index"
                 options={{
                     title: "My Profile",
+                    headerRight: () => <LogoutButton />,
                 }}
             />
             <Stack.Screen

@@ -23,30 +23,31 @@ export default function Session() {
                     <Text style={styles.buttonClimbText}>New Climb</Text>
                 </TouchableOpacity>
             </Link>
-
-            {climbingSession.isLoading ? (
-                <ActivityIndicator />
-            ) : climbingSession.isError ? (
-                <Text>Error loading climbs</Text>
-            ) : climbingSession.data?.climbs?.length ? (
-                <FlatList
-                    data={climbingSession.data.climbs}
-                    renderItem={({ item }) => <ClimbCard climb={item} />}
-                    keyExtractor={(item) => item.id.toString()}
-                    contentContainerStyle={styles.climbList}
-                />
-            ) : (
-                <Text>No climbs added yet. Start by adding a new climb!</Text>
-            )}
+            
+                {climbingSession.isLoading || climbingSession.isFetching ? (
+                    <View><Text style={styles.statusText}>Fetching Previous Session...</Text><ActivityIndicator size={'large'} /></View>
+                ) : climbingSession.isError ? (
+                    <Text>Error loading climbs</Text>
+                ) : climbingSession.data?.climbs?.length ? (
+                    <FlatList
+                        data={climbingSession.data.climbs}
+                        renderItem={({ item }) => <ClimbCard climb={item} />}
+                        keyExtractor={(item) => item.id.toString()}
+                        contentContainerStyle={styles.climbList}
+                    />
+                ) : (
+                    <Text style={styles.statusText}>No climbs added yet. Start by adding a new climb!</Text>
+                )}
+            
         </View>
     );
+
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 16,
-        alignItems: 'center',
         backgroundColor: '#fff',
     },
     button: {
@@ -55,6 +56,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 8,
         marginBottom: 16,
+        alignSelf: 'center',
+        maxWidth: 300,
     },
     buttonClimbText: {
         color: 'white',
@@ -64,7 +67,7 @@ const styles = StyleSheet.create({
     },
     climbList: {
         width: '100%',
-        paddingHorizontal: 16,
+        paddingHorizontal: 24,
     },
     cardText: {
         fontSize: 18,
@@ -170,4 +173,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    statusText: {
+        fontSize: 16,
+        fontWeight: '500',
+        textAlign: 'center',
+        marginBottom: 8,
+    }
 });
