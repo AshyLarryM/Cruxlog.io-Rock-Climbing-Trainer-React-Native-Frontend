@@ -42,6 +42,11 @@ function InitalLayout() {
 		const inTabsGroup = segments[0] === '(auth)';
 
 		if (isSignedIn && !inTabsGroup) {
+			Toast.show({
+				type: "success",
+				text1: "Logged in.",
+				swipeable: true,
+			});
 			router.replace('/(auth)/history');
 		} else if (!isSignedIn) {
 			router.replace('/login');

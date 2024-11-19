@@ -1,6 +1,7 @@
 import { baseUrl } from "@/constants/apiRepository";
 import { useAuth } from "@clerk/clerk-expo";
 import { useMutation } from "@tanstack/react-query";
+import Toast from "react-native-toast-message";
 
 interface UpdateSessionPayload {
     sessionName: string;
@@ -59,6 +60,10 @@ export function useUpdateSession() {
             console.error("Error updating session:", error);
         },
         onSuccess: (data) => {
+            Toast.show({
+                type: "success",
+                text1: "Climbing Session Completed!"
+            })
             console.log("Session updated successfully:", data);
         },
     });

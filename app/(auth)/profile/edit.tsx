@@ -7,18 +7,21 @@ import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import { useGenerateProfilePresignedUrl } from '@/lib/state/serverState/user/useGeneratePresignedUrl';
 import { useUploadImage } from '@/lib/state/serverState/user/useUploadImage';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function EditProfile() {
     const { data } = useMeUser();
 
-    const [fullName, setFullName] = useState(data?.user?.fullName || ''); // Default to an empty string for text
-    const [age, setAge] = useState<number | null>(data?.user?.age ?? null); // Default to null for numeric fields
+    const [fullName, setFullName] = useState(data?.user?.fullName || '');
+    const [age, setAge] = useState<number | null>(data?.user?.age ?? null);
     const [height, setHeight] = useState<number | null>(data?.user?.height ?? null);
     const [weight, setWeight] = useState<number | null>(data?.user?.weight ?? null);
     const [apeIndex, setApeIndex] = useState<number | null>(data?.user?.apeIndex ?? null);
-    const [gradingPreference, setGradingPreference] = useState(data?.user?.gradingPreference || false); // Default to false for booleans
+    const [gradingPreference, setGradingPreference] = useState(data?.user?.gradingPreference || false);
     const [measurementSystem, setMeasurementSystem] = useState(data?.user?.measurementSystem || false);
-    const [profileImage, setProfileImage] = useState<string | null>(data?.user?.profileImage ?? null); // Default to null for optional string fields
+    const [profileImage, setProfileImage] = useState<string | null>(data?.user?.profileImage ?? null);
+    const [isUpdating, setIsUpdating] = useState<boolean>(false);
+    const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
 
 
 
@@ -27,14 +30,19 @@ export default function EditProfile() {
     const { mutateAsync: uploadImage } = useUploadImage();
 
     async function handleSave() {
+        setIsUpdating(true)
         try {
             let profileImageUrl = profileImage;
+            
+            const isProfileImageChanged = profileImage !== data?.user?.profileImage;
 
-            if (profileImage) {
+            if (isProfileImageChanged && profileImage) {
                 const { url, key } = await generateProfilePresignedUrl();
                 try {
+                    setIsImageUploading(true),
                     await uploadImage({ url, imageUri: profileImage });
                     profileImageUrl = `https://rock-climbing-app.s3.us-west-1.amazonaws.com/${key}`;
+                    setIsImageUploading(false);
                 } catch (uploadError) {
                     console.error("Image upload failed:", uploadError);
                     Toast.show({
@@ -55,7 +63,7 @@ export default function EditProfile() {
                     apeIndex,
                     gradingPreference,
                     measurementSystem,
-                    profileImage: profileImageUrl,
+                    profileImage: isProfileImageChanged ? profileImageUrl : undefined,
                 },
                 {
                     onSuccess: () => {
@@ -84,6 +92,9 @@ export default function EditProfile() {
                 text2: "Failed to Update Profile!"
             })
         }
+        finally {
+            setIsUpdating(false);
+        }
     }
 
 
@@ -109,6 +120,12 @@ export default function EditProfile() {
 
     return (
         <View style={styles.container}>
+            <Spinner
+                visible={isImageUploading || isUpdating}
+                textContent={isImageUploading ? "Uploading Image..." : "Updating Profile..."}
+                textStyle={{ color: '#fff' }}
+                overlayColor="rgba(0, 0, 0, 0.7)"
+            />
             <TouchableOpacity onPress={chooseImage}>
                 <View style={styles.imageContainer}>
                     {profileImage ? (

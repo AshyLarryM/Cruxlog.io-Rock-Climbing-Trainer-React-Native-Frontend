@@ -6,15 +6,18 @@ import { useUpdateSession } from '@/lib/state/serverState/user/session/useUpdate
 import { router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function Summary() {
     const { data: climbingSession, isLoading, isError } = useFetchSession();
     const { mutate: updateSession, isPending } = useUpdateSession();
     const navigation = useNavigation();
-    const [sessionName, setSessionName] = useState('');
-    const [intensity, setIntensity] = useState(5);
-    const [notes, setNotes] = useState('');
-    const [modalVisible, setModalVisible] = useState(false);
+    const [sessionName, setSessionName] = useState<string>('');
+    const [intensity, setIntensity] = useState<number>(5);
+    const [notes, setNotes] = useState<string>('');
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
 
     if (isLoading) return <ActivityIndicator />;
     if (isError) return <Text>Error loading session summary</Text>;
@@ -47,7 +50,7 @@ export default function Summary() {
                 onSuccess: () => {
                     Toast.show({
                         type: "success",
-                        text1: "Session Saved",
+                        text1: "Session Completed!",
                     });
                     router.push('/(auth)/history');
                 },
@@ -63,6 +66,12 @@ export default function Summary() {
 
     return (
         <View style={styles.container}>
+            <Spinner
+                visible={isSubmitting}
+                textContent="Saving Session..."
+                textStyle={{ color: '#fff' }}
+                overlayColor="rgba(0, 0, 0, 0.7)"
+            />
             <Text style={styles.label}>Session Name</Text>
             <TextInput
                 style={styles.sessionTextInput}

@@ -34,7 +34,7 @@ export default function TabsPage() {
                 <Tabs.Screen
                     name="history"
                     options={{
-                        headerTitle: 'History',
+                        headerTitle: 'My Session History',
                         tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
                         tabBarLabel: 'History',
                         headerShown: false,

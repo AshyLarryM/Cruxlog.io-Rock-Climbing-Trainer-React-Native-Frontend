@@ -1,7 +1,7 @@
 import { useSignIn } from '@clerk/clerk-expo';
 import { Link } from 'expo-router';
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Button, Pressable, Text, Alert } from 'react-native';
+import { View, StyleSheet, TextInput, Button, Pressable, Text, Alert, ActivityIndicator } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function Login() {
@@ -53,8 +53,12 @@ export default function Login() {
                 style={styles.inputField}
             />
 
-            <Pressable onPress={onSigninPress} style={styles.loginButton}>
+            <Pressable onPress={loading ? null: onSigninPress} style={styles.loginButton}>
+                {loading ? (
+                    <Text style={styles.loginButtonText}>Loggin in...</Text>
+            ) : ( 
                 <Text style={styles.loginButtonText}>Login</Text>
+            )}
             </Pressable>
 
             <Link href={'/reset'} asChild>

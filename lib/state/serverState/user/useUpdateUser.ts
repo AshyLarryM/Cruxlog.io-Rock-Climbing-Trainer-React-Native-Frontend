@@ -2,6 +2,7 @@ import { useAuth } from "@clerk/clerk-expo";
 import { baseUrl } from "@/constants/apiRepository";
 import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
 import { User } from "@/lib/utils/types";
+import Toast from "react-native-toast-message";
 
 interface ApiResponse {
     message: string;
@@ -33,12 +34,23 @@ export function useUpdateUser(): UseMutationResult<ApiResponse, Error, Partial<U
                 console.warn("No Token");
                 throw new Error("Token not available");
             }
-            // Use a fallback userId if undefined or null
             return updateUser(token, userId ?? '', userData);
         },
         onSuccess: () => {
-            // Use an object with queryKey to explicitly specify the key for invalidateQueries
+            Toast.show({
+				type: "success",
+                text1: "Updated Profile",
+				text2: "User Profile Successfully Updated",
+				swipeable: true,
+			});
             queryClient.invalidateQueries({ queryKey: ['user', userId ?? 'unknown'] });
+        },
+        onError: () => {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "User Updated Failed",
+            });
         },
     });
 }

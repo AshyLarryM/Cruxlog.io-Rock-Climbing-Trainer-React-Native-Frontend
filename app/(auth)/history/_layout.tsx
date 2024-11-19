@@ -14,7 +14,7 @@ export default function HistoryLayout() {
             <Stack.Screen
                 name="index"
                 options={{
-                    title: "History",
+                    title: "Session History",
                 }}
             />
         </Stack>
