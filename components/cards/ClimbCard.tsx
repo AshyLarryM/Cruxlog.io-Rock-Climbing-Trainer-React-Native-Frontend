@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Climb } from '@/lib/utils/models/climbModels';
 import { useRouter, usePathname } from 'expo-router';
@@ -14,6 +14,7 @@ export function ClimbCard({ climb }: ClimbCardProps) {
     const dispatch = useDispatch();
     const router = useRouter();
     const pathname = usePathname();
+    const [imageLoading, setImageLoading] = useState<boolean>(true);
 
     const isHistoryRoute = pathname.startsWith('/history');
 
@@ -45,10 +46,15 @@ export function ClimbCard({ climb }: ClimbCardProps) {
 
             {climb.climbImage && (
                 <View style={styles.climbImageContainer}>
+                    {imageLoading && (
+                        <ActivityIndicator size="large" color="#6c47ff" style={styles.loader} />
+                    )}
                     <Image
                         source={{ uri: climb.climbImage }}
                         style={styles.climbImage}
                         resizeMode="cover"
+                        onLoad={() => setImageLoading(false)}
+                        onError={() => setImageLoading(false)} // Handle potential errors
                     />
                 </View>
             )}
@@ -165,10 +171,16 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+    loader: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+    },
     climbImageContainer: {
         paddingHorizontal: 16,
         paddingTop: 4,
         alignItems: 'center',
+        position: 'relative',
     },
     climbImage: {
         padding: 4,
