@@ -11,14 +11,16 @@ import { useUploadImage } from '@/lib/state/serverState/user/useUploadImage';
 export default function EditProfile() {
     const { data } = useMeUser();
 
-    const [fullName, setFullName] = useState(data?.user?.fullName || '');
-    const [age, setAge] = useState<number | undefined>(data?.user?.age);
-    const [height, setHeight] = useState<number | undefined>(data?.user?.height);
-    const [weight, setWeight] = useState<number | undefined>(data?.user?.weight);
-    const [apeIndex, setApeIndex] = useState<number | undefined>(data?.user?.apeIndex);
-    const [gradingPreference, setGradingPreference] = useState(data?.user?.gradingPreference || false);
+    const [fullName, setFullName] = useState(data?.user?.fullName || ''); // Default to an empty string for text
+    const [age, setAge] = useState<number | null>(data?.user?.age ?? null); // Default to null for numeric fields
+    const [height, setHeight] = useState<number | null>(data?.user?.height ?? null);
+    const [weight, setWeight] = useState<number | null>(data?.user?.weight ?? null);
+    const [apeIndex, setApeIndex] = useState<number | null>(data?.user?.apeIndex ?? null);
+    const [gradingPreference, setGradingPreference] = useState(data?.user?.gradingPreference || false); // Default to false for booleans
     const [measurementSystem, setMeasurementSystem] = useState(data?.user?.measurementSystem || false);
-    const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
+    const [profileImage, setProfileImage] = useState<string | null>(data?.user?.profileImage ?? null); // Default to null for optional string fields
+
+
 
     const { mutate: updateUser, isPending } = useUpdateUser();
     const { mutateAsync: generateProfilePresignedUrl } = useGenerateProfilePresignedUrl();
@@ -122,7 +124,7 @@ export default function EditProfile() {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter your full name"
-                    value={fullName}
+                    value={fullName !== null ? fullName.toString() : ''}
                     onChangeText={setFullName}
                 />
             </View>
@@ -133,8 +135,8 @@ export default function EditProfile() {
                     style={styles.input}
                     placeholder="Enter your age"
                     keyboardType="numeric"
-                    value={age !== undefined ? age.toString() : ''}
-                    onChangeText={(text) => setAge(text ? Number(text) : undefined)}
+                    value={age !== null ? age.toString() : ''}
+                    onChangeText={(text) => setAge(text ? Number(text) : null)}
                 />
             </View>
 
@@ -144,8 +146,8 @@ export default function EditProfile() {
                     style={styles.input}
                     placeholder="Enter your height"
                     keyboardType="numeric"
-                    value={height !== undefined ? height.toString() : ''}
-                    onChangeText={(text) => setHeight(text ? Number(text) : undefined)}
+                    value={height !== null ? height.toString() : ''}
+                    onChangeText={(text) => setHeight(text ? Number(text) : null)}
                 />
             </View>
 
@@ -155,8 +157,8 @@ export default function EditProfile() {
                     style={styles.input}
                     placeholder="Enter your weight"
                     keyboardType="numeric"
-                    value={weight !== undefined ? weight.toString() : ''}
-                    onChangeText={(text) => setWeight(text ? Number(text) : undefined)}
+                    value={weight !== null ? weight.toString() : ''}
+                    onChangeText={(text) => setWeight(text ? Number(text) : null)}
                 />
             </View>
 
@@ -166,8 +168,8 @@ export default function EditProfile() {
                     style={styles.input}
                     placeholder="Enter your ape index"
                     keyboardType="numeric"
-                    value={apeIndex !== undefined ? apeIndex.toString() : ''}
-                    onChangeText={(text) => setApeIndex(text ? Number(text) : undefined)}
+                    value={apeIndex !== null ? apeIndex.toString() : ''}
+                    onChangeText={(text) => setApeIndex(text ? Number(text) : null)}
                 />
             </View>
             {/* Grading Preference Switch */}

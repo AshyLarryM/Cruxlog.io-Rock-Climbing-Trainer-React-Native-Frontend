@@ -1,10 +1,10 @@
 export interface User {
     email: string,
-    fullName?: string,
-    age?: number,
-    height?: number,
-    weight?: number,
-    apeIndex?: number,
+    fullName?: string | null,
+    age?: number | null,
+    height?: number | null,
+    weight?: number | null,
+    apeIndex?: number | null,
     gradingPreference: boolean,
     measurementSystem: boolean,
     profileImage?: string | null;
