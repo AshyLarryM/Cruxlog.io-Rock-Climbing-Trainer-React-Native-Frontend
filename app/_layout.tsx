@@ -40,7 +40,6 @@ function InitalLayout() {
 		if (!isLoaded) return;
 
 		const inTabsGroup = segments[0] === '(auth)';
-		console.log("isSignedIn:", isSignedIn);
 
 		if (isSignedIn && !inTabsGroup) {
 			router.replace('/(auth)/history');

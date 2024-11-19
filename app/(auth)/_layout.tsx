@@ -18,7 +18,6 @@ export default function TabsPage() {
 
     function navigateToSession() {
         toggleSessionModal();
-        console.log('routing to session...')
         router.push('/(auth)/session');
     }
 

@@ -13,8 +13,6 @@ export default function Profile() {
     const { data, error, isLoading } = useMeUser();
     const { data: userPr} = useUserPr();
 
-    console.log("User PRs:", userPr?.userHardestGrades.boulder)
-
 
     if (isLoading) {
         return <ActivityIndicator size="large" color="#0000ff" />;

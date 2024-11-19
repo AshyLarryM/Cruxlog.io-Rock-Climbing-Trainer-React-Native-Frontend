@@ -11,7 +11,6 @@ export default function History() {
 
     useFocusEffect(
         React.useCallback(() => {
-            console.log("refresh history");
             refetch();
         }, [refetch]) // TODO: May trigger too many api calls?
     );

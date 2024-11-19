@@ -17,7 +17,6 @@ async function generateProfilePresignedUrl(token: string, userId: string): Promi
 
     if (!response.ok) throw new Error('Failed to generate pre-signed URL!');
     const data = await response.json();
-    console.log('generate presignedUrl: ', data);
     return data;
 }
 
