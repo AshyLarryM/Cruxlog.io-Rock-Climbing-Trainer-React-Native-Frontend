@@ -13,6 +13,9 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "This app requires access to your photo library to allow you to upload profile pictures for personalization and climb images to document your climbing activities."
+      },
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.cruxlog"
     },
