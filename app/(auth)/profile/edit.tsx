@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Button, StyleSheet, Switch, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Switch, ActivityIndicator, TouchableOpacity, Image, Pressable, Modal } from 'react-native';
 import React, { useState } from 'react';
 import { useMeUser } from '@/lib/state/serverState/user/useMeUser';
 import { useUpdateUser } from '@/lib/state/serverState/user/useUpdateUser';
@@ -23,6 +23,8 @@ export default function EditProfile() {
     const [isUpdating, setIsUpdating] = useState<boolean>(false);
     const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
 
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+
 
 
     const { mutate: updateUser, isPending } = useUpdateUser();
@@ -33,14 +35,14 @@ export default function EditProfile() {
         setIsUpdating(true)
         try {
             let profileImageUrl = profileImage;
-            
+
             const isProfileImageChanged = profileImage !== data?.user?.profileImage;
 
             if (isProfileImageChanged && profileImage) {
                 const { url, key } = await generateProfilePresignedUrl();
                 try {
                     setIsImageUploading(true),
-                    await uploadImage({ url, imageUri: profileImage });
+                        await uploadImage({ url, imageUri: profileImage });
                     profileImageUrl = `https://rock-climbing-app.s3.us-west-1.amazonaws.com/${key}`;
                     setIsImageUploading(false);
                 } catch (uploadError) {
@@ -116,6 +118,10 @@ export default function EditProfile() {
             setProfileImage(result.assets[0].uri);
         }
 
+    }
+
+    async function showDeleteModal() {
+        setModalVisible(true);
     }
 
     return (
@@ -214,13 +220,50 @@ export default function EditProfile() {
                     <Text style={styles.updateButtonText}>Update Profile</Text>
                 )}
             </TouchableOpacity>
+
+            <Pressable style={styles.button} onPress={showDeleteModal}>
+                <Text style={styles.linkText}>Delete Account</Text>
+            </Pressable>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalText}>Delete your Account?</Text>
+                        <Text style={styles.modalSubText}>Are you sure? All data and account information will be permanently deleted.</Text>
+                        <View style={styles.modalButtons}>
+                            <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+                                <Text style={styles.cancelButtonText}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.modalButton, styles.submitButton]}
+                                onPress={() => {
+                                    setModalVisible(false);
+                                    // submitSessionUpdate();
+                                }}
+                            >
+                                {isPending ? (
+                                    <ActivityIndicator size="small" color="#fff" />
+                                ) : (
+                                    <Text style={styles.submitButtonText}>Submit</Text>
+                                )}
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20,
+        marginTop: 8,
+        paddingHorizontal: 16
     },
     inputGroup: {
         marginBottom: 15,
@@ -276,5 +319,63 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'center',
-    }
+    },
+    button: {
+        marginTop: 32,
+        alignItems: 'center',
+    },
+    linkText: {
+        color: '#ff0000',
+        fontSize: 16,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        width: 300,
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    modalSubText: {
+        fontSize: 16,
+        color: '#666',
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    modalButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 35,
+        borderRadius: 5,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#6c47ff'
+    },
+    cancelButtonText: {
+        color: '#6c47ff',
+        fontSize: 16,
+
+    },
+    submitButton: {
+        backgroundColor: '#ff0000',
+        borderWidth: 1,
+        borderColor: '#ff0000',
+    },
+    submitButtonText: {
+        color: '#fff',
+    },
 });
