@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderWidth: 1,
         borderColor: '#6c47ff',
-        borderRadius: 4,
+        borderRadius: 12,
         padding: 10,
         backgroundColor: '#fff',
     },
@@ -114,5 +114,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 1,
         color: '#333',
+        fontWeight: '500',
+        marginTop: 8,
     },
 });

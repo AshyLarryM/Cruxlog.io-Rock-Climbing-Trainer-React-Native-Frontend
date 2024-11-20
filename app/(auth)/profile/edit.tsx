@@ -157,7 +157,7 @@ export default function EditProfile() {
                 />
             </View>
 
-            <View style={styles.inputGroup}>
+            {/* <View style={styles.inputGroup}>
                 <Text style={styles.label}>Height</Text>
                 <TextInput
                     style={styles.input}
@@ -188,7 +188,7 @@ export default function EditProfile() {
                     value={apeIndex !== null ? apeIndex.toString() : ''}
                     onChangeText={(text) => setApeIndex(text ? Number(text) : null)}
                 />
-            </View>
+            </View> */}
             {/* Grading Preference Switch */}
             <View style={styles.switchContainer}>
                 <Text style={styles.label}>Grading Preference (YDS - V Scale / French)</Text>

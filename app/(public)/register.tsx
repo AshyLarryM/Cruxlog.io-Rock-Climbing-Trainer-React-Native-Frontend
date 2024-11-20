@@ -26,7 +26,6 @@ export default function Register() {
                 password,
             });
             await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
-            // change the ui to verify the email address
             setPendingVerification(true);
         } catch (err: any) {
             alert(err.errors[0].message);
@@ -122,7 +121,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderWidth: 1,
         borderColor: '#6c47ff',
-        borderRadius: 4,
+        borderRadius: 12,
         padding: 10,
         backgroundColor: '#fff',
     },
@@ -144,5 +143,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 1,
         color: '#333',
+        fontWeight: '500',
+        marginTop: 8,
     },
 });
