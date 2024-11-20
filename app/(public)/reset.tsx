@@ -53,7 +53,7 @@ export default function Reset() {
                 <View style={styles.header}>
                     <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
                     <Text style={styles.pageHeader}>Reset Password </Text>
-                    <Text style={styles.headerDetails}>Enter your email address to reset password</Text>
+                    <Text style={styles.headerDetails}>Enter your email address to reset password.</Text>
                 </View>
                 <Stack.Screen options={{ headerBackVisible: !successfulCreation }} />
 
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     pageHeader: {
-        fontSize: 32,
+        fontSize: 42,
         textAlign: 'center',
         fontWeight: 'bold',
         color: '#6c47ff',
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         marginBottom: 1,
     },
     headerDetails: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '400',
         textAlign: 'center',
         marginBottom: 16,

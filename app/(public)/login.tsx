@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     pageHeader: {
-        fontSize: 32,
+        fontSize: 42,
         textAlign: 'center',
         fontWeight: 'bold',
         color: '#6c47ff',
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
         marginBottom: 1,
     },
     headerDetails: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '400',
         textAlign: 'center',
         marginBottom: 16,
