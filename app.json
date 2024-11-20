@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "climbing-trainer",
-    "slug": "climbing-trainer",
+    "name": "CruxLog",
+    "slug": "cruxlog",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/cruxlogIcon.png",
@@ -13,13 +13,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.cruxlog"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.cruxlog"
     },
     "web": {
       "bundler": "metro",

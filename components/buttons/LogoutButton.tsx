@@ -13,11 +13,11 @@ export function LogoutButton() {
         setIsLoading(true);
         try {
             await signOut();
-            Toast.show({
-                type: 'success',
-                text1: 'Signed Out',
-                text2: 'You have been signed out successfully!',
-            });
+            // Toast.show({
+            //     type: 'success',
+            //     text1: 'Signed Out',
+            //     text2: 'You have been signed out successfully!',
+            // });
         } catch (error) {
             Toast.show({
                 type: 'error',

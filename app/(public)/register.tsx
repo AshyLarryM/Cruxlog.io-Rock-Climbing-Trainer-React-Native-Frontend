@@ -69,7 +69,7 @@ export default function Register() {
             <Spinner visible={loading} />
             <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
             <Text style={styles.pageHeader}>Create an account </Text>
-            <Text style={styles.headerDetails}>Enter your email address to reset password</Text>
+            <Text style={styles.headerDetails}>Create an account to begin logging your climbing sessions</Text>
             {!pendingVerification && (
                 <>
                     <Text style={styles.label}>Email Address</Text>
