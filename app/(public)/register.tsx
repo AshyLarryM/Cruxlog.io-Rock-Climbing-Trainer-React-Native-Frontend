@@ -55,7 +55,7 @@ export default function Register() {
                 userId: completeSignUp.createdUserId,
                 email: emailAddress,
             });
-            
+
         } catch (err: any) {
             alert(err.errors[0].message)
         } finally {
@@ -67,12 +67,14 @@ export default function Register() {
         <View style={styles.container}>
             <Stack.Screen options={{ headerBackVisible: !pendingVerification }} />
             <Spinner visible={loading} />
+            <Text style={styles.pageHeader}>Create an account </Text>
+            <Text style={styles.headerDetails}>Enter your email address to reset password</Text>
             {!pendingVerification && (
                 <>
                     <Text style={styles.label}>Email Address</Text>
                     <TextInput
                         autoCapitalize='none'
-                        placeholder='placeholder@gmail.com'
+                        placeholder='example@gmail.com'
                         value={emailAddress}
                         onChangeText={setEmailAddress}
                         style={styles.inputField}
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
     inputField: {
         marginVertical: 4,
         height: 50,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: '#6c47ff',
         borderRadius: 12,
         padding: 10,
@@ -145,5 +147,19 @@ const styles = StyleSheet.create({
         color: '#333',
         fontWeight: '500',
         marginTop: 8,
+    },
+    pageHeader: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 12,
+        color: '#6c47ff',
+    },
+    headerDetails: {
+        fontSize: 16,
+        fontWeight: '400',
+        textAlign: 'center',
+        marginBottom: 24,
+        color: '#000',
     },
 });

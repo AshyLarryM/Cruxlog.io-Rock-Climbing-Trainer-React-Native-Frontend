@@ -13,7 +13,7 @@ export default function PublicLayout() {
             <Stack.Screen
                 name="login"
                 options={{
-                    headerTitle: "Crux Log",
+                    headerTitle: "CruxLog",
                 }}>
             </Stack.Screen>
             <Stack.Screen

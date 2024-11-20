@@ -35,6 +35,9 @@ export default function Login() {
         <View style={styles.container}>
             <Spinner visible={loading} />
 
+            <Text style={styles.pageHeader}>Sign in to your account </Text>
+            <Text style={styles.headerDetails}>Sign in to log your climbing sessions.</Text>
+
             <Text style={styles.label}>Email Address</Text>
             <TextInput autoCapitalize='none'
                 placeholder='example@gmail.com'
@@ -53,12 +56,12 @@ export default function Login() {
                 style={styles.inputField}
             />
 
-            <Pressable onPress={loading ? null: onSigninPress} style={styles.loginButton}>
+            <Pressable onPress={loading ? null : onSigninPress} style={styles.loginButton}>
                 {loading ? (
                     <Text style={styles.loginButtonText}>Loggin in...</Text>
-            ) : ( 
-                <Text style={styles.loginButtonText}>Login</Text>
-            )}
+                ) : (
+                    <Text style={styles.loginButtonText}>Login</Text>
+                )}
             </Pressable>
 
             <Link href={'/reset'} asChild>
@@ -86,7 +89,7 @@ const styles = StyleSheet.create({
     inputField: {
         marginVertical: 8,
         height: 50,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: '#6c47ff',
         borderRadius: 12,
         padding: 10,
@@ -116,5 +119,19 @@ const styles = StyleSheet.create({
         color: '#333',
         fontWeight: '500',
         marginTop: 8,
+    },
+    pageHeader: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 12,
+        color: '#6c47ff',
+    },
+    headerDetails: {
+        fontSize: 16,
+        fontWeight: '400',
+        textAlign: 'center',
+        marginBottom: 24,
+        color: '#000',
     },
 });

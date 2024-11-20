@@ -10,7 +10,6 @@ export default function Reset() {
     const [successfulCreation, setSuccessfulCreation] = useState<boolean>(false);
     const { signIn, setActive } = useSignIn();
 
-    // Request a passowrd reset code by email
     const onRequestReset = async () => {
         try {
             await signIn!.create({
@@ -23,7 +22,6 @@ export default function Reset() {
         }
     };
 
-    // Reset the password with the code and the new password
     const onReset = async () => {
         try {
             const result = await signIn!.attemptFirstFactor({
@@ -34,7 +32,6 @@ export default function Reset() {
             console.log(result);
             alert('Password reset successfully');
 
-            // Set the user session active, which will log in the user automatically
             await setActive!({ session: result.createdSessionId });
         } catch (err: any) {
             alert(err.errors[0].message);
@@ -43,11 +40,13 @@ export default function Reset() {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.pageHeader}>Reset Password </Text>
+            <Text style={styles.headerDetails}>Enter your email address to reset password</Text>
             <Stack.Screen options={{ headerBackVisible: !successfulCreation }} />
 
             {!successfulCreation && (
                 <>
-                    <Text>Email Address</Text>
+                    <Text style={styles.label}>Email Address</Text>
                     <TextInput autoCapitalize="none" placeholder="youremail@email.com" value={emailAddress} onChangeText={setEmailAddress} style={styles.inputField} placeholderTextColor={'#888'} />
                     <Pressable style={styles.resetButton} onPress={onRequestReset}><Text style={styles.resetButtonText}>Send Reset Email</Text></Pressable>
                 </>
@@ -77,9 +76,9 @@ const styles = StyleSheet.create({
     inputField: {
         marginVertical: 4,
         height: 50,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: '#6c47ff',
-        borderRadius: 4,
+        borderRadius: 12,
         padding: 10,
         backgroundColor: '#fff',
     },
@@ -101,5 +100,20 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 4,
         color: '#333',
+        fontWeight: '500',
+    },
+    pageHeader: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 16,
+        color: '#6c47ff',
+    },
+    headerDetails: {
+        fontSize: 16,
+        fontWeight: '400',
+        textAlign: 'center',
+        marginBottom: 24,
+        color: '#000',
     },
 });
