@@ -1,4 +1,4 @@
-import { TextInput, View, StyleSheet, Pressable, Text } from 'react-native';
+import { TextInput, View, StyleSheet, Pressable, Text, Image } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useState } from 'react';
@@ -67,6 +67,7 @@ export default function Register() {
         <View style={styles.container}>
             <Stack.Screen options={{ headerBackVisible: !pendingVerification }} />
             <Spinner visible={loading} />
+            <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
             <Text style={styles.pageHeader}>Create an account </Text>
             <Text style={styles.headerDetails}>Enter your email address to reset password</Text>
             {!pendingVerification && (
@@ -117,6 +118,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
+    },
+    logo: {
+        alignSelf: 'center',
+        marginBottom: 16,
+        width: 150,
+        height: 150,
+        resizeMode: 'contain',
     },
     inputField: {
         marginVertical: 4,

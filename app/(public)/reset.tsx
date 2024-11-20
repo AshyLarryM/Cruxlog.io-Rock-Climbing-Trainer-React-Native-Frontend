@@ -1,7 +1,7 @@
 import { useSignIn } from "@clerk/clerk-expo";
 import { Stack } from "expo-router";
 import { useState } from "react";
-import { Button, Pressable, StyleSheet, TextInput, View, Text } from "react-native";
+import { Image, Pressable, StyleSheet, TextInput, View, Text } from "react-native";
 
 export default function Reset() {
     const [emailAddress, setEmailAddress] = useState<string>('');
@@ -40,6 +40,7 @@ export default function Reset() {
 
     return (
         <View style={styles.container}>
+            <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
             <Text style={styles.pageHeader}>Reset Password </Text>
             <Text style={styles.headerDetails}>Enter your email address to reset password</Text>
             <Stack.Screen options={{ headerBackVisible: !successfulCreation }} />
@@ -72,6 +73,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
+    },
+    logo: {
+        alignSelf: 'center',
+        marginBottom: 16,
+        width: 150,
+        height: 150,
+        resizeMode: 'contain',
     },
     inputField: {
         marginVertical: 4,

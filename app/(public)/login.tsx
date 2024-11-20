@@ -1,7 +1,7 @@
 import { useSignIn } from '@clerk/clerk-expo';
 import { Link } from 'expo-router';
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Button, Pressable, Text, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, TextInput, Pressable, Text, Image } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function Login() {
@@ -34,7 +34,7 @@ export default function Login() {
     return (
         <View style={styles.container}>
             <Spinner visible={loading} />
-
+            <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
             <Text style={styles.pageHeader}>Sign in to your account </Text>
             <Text style={styles.headerDetails}>Sign in to log your climbing sessions.</Text>
 
@@ -85,6 +85,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
+    },
+    logo: {
+        alignSelf: 'center',
+        marginBottom: 16,
+        width: 150,
+        height: 150,
+        resizeMode: 'contain',
     },
     inputField: {
         marginVertical: 8,
