@@ -52,17 +52,17 @@ export default function Profile() {
 
 
                 {/* Height and Weight Row */}
-                <View style={styles.row}>
+                {/* <View style={styles.row}>
                     <Text style={styles.label}>Height: <Text style={styles.text}>{data?.user?.height || 'Add'}</Text></Text>
                     <View style={styles.verticalSeparator} />
                     <Text style={styles.label}>Weight: <Text style={styles.text}>{data?.user?.weight || 'Add'}</Text></Text>
-                </View>
+                </View> */}
 
-                <View style={styles.separator} />
+                {/* <View style={styles.separator} /> */}
 
                 {/* Other Profile Details */}
-                <Text style={styles.label}>Ape Index: <Text style={styles.text}>{data?.user?.apeIndex || 'Add'}</Text></Text>
-                <View style={styles.separator} />
+                {/* <Text style={styles.label}>Ape Index: <Text style={styles.text}>{data?.user?.apeIndex || 'Add'}</Text></Text> */}
+                {/* <View style={styles.separator} /> */}
                 <Text style={styles.label}>
                     Grading Preference: <Text style={styles.text}>{data?.user?.gradingPreference ? 'French' : 'YDS/V Scale'}</Text>
                 </Text>
