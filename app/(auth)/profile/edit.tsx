@@ -8,9 +8,11 @@ import Toast from 'react-native-toast-message';
 import { useGenerateProfilePresignedUrl } from '@/lib/state/serverState/user/useGeneratePresignedUrl';
 import { useUploadImage } from '@/lib/state/serverState/user/useUploadImage';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { useDeleteUser } from '@/lib/state/serverState/user/useDeleteUser';
 
 export default function EditProfile() {
     const { data } = useMeUser();
+    const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser();
 
     const [fullName, setFullName] = useState(data?.user?.fullName || '');
     const [age, setAge] = useState<number | null>(data?.user?.age ?? null);
@@ -123,6 +125,28 @@ export default function EditProfile() {
     async function showDeleteModal() {
         setModalVisible(true);
     }
+
+    const handleDeleteAccount = () => {
+        deleteUser(undefined, {
+            onSuccess: () => {
+                Toast.show({
+                    type: "success",
+                    text1: "Account Deleted",
+                    text2: "Your account has been successfully deleted.",
+                });
+                router.replace("/register");
+            },
+            onError: (error) => {
+                console.error("Error deleting account:", error);
+                Toast.show({
+                    type: "error",
+                    text1: "Error",
+                    text2: "Failed to delete account.",
+                });
+            },
+        });
+    };
+    
 
     return (
         <View style={styles.container}>
@@ -243,7 +267,7 @@ export default function EditProfile() {
                                 style={[styles.modalButton, styles.submitButton]}
                                 onPress={() => {
                                     setModalVisible(false);
-                                    // submitSessionUpdate();
+                                    handleDeleteAccount();
                                 }}
                             >
                                 {isPending ? (
