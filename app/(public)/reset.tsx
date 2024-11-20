@@ -1,7 +1,10 @@
 import { useSignIn } from "@clerk/clerk-expo";
 import { Stack } from "expo-router";
 import { useState } from "react";
-import { Image, Pressable, StyleSheet, TextInput, View, Text } from "react-native";
+import { Image, Pressable, StyleSheet, TextInput, View, Text, Dimensions } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
+const { width, height } = Dimensions.get('window');
 
 export default function Reset() {
     const [emailAddress, setEmailAddress] = useState<string>('');
@@ -39,56 +42,70 @@ export default function Reset() {
     };
 
     return (
-        <View style={styles.container}>
-            <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
-            <Text style={styles.pageHeader}>Reset Password </Text>
-            <Text style={styles.headerDetails}>Enter your email address to reset password</Text>
-            <Stack.Screen options={{ headerBackVisible: !successfulCreation }} />
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.scrollContainer}
+            enableOnAndroid={true}
+            keyboardShouldPersistTaps="handled"
+            extraScrollHeight={110}
+            enableAutomaticScroll={true}
+        >
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
+                    <Text style={styles.pageHeader}>Reset Password </Text>
+                    <Text style={styles.headerDetails}>Enter your email address to reset password</Text>
+                </View>
+                <Stack.Screen options={{ headerBackVisible: !successfulCreation }} />
 
-            {!successfulCreation && (
-                <>
-                    <Text style={styles.label}>Email Address</Text>
-                    <TextInput autoCapitalize="none" placeholder="youremail@email.com" value={emailAddress} onChangeText={setEmailAddress} style={styles.inputField} placeholderTextColor={'#888'} />
-                    <Pressable style={styles.resetButton} onPress={onRequestReset}><Text style={styles.resetButtonText}>Send Reset Email</Text></Pressable>
-                </>
-            )}
+                {!successfulCreation && (
+                    <>
+                        <Text style={styles.label}>Email Address</Text>
+                        <TextInput autoCapitalize="none" placeholder="youremail@email.com" value={emailAddress} onChangeText={setEmailAddress} style={styles.inputField} placeholderTextColor={'#888'} />
+                        <Pressable style={styles.resetButton} onPress={onRequestReset}><Text style={styles.resetButtonText}>Send Reset Email</Text></Pressable>
+                    </>
+                )}
 
-            {successfulCreation && (
-                <>
-                    <View>
-                        <TextInput value={code} placeholder="Code..." style={styles.inputField} onChangeText={setCode} />
-                        <TextInput placeholder="New password" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputField} />
-                    </View>
-                    <Pressable style={styles.resetButton} onPress={onReset}>
-                        <Text>Reset Password</Text>
-                    </Pressable>
-                </>
-            )}
-        </View>
+                {successfulCreation && (
+                    <>
+                        <View>
+                            <TextInput value={code} placeholder="Code..." style={styles.inputField} onChangeText={setCode} />
+                            <TextInput placeholder="New password" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputField} />
+                        </View>
+                        <Pressable style={styles.resetButton} onPress={onReset}>
+                            <Text>Reset Password</Text>
+                        </Pressable>
+                    </>
+                )}
+            </View>
+        </KeyboardAwareScrollView>
     );
 };
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+    },
     container: {
         flex: 1,
-        justifyContent: 'center',
+        marginTop: 24,
         padding: 20,
+        justifyContent: 'flex-start',
     },
     logo: {
-        alignSelf: 'center',
-        marginBottom: 16,
-        width: 150,
-        height: 150,
+        width: width * 0.3,
+        height: width * 0.3,
         resizeMode: 'contain',
     },
     inputField: {
-        marginVertical: 4,
-        height: 50,
-        borderWidth: 2,
+        marginVertical: 10,
+        height: 44,
+        borderWidth: 1.5,
         borderColor: '#6c47ff',
-        borderRadius: 12,
+        borderRadius: 8,
         padding: 10,
         backgroundColor: '#fff',
+        fontSize: 14,
     },
     resetButton: {
         margin: 8,
@@ -105,23 +122,26 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     label: {
-        fontSize: 16,
-        marginBottom: 4,
+        fontSize: 14,
+        marginBottom: 0,
         color: '#333',
-        fontWeight: '500',
     },
     pageHeader: {
-        fontSize: 40,
-        fontWeight: 'bold',
+        fontSize: 32,
         textAlign: 'center',
-        marginBottom: 16,
+        fontWeight: 'bold',
         color: '#6c47ff',
+        marginTop: 8,
+    },
+    header: {
+        alignItems: 'center',
+        marginBottom: 1,
     },
     headerDetails: {
         fontSize: 16,
         fontWeight: '400',
         textAlign: 'center',
-        marginBottom: 24,
+        marginBottom: 16,
         color: '#000',
     },
 });
