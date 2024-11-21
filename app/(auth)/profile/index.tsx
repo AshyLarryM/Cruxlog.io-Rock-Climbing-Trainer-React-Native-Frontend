@@ -11,7 +11,7 @@ export default function Profile() {
 
     const { userId } = useAuth();
     const { data, error, isLoading } = useMeUser();
-    const { data: userPr} = useUserPr();
+    const { data: userPr } = useUserPr();
 
 
     if (isLoading) {
@@ -43,13 +43,12 @@ export default function Profile() {
 
                 {/* Name and Age Row */}
                 <View style={styles.row}>
-                    <Text style={styles.text}>{data?.user?.fullName || 'Add'}</Text>
-                    <View style={styles.verticalSeparator} />
-                    <Text style={styles.text}>{data?.user?.age ? `${data.user.age} years old` : 'Add'}</Text>
+                    <Text style={styles.label}>Name: <Text style={styles.text}>{data?.user?.fullName || 'Add'}</Text></Text>
                 </View>
 
                 <View style={styles.separator} />
-
+                <Text style={styles.label}>Age: <Text style={styles.text}>{data?.user?.age ? `${data.user.age} years old` : 'Add'}</Text></Text>
+                <View style={styles.separator} />
 
                 {/* Height and Weight Row */}
                 {/* <View style={styles.row}>
@@ -58,7 +57,7 @@ export default function Profile() {
                     <Text style={styles.label}>Weight: <Text style={styles.text}>{data?.user?.weight || 'Add'}</Text></Text>
                 </View> */}
 
-                {/* <View style={styles.separator} /> */}
+
 
                 {/* Other Profile Details */}
                 {/* <Text style={styles.label}>Ape Index: <Text style={styles.text}>{data?.user?.apeIndex || 'Add'}</Text></Text> */}

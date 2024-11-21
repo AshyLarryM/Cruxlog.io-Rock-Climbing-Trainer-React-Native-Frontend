@@ -1,9 +1,12 @@
-import { TextInput, View, StyleSheet, Pressable, Text, Image } from 'react-native';
+import { TextInput, View, StyleSheet, Pressable, Text, Image, Dimensions } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useState } from 'react';
-import { Stack } from 'expo-router';
+import { Link, Stack } from 'expo-router';
 import { useCreateUser } from '@/lib/state/serverState/user/useCreateUser';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+const { width, height } = Dimensions.get('window');
 
 export default function Register() {
     const { isLoaded, signUp, setActive } = useSignUp();
@@ -64,110 +67,160 @@ export default function Register() {
     }
 
     return (
-        <View style={styles.container}>
-            <Stack.Screen options={{ headerBackVisible: !pendingVerification }} />
-            <Spinner visible={loading} />
-            <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
-            <Text style={styles.pageHeader}>Create an account </Text>
-            <Text style={styles.headerDetails}>Create an account to begin logging your climbing sessions</Text>
-            {!pendingVerification && (
-                <>
-                    <Text style={styles.label}>Email Address</Text>
-                    <TextInput
-                        autoCapitalize='none'
-                        placeholder='example@gmail.com'
-                        value={emailAddress}
-                        onChangeText={setEmailAddress}
-                        style={styles.inputField}
-                        placeholderTextColor="#888"
-                    />
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.scrollContainer}
+            enableOnAndroid={true}
+            keyboardShouldPersistTaps="handled"
+            extraScrollHeight={110}
+            enableAutomaticScroll={true}
+        >
+            <View style={styles.container}>
+                <Stack.Screen options={{ headerBackVisible: !pendingVerification }} />
+                <Spinner visible={loading} />
+                <View style={styles.header}>
+                    <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
+                    <Text style={styles.pageHeader}>Create an account </Text>
+                    <Text style={styles.headerDetails}>Create an account to begin logging your climbing sessions.</Text>
+                </View>
 
-                    <Text style={styles.label}>Password</Text>
-                    <TextInput
-                        placeholder='password'
-                        value={password}
-                        onChangeText={setPassword}
-                        style={styles.inputField}
-                        placeholderTextColor="#888"
-                    />
+                {!pendingVerification && (
+                    <>
+                        <Text style={styles.label}>Email Address</Text>
+                        <TextInput
+                            autoCapitalize='none'
+                            placeholder='example@gmail.com'
+                            value={emailAddress}
+                            onChangeText={setEmailAddress}
+                            style={styles.inputField}
+                            placeholderTextColor="#888"
+                        />
 
-                    <Pressable onPress={onSignUpPress} style={styles.registerButton}>
-                        <Text style={styles.registerButtonText}>Create Account</Text>
-                    </Pressable>
-                </>
-            )}
+                        <Text style={styles.label}>Password</Text>
+                        <TextInput
+                            placeholder='password'
+                            value={password}
+                            onChangeText={setPassword}
+                            style={styles.inputField}
+                            placeholderTextColor="#888"
+                        />
 
-            {pendingVerification && (
-                <>
-                    <View>
-                        <Text style={styles.label}>Verification Code</Text>
-                        <TextInput value={code} placeholder='Code...' style={styles.inputField} onChangeText={setCode} placeholderTextColor={'#888'} />
-                    </View>
-                    <Pressable onPress={onPressVerifiy} style={styles.registerButton}>
-                        <Text style={styles.registerButtonText}>Verify Email</Text>
-                    </Pressable>
-                </>
-            )}
-        </View>
+                        <Pressable onPress={onSignUpPress} style={styles.registerButton}>
+                            <Text style={styles.registerButtonText}>Create Account</Text>
+                        </Pressable>
+                        <View style={styles.inlineTextContainer}>
+                            <Text style={styles.inlineText}>Already have an account?</Text>
+                            <Link href="/login" asChild>
+                                <Pressable onPress={() => {/* Navigate to Login screen */ }}>
+                                    <Text style={styles.signInLink}> Sign In</Text>
+                                </Pressable>
+                            </Link>
+                        </View>
+                    </>
+                )}
+
+                {pendingVerification && (
+                    <>
+                        <View>
+                            <Text style={styles.label}>Verification Code</Text>
+                            <TextInput value={code} placeholder='Code...' style={styles.inputField} onChangeText={setCode} placeholderTextColor={'#888'} />
+                        </View>
+                        <Pressable onPress={onPressVerifiy} style={styles.registerButton}>
+                            <Text style={styles.registerButtonText}>Verify Email</Text>
+                        </Pressable>
+                    </>
+                )}
+            </View>
+        </KeyboardAwareScrollView>
     );
 }
 
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+    },
     container: {
         flex: 1,
-        justifyContent: 'center',
         padding: 20,
+        marginTop: 24,
+        justifyContent: 'flex-start',
     },
     logo: {
-        alignSelf: 'center',
-        marginBottom: 16,
-        width: 150,
-        height: 150,
+        width: width * 0.3,
+        height: width * 0.3,
         resizeMode: 'contain',
     },
+    pageHeader: {
+        fontSize: 42,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color: '#6c47ff',
+        marginTop: 8,
+    },
+    header: {
+        alignItems: 'center',
+        marginBottom: 1,
+    },
+    headerDetails: {
+        fontSize: 14,
+        fontWeight: '400',
+        textAlign: 'center',
+        marginBottom: 16,
+        color: '#000',
+    },
+    form: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        marginTop: 16,
+    },
     inputField: {
-        marginVertical: 4,
-        height: 50,
-        borderWidth: 2,
+        marginVertical: 10,
+        height: 44,
+        borderWidth: 1.5,
         borderColor: '#6c47ff',
-        borderRadius: 12,
+        borderRadius: 8,
         padding: 10,
         backgroundColor: '#fff',
+        fontSize: 14,
     },
     registerButton: {
-        margin: 8,
+        marginVertical: 16,
         alignItems: 'center',
         backgroundColor: '#6c47ff',
         paddingVertical: 12,
-        paddingHorizontal: 24,
         borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#6347ff'
     },
     registerButtonText: {
-        color: "#fff",
+        color: '#fff',
         fontWeight: 'bold',
+    },
+    button: {
+        marginVertical: 8,
+        alignItems: 'center',
+    },
+    linkText: {
+        color: '#6c47ff',
+        fontSize: 14,
     },
     label: {
-        fontSize: 16,
-        marginBottom: 1,
+        fontSize: 14,
+        marginBottom: 0,
         color: '#333',
-        fontWeight: '500',
+    },
+    inlineTextContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
         marginTop: 8,
     },
-    pageHeader: {
-        fontSize: 40,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 12,
-        color: '#6c47ff',
+    inlineText: {
+        fontSize: 14,
+        color: '#333',
     },
-    headerDetails: {
-        fontSize: 16,
+    signInLink: {
+        fontSize: 14,
+        color: '#6c47ff',
         fontWeight: '400',
-        textAlign: 'center',
-        marginBottom: 24,
-        color: '#000',
+        marginLeft: 4,
     },
 });

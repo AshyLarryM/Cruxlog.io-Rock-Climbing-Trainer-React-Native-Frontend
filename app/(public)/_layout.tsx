@@ -19,7 +19,7 @@ export default function PublicLayout() {
             <Stack.Screen
                 name="register"
                 options={{
-                    headerTitle: "Create Account",
+                    headerTitle: "CruxLog",
                 }}>
             </Stack.Screen>
             <Stack.Screen

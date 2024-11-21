@@ -49,7 +49,7 @@ function InitalLayout() {
 			});
 			router.replace('/(auth)/history');
 		} else if (!isSignedIn) {
-			router.replace('/login');
+			router.replace('/register');
 		}
 
 	}, [isSignedIn]);
