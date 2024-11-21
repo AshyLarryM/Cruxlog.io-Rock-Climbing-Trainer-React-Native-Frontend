@@ -149,7 +149,35 @@ export default function NewClimb() {
         }
     }
 
+
+    async function requestPermissions() {
+        const libraryPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!libraryPermission.granted) {
+            Alert.alert(
+                "Permission Required",
+                "CruxLog needs access to your photo library to upload images for climbs. Please enable permissions in Settings.",
+                [{ text: "OK" }]
+            );
+            return false;
+        }
+
+        const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
+        if (!cameraPermission.granted) {
+            Alert.alert(
+                "Permission Required",
+                "CruxLog needs access to your camera to take photos for climbs. Please enable permissions in Settings.",
+                [{ text: "OK" }]
+            );
+            return false;
+        }
+        return true;
+    }
+
+
     async function chooseImage() {
+        const hasPermissions = await requestPermissions();
+        if (!hasPermissions) return;
+
         Alert.alert(
             "Upload or Take Photo",
             "Choose how you'd like to add a photo",
@@ -157,12 +185,6 @@ export default function NewClimb() {
                 {
                     text: "Take Photo",
                     onPress: async () => {
-                        const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
-                        if (!cameraPermission.granted) {
-                            alert("Permission to access the camera is required!");
-                            return;
-                        }
-
                         const result = await ImagePicker.launchCameraAsync({
                             mediaTypes: ImagePicker.MediaTypeOptions.Images,
                             allowsEditing: true,
@@ -178,12 +200,6 @@ export default function NewClimb() {
                 {
                     text: "Upload from Library",
                     onPress: async () => {
-                        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                        if (!permissionResult.granted) {
-                            alert("Permission to access the media library is required!");
-                            return;
-                        }
-
                         const result = await ImagePicker.launchImageLibraryAsync({
                             mediaTypes: ImagePicker.MediaTypeOptions.Images,
                             allowsEditing: true,
@@ -303,7 +319,7 @@ export default function NewClimb() {
             </TouchableOpacity>
 
             <TouchableOpacity onPress={handleSave} style={styles.addButton} disabled={loading}>
-                <Text style={styles.addButtonText}>{loading ? "Saving..." : "Add Climb" }</Text>
+                <Text style={styles.addButtonText}>{loading ? "Saving..." : "Add Climb"}</Text>
             </TouchableOpacity>
         </ScrollView>
     );

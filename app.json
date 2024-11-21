@@ -14,7 +14,8 @@
     },
     "ios": {
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "This app requires access to your photo library to allow you to upload profile pictures for personalization and climb images to document your climbing activities."
+        "NSPhotoLibraryUsageDescription": "CruxLog requires access to your photo library to allow you to upload profile pictures for personalization and climb images to document your climbing sessions.",
+        "NSCameraUsageDescription": "CruxLog uses the camera to capture photos of climbs for your climbing session data/history."
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.cruxlog"
