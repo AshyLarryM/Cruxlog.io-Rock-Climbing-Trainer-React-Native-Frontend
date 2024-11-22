@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";
-import { Pressable } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 export function ReviewSessionButton() {
     const router = useRouter();
@@ -9,7 +9,9 @@ export function ReviewSessionButton() {
     }
     return (
         <Pressable onPress={reviewSession} style={{ marginRight: 10 }}>
-            <Ionicons name="checkmark" size={24} color={'#fff'} />
+            <View style={styles.iconBackground}>
+                <Ionicons name="checkmark" size={24} color={'#fff'} />
+            </View>
         </Pressable>
     )
 }
@@ -47,3 +49,14 @@ export default function SessionLayout() {
         </Stack>
     );
 }
+
+const styles = StyleSheet.create({
+    iconBackground: {
+        backgroundColor: "#7f5eff",
+        borderRadius: 10,
+        width: 36,
+        height: 36,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+});

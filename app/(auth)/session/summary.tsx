@@ -21,6 +21,7 @@ export default function Summary() {
     const boulderClimbs = climbingSession?.climbs?.filter(climb => climb.type === 'Boulder' && climb.send === true) || [];
     const routeClimbs = climbingSession?.climbs?.filter(climb => climb.type === 'Top Rope' && climb.send === true || climb.type === 'Lead' && climb.send === true) || [];
 
+
     if (isLoading) return <ActivityIndicator />;
     if (isError) return <Text>Error loading session summary</Text>;
 
@@ -28,7 +29,9 @@ export default function Summary() {
         navigation.setOptions({
             headerRight: () => (
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Ionicons name="checkmark" size={24} color={'#89DE43'} />
+                    <View style={styles.iconBackground}>
+                        <Ionicons name="checkmark" size={24} color={'#00ffa2'} />
+                    </View>
                 </TouchableOpacity>
             ),
         });
@@ -122,9 +125,9 @@ export default function Summary() {
                             <Text style={styles.cardText}>Style: {item.style}</Text>
                             <Text style={styles.cardText}>Grade: <Text style={styles.boulderGradeText}>{item.grade}</Text></Text>
                         </View>
-                        
+
                     )}
-                    
+
                     contentContainerStyle={styles.horizontalCardContainer}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
@@ -191,6 +194,14 @@ export default function Summary() {
 }
 
 const styles = StyleSheet.create({
+    iconBackground: {
+        backgroundColor: "#7f5eff",
+        borderRadius: 10,
+        width: 36,
+        height: 36,
+        justifyContent: "center",
+        alignItems: "center",
+    },
     container: {
         flex: 1,
         padding: 20,
@@ -235,9 +246,9 @@ const styles = StyleSheet.create({
     },
     sessionTextInput: {
         height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        fontSize: 18,
+        borderColor: '#6c47ff',
+        borderWidth: 2,
+        fontSize: 16,
         marginVertical: 8,
         paddingHorizontal: 8,
         borderRadius: 20,
