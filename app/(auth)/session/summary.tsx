@@ -44,6 +44,12 @@ export default function Summary() {
     };
 
     function submitSessionUpdate() {
+
+        if (sessionName.length === 0) {
+            alert('Please enter a Session Name to complete session.')
+            return
+        }
+
         updateSession(
             {
                 sessionName,
@@ -114,47 +120,48 @@ export default function Summary() {
             />
 
             {/* Boulders Section */}
-            <Text style={styles.label}>Boulder Sends</Text>
-            {boulderClimbs.length ? (
-                <FlatList
-                    data={boulderClimbs}
-                    keyExtractor={(climb) => climb.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={styles.horizontalCard}>
-                            <Text style={styles.cardTitle}>{item.name}</Text>
-                            <Text style={styles.cardText}>Style: {item.style}</Text>
-                            <Text style={styles.cardText}>Grade: <Text style={styles.boulderGradeText}>{item.grade}</Text></Text>
-                        </View>
+            {boulderClimbs.length > 0 && (
+                <>
+                    <Text style={styles.label}>Boulder Sends</Text>
+                    <FlatList
+                        data={boulderClimbs}
+                        keyExtractor={(climb) => climb.id.toString()}
+                        renderItem={({ item }) => (
+                            <View style={styles.horizontalCard}>
+                                <Text style={styles.cardTitle}>{item.name}</Text>
+                                <Text style={styles.cardText}>Style: {item.style}</Text>
+                                <Text style={styles.cardText}>Grade: <Text style={styles.boulderGradeText}>{item.grade}</Text></Text>
+                            </View>
 
-                    )}
+                        )}
 
-                    contentContainerStyle={styles.horizontalCardContainer}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                />
-            ) : (
-                <Text>No Boulder climbs available</Text>
+                        contentContainerStyle={styles.horizontalCardContainer}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </>
             )}
 
+
             {/* Routes Section */}
-            <Text style={styles.label}>Route Sends</Text>
-            {routeClimbs.length ? (
-                <FlatList
-                    data={routeClimbs}
-                    keyExtractor={(climb) => climb.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={styles.horizontalCard}>
-                            <Text style={styles.cardTitle}>{item.name}</Text>
-                            <Text style={styles.cardText}>Style: {item.style}</Text>
-                            <Text style={styles.cardText}>Grade: <Text style={styles.routeGradeText}>{item.grade}</Text></Text>
-                        </View>
-                    )}
-                    contentContainerStyle={styles.horizontalCardContainer}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                />
-            ) : (
-                <Text>No Routes available</Text>
+            {routeClimbs.length > 0 && (
+                <>
+                    <Text style={styles.label}>Route Sends</Text>
+                    <FlatList
+                        data={routeClimbs}
+                        keyExtractor={(climb) => climb.id.toString()}
+                        renderItem={({ item }) => (
+                            <View style={styles.horizontalCard}>
+                                <Text style={styles.cardTitle}>{item.name}</Text>
+                                <Text style={styles.cardText}>Style: {item.style}</Text>
+                                <Text style={styles.cardText}>Grade: <Text style={styles.routeGradeText}>{item.grade}</Text></Text>
+                            </View>
+                        )}
+                        contentContainerStyle={styles.horizontalCardContainer}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </>
             )}
 
             {/* Confirmation Modal */}
@@ -197,8 +204,8 @@ const styles = StyleSheet.create({
     iconBackground: {
         backgroundColor: "#7f5eff",
         borderRadius: 10,
-        width: 36,
-        height: 36,
+        width: 32,
+        height: 32,
         justifyContent: "center",
         alignItems: "center",
     },
@@ -287,7 +294,7 @@ const styles = StyleSheet.create({
     modalButton: {
         paddingVertical: 10,
         paddingHorizontal: 35,
-        borderRadius: 5,
+        borderRadius: 24,
         alignItems: 'center',
         borderWidth: 1,
         borderColor: '#6c47ff'
@@ -295,10 +302,10 @@ const styles = StyleSheet.create({
     cancelButtonText: {
         color: '#6c47ff',
         fontSize: 16,
-
     },
     submitButton: {
         backgroundColor: '#6c47ff',
+        borderRadius: 24,
     },
     submitButtonText: {
         color: '#fff',

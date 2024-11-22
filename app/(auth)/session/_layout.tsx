@@ -10,7 +10,7 @@ export function ReviewSessionButton() {
     return (
         <Pressable onPress={reviewSession} style={{ marginRight: 10 }}>
             <View style={styles.iconBackground}>
-                <Ionicons name="checkmark" size={24} color={'#fff'} />
+                <Ionicons name="checkmark" size={24} color={'#00ffa2'} />
             </View>
         </Pressable>
     )
@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     iconBackground: {
         backgroundColor: "#7f5eff",
         borderRadius: 10,
-        width: 36,
-        height: 36,
+        width: 32,
+        height: 32,
         justifyContent: "center",
         alignItems: "center",
     },

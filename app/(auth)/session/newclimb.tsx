@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,
-        fontSize: 18,
+        fontSize: 16,
         marginVertical: 8,
         paddingHorizontal: 8,
         borderRadius: 24,
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#6c47ff',
         paddingVertical: 12,
         paddingHorizontal: 20,
-        borderRadius: 8,
+        borderRadius: 24,
     },
     addButtonText: {
         color: 'white',
