@@ -9,6 +9,7 @@ import { useGenerateProfilePresignedUrl } from '@/lib/state/serverState/user/use
 import { useUploadImage } from '@/lib/state/serverState/user/useUploadImage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useDeleteUser } from '@/lib/state/serverState/user/useDeleteUser';
+import { GradientButton } from '@/components/buttons/GradientButton';
 
 export default function EditProfile() {
     const { data } = useMeUser();
@@ -146,7 +147,7 @@ export default function EditProfile() {
             },
         });
     };
-    
+
 
     return (
         <View style={styles.container}>
@@ -245,6 +246,8 @@ export default function EditProfile() {
                 )}
             </TouchableOpacity>
 
+            {/* <GradientButton onPress={handleSave} text='Update Profile' loading={isPending} /> */}
+
             <Pressable style={styles.button} onPress={showDeleteModal}>
                 <Text style={styles.linkText}>Delete Account</Text>
             </Pressable>
@@ -287,7 +290,7 @@ export default function EditProfile() {
 const styles = StyleSheet.create({
     container: {
         marginTop: 8,
-        paddingHorizontal: 16
+        padding: 20,
     },
     inputGroup: {
         marginBottom: 15,
@@ -336,7 +339,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#6c47ff',
         paddingVertical: 12,
         paddingHorizontal: 20,
-        borderRadius: 8,
+        borderRadius: 24,
     },
     updateButtonText: {
         color: 'white',

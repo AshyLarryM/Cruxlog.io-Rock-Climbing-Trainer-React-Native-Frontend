@@ -6,6 +6,8 @@ import { Link, Stack } from 'expo-router';
 import { useCreateUser } from '@/lib/state/serverState/user/useCreateUser';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { GradientButton } from '@/components/buttons/GradientButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -28,7 +30,7 @@ export default function Register() {
             useNativeDriver: true,
         }).start();
     }, []);
-    
+
 
     async function onSignUpPress() {
         if (!isLoaded) {
@@ -95,13 +97,10 @@ export default function Register() {
                 </View>
 
                 <Animated.View style={[styles.registerContainer, { transform: [{ translateY: slideAnim }] }]}>
-                {/* <View style={styles.registerContainer}> */}
-
-                    <Text style={styles.headerDetails}>Create an account to begin logging your climbing sessions.</Text>
 
                     {!pendingVerification && (
                         <>
-                            {/* <Text style={styles.label}>Email Address</Text> */}
+                            <Text style={styles.headerDetails}>Create an account to begin logging your climbing sessions.</Text>
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     autoCapitalize="none"
@@ -114,7 +113,6 @@ export default function Register() {
                                 <Ionicons name="mail-outline" size={22} color="#ccc" style={styles.iconRight} />
                             </View>
 
-                            {/* <Text style={styles.label}>Password</Text> */}
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     placeholder="Password"
@@ -127,10 +125,8 @@ export default function Register() {
                                 <Ionicons name="lock-closed-outline" size={22} color="#ccc" style={styles.iconRight} />
                             </View>
 
+                            <GradientButton onPress={onSignUpPress} text='Create Account' />
 
-                            <Pressable onPress={onSignUpPress} style={styles.registerButton}>
-                                <Text style={styles.registerButtonText}>Create Account</Text>
-                            </Pressable>
                             <View style={styles.inlineTextContainer}>
                                 <Text style={styles.inlineText}>Already have an account?</Text>
                                 <Link href="/login" asChild>
@@ -141,20 +137,28 @@ export default function Register() {
                             </View>
                         </>
                     )}
-                {/* </View> */}
-                </Animated.View>
+                    {/* </View> */}
 
-                {pendingVerification && (
-                    <>
-                        <View>
-                            <Text style={styles.label}>Verification Code</Text>
-                            <TextInput value={code} placeholder='Code...' style={styles.inputField} onChangeText={setCode} placeholderTextColor={'#888'} />
-                        </View>
-                        <Pressable onPress={onPressVerifiy} style={styles.registerButton}>
-                            <Text style={styles.registerButtonText}>Verify Email</Text>
-                        </Pressable>
-                    </>
-                )}
+
+                    {pendingVerification && (
+                        <>
+                            <Text style={styles.headerDetails}>
+                                Enter the verification code sent to your email address.
+                            </Text>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    value={code}
+                                    placeholder="Code..."
+                                    style={styles.inputFieldWithIcon}
+                                    onChangeText={setCode}
+                                    placeholderTextColor="#888"
+                                />
+                                <Ionicons name="key-outline" size={22} color="#ccc" style={styles.iconRight} />
+                            </View>
+                            <GradientButton onPress={onPressVerifiy} text="Verify Email" />
+                        </>
+                    )}
+                </Animated.View>
             </View>
         </KeyboardAwareScrollView>
     );
@@ -169,7 +173,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
-        marginTop: 24,
+        marginTop: 16,
         justifyContent: 'flex-start',
     },
     registerContainer: {
@@ -222,14 +226,13 @@ const styles = StyleSheet.create({
     },
     registerButton: {
         marginVertical: 16,
-        alignItems: 'center',
-        backgroundColor: '#6c47ff',
-        paddingVertical: 12,
         borderRadius: 30,
+        overflow: 'hidden',
     },
     registerButtonText: {
         color: '#fff',
         fontWeight: 'bold',
+        fontSize: 16,
     },
     button: {
         marginVertical: 8,

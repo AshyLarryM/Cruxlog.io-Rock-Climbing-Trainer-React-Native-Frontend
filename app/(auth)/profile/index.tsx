@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#6c47ff',
         paddingVertical: 12,
         paddingHorizontal: 24,
-        borderRadius: 8,
+        borderRadius: 24,
     },
     buttonContent: {
         flexDirection: 'row',

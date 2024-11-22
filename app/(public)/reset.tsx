@@ -1,8 +1,9 @@
+import { GradientButton } from "@/components/buttons/GradientButton";
 import { useSignIn } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack } from "expo-router";
-import { useState } from "react";
-import { Image, Pressable, StyleSheet, TextInput, View, Text, Dimensions } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Image, Pressable, StyleSheet, TextInput, View, Text, Dimensions, Animated, Easing } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const { width, height } = Dimensions.get('window');
@@ -13,6 +14,16 @@ export default function Reset() {
     const [code, setCode] = useState<string>('');
     const [successfulCreation, setSuccessfulCreation] = useState<boolean>(false);
     const { signIn, setActive } = useSignIn();
+
+    const slideAnim = useRef(new Animated.Value(height)).current;
+    useEffect(() => {
+        Animated.timing(slideAnim, {
+            toValue: 0,
+            duration: 500,
+            easing: Easing.out(Easing.quad),
+            useNativeDriver: true,
+        }).start();
+    }, []);
 
     const onRequestReset = async () => {
         try {
@@ -54,42 +65,42 @@ export default function Reset() {
                 <View style={styles.header}>
                     <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
                     <Text style={styles.pageHeader}>Reset Password </Text>
-                    <Text style={styles.headerDetails}>Enter your email address to reset password.</Text>
                 </View>
                 <Stack.Screen options={{ headerBackVisible: !successfulCreation }} />
 
-                {!successfulCreation && (
-                    <>
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                autoCapitalize="none"
-                                placeholder="Email"
-                                value={emailAddress}
-                                onChangeText={setEmailAddress}
-                                style={styles.inputFieldWithIcon}
-                                placeholderTextColor="#888"
-                            />
-                            <Ionicons name="mail-outline" size={22} color="#ccc" style={styles.iconRight} />
-                        </View>
-                        <Pressable style={styles.resetButton} onPress={onRequestReset}><Text style={styles.resetButtonText}>Send Reset Email</Text></Pressable>
-                    </>
-                )}
+                <Animated.View style={[styles.registerContainer, { transform: [{ translateY: slideAnim }] }]}>
+                    {!successfulCreation && (
+                        <>
+                            <Text style={styles.headerDetails}>Enter your email address to reset password.</Text>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    autoCapitalize="none"
+                                    placeholder="Email"
+                                    value={emailAddress}
+                                    onChangeText={setEmailAddress}
+                                    style={styles.inputFieldWithIcon}
+                                    placeholderTextColor="#888"
+                                />
+                                <Ionicons name="mail-outline" size={22} color="#ccc" style={styles.iconRight} />
+                            </View>
+                            <GradientButton onPress={onRequestReset} text="Send Reset Email" />
+                        </>
+                    )}
 
-                {successfulCreation && (
-                    <>
-                        <View style={styles.inputContainer}>
-                            <TextInput value={code} placeholder="Code..." style={styles.inputFieldWithIcon} onChangeText={setCode} />
-
-                        </View>
-                        <View style={styles.inputContainer}>
-                            <TextInput placeholder="New password" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputFieldWithIcon} />
-                            <Ionicons name="lock-closed-outline" size={22} color="#ccc" style={styles.iconRight} />
-                        </View>
-                        <Pressable style={styles.resetButton} onPress={onReset}>
-                            <Text style={styles.resetButtonText}>Reset Password</Text>
-                        </Pressable>
-                    </>
-                )}
+                    {successfulCreation && (
+                        <>
+                            <View style={styles.inputContainer}>
+                                <TextInput value={code} placeholder="Code..." style={styles.inputFieldWithIcon} onChangeText={setCode} />
+                                <Ionicons name="key-outline" size={22} color="#ccc" style={styles.iconRight} />
+                            </View>
+                            <View style={styles.inputContainer}>
+                                <TextInput placeholder="New password" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputFieldWithIcon} />
+                                <Ionicons name="lock-closed-outline" size={22} color="#ccc" style={styles.iconRight} />
+                            </View>
+                            <GradientButton onPress={onReset} text="Reset Password" />
+                        </>
+                    )}
+                </Animated.View>
             </View>
         </KeyboardAwareScrollView>
     );
@@ -105,6 +116,16 @@ const styles = StyleSheet.create({
         marginTop: 24,
         padding: 20,
         justifyContent: 'flex-start',
+    },
+    registerContainer: {
+        backgroundColor: '#fff',
+        padding: 32,
+        borderRadius: 24,
+        flexGrow: 1,
+        marginBottom: 16,
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
     },
     logo: {
         width: width * 0.3,

@@ -1,5 +1,7 @@
+import { GradientButton } from '@/components/buttons/GradientButton';
 import { useSignIn } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, TextInput, Pressable, Text, Image, View, Dimensions, Animated, Easing } from 'react-native';
@@ -89,13 +91,8 @@ export default function Login() {
                             <Ionicons name="lock-closed-outline" size={22} color="#ccc" style={styles.iconRight} />
                         </View>
 
-                        <Pressable onPress={loading ? null : onSigninPress} style={styles.loginButton}>
-                            {loading ? (
-                                <Text style={styles.loginButtonText}>Loggin in...</Text>
-                            ) : (
-                                <Text style={styles.loginButtonText}>Login</Text>
-                            )}
-                        </Pressable>
+                        <GradientButton onPress={onSigninPress} text='Log In' loading={loading} />
+
 
                         <Link href="/reset" asChild>
                             <Pressable style={styles.button}>
@@ -123,7 +120,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        marginTop: 24,
+        marginTop: 8,
         justifyContent: 'center',
     },
     registerContainer: {
@@ -176,8 +173,13 @@ const styles = StyleSheet.create({
     },
     loginButton: {
         marginVertical: 16,
+        borderRadius: 30,
+        overflow: 'hidden',
+    },
+    gradientButton: {
+        flex: 1,
         alignItems: 'center',
-        backgroundColor: '#6c47ff',
+        justifyContent: 'center',
         paddingVertical: 12,
         borderRadius: 30,
     },
