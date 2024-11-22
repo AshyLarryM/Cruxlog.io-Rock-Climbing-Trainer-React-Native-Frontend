@@ -273,7 +273,7 @@ export default function EditProfile() {
                                 {isPending ? (
                                     <ActivityIndicator size="small" color="#fff" />
                                 ) : (
-                                    <Text style={styles.submitButtonText}>Submit</Text>
+                                    <Text style={styles.submitButtonText}>DELETE</Text>
                                 )}
                             </TouchableOpacity>
                         </View>

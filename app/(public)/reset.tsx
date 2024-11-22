@@ -1,4 +1,5 @@
 import { useSignIn } from "@clerk/clerk-expo";
+import { Ionicons } from "@expo/vector-icons";
 import { Stack } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, StyleSheet, TextInput, View, Text, Dimensions } from "react-native";
@@ -59,20 +60,33 @@ export default function Reset() {
 
                 {!successfulCreation && (
                     <>
-                        <Text style={styles.label}>Email Address</Text>
-                        <TextInput autoCapitalize="none" placeholder="youremail@email.com" value={emailAddress} onChangeText={setEmailAddress} style={styles.inputField} placeholderTextColor={'#888'} />
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                autoCapitalize="none"
+                                placeholder="Email"
+                                value={emailAddress}
+                                onChangeText={setEmailAddress}
+                                style={styles.inputFieldWithIcon}
+                                placeholderTextColor="#888"
+                            />
+                            <Ionicons name="mail-outline" size={22} color="#ccc" style={styles.iconRight} />
+                        </View>
                         <Pressable style={styles.resetButton} onPress={onRequestReset}><Text style={styles.resetButtonText}>Send Reset Email</Text></Pressable>
                     </>
                 )}
 
                 {successfulCreation && (
                     <>
-                        <View>
-                            <TextInput value={code} placeholder="Code..." style={styles.inputField} onChangeText={setCode} />
-                            <TextInput placeholder="New password" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputField} />
+                        <View style={styles.inputContainer}>
+                            <TextInput value={code} placeholder="Code..." style={styles.inputFieldWithIcon} onChangeText={setCode} />
+
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <TextInput placeholder="New password" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputFieldWithIcon} />
+                            <Ionicons name="lock-closed-outline" size={22} color="#ccc" style={styles.iconRight} />
                         </View>
                         <Pressable style={styles.resetButton} onPress={onReset}>
-                            <Text>Reset Password</Text>
+                            <Text style={styles.resetButtonText}>Reset Password</Text>
                         </Pressable>
                     </>
                 )}
@@ -102,20 +116,18 @@ const styles = StyleSheet.create({
         height: 44,
         borderWidth: 1.5,
         borderColor: '#6c47ff',
-        borderRadius: 8,
+        borderRadius: 24,
         padding: 10,
         backgroundColor: '#fff',
         fontSize: 14,
+        paddingLeft: 10,
     },
     resetButton: {
-        margin: 8,
+        marginVertical: 16,
         alignItems: 'center',
         backgroundColor: '#6c47ff',
         paddingVertical: 12,
-        paddingHorizontal: 24,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#6347ff'
+        borderRadius: 30,
     },
     resetButtonText: {
         color: "#fff",
@@ -127,11 +139,11 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     pageHeader: {
-        fontSize: 42,
+        fontSize: 36,
         textAlign: 'center',
-        fontWeight: 'bold',
+        fontWeight: '400',
         color: '#6c47ff',
-        marginTop: 8,
+        marginVertical: 16,
     },
     header: {
         alignItems: 'center',
@@ -142,6 +154,26 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         textAlign: 'center',
         marginBottom: 16,
-        color: '#000',
+        color: '#6c47ff',
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 10,
+        height: 48,
+        borderWidth: 1.5,
+        borderColor: '#6c47ff',
+        borderRadius: 24,
+        paddingHorizontal: 10,
+        backgroundColor: '#fff',
+    },
+    iconRight: {
+        paddingRight: 10,
+    },
+    inputFieldWithIcon: {
+        flex: 1,
+        fontSize: 14,
+        color: '#333',
+        paddingLeft: 10,
     },
 });
