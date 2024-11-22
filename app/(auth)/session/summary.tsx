@@ -108,11 +108,22 @@ export default function Summary() {
                 blurOnSubmit={true}
             />
 
-            {/* List of Climbs */}
+            <Text style={styles.label}>Climbs</Text>
             {climbingSession?.climbs?.length ? (
-                climbingSession.climbs.map((climb) => (
-                    <Text key={climb.id?.toString()}>{climb.name} - Grade: {climb.grade}</Text>
-                ))
+                <FlatList
+                    data={climbingSession.climbs}
+                    keyExtractor={(climb) => climb.id.toString()}
+                    renderItem={({ item }) => (
+                        <View style={styles.horizontalCard}>
+                            <Text style={styles.cardTitle}>{item.name}</Text>
+                            <Text style={styles.cardText}>Style: {item.style} {item.type}</Text>
+                            <Text style={styles.cardText}>Grade: {item.grade}</Text>
+                        </View>
+                    )}
+                    contentContainerStyle={styles.horizontalCardContainer}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                />
             ) : (
                 <Text>No climbs available</Text>
             )}
@@ -155,7 +166,9 @@ export default function Summary() {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         padding: 20,
+        backgroundColor: "#f8f8f8",
     },
     date: {
         fontSize: 16,
@@ -166,7 +179,8 @@ const styles = StyleSheet.create({
     label: {
         textAlign: 'center',
         fontSize: 18,
-        marginVertical: 10,
+        marginVertical: 4,
+        fontWeight: '500',
     },
     slider: {
         width: '100%',
@@ -176,9 +190,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
         marginBottom: 20,
+        fontWeight: '500',
     },
     textInput: {
-        height: 100,
+        height: 75,
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 10,
@@ -246,5 +261,48 @@ const styles = StyleSheet.create({
     submitButtonText: {
         color: '#fff',
         fontSize: 16,
+    },
+
+    cardContainer: {
+        paddingVertical: 10,
+    },
+    card: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    cardTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    cardText: {
+        fontSize: 14,
+        color: '#666',
+        marginBottom: 3,
+    },
+    horizontalCardContainer: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+    horizontalCard: {
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 15,
+        marginRight: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 5,
+        width: 200,
+        height: 100,
     },
 });
