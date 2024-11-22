@@ -4,9 +4,9 @@ export interface Session {
     sessionName?: string,
     intensity: number,
     notes?: string,
-    createdAt: Date,
+    createdAt: string,
     completed: boolean,
-    sessionStats: SessionStats,
+    sessionStats?: SessionStats,
 }
 
 export interface SessionStats {

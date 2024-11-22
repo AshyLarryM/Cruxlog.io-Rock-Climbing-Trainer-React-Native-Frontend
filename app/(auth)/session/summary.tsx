@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, TextInput, Image, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, TextInput, Image, Modal, ScrollView } from 'react-native';
 import { useFetchSession } from '@/lib/state/serverState/user/session/useFetchSession';
 import Slider from '@react-native-community/slider';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import { router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { SessionStatsGrid } from '@/components/session/SessionStatsGrid';
 
 export default function Summary() {
     const { data: climbingSession, isLoading, isError } = useFetchSession();
@@ -17,6 +18,8 @@ export default function Summary() {
     const [notes, setNotes] = useState<string>('');
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+    const sessionStats = climbingSession?.session?.sessionStats;
 
     const boulderClimbs = climbingSession?.climbs?.filter(climb => climb.type === 'Boulder' && climb.send === true) || [];
     const routeClimbs = climbingSession?.climbs?.filter(climb => climb.type === 'Top Rope' && climb.send === true || climb.type === 'Lead' && climb.send === true) || [];
@@ -83,6 +86,7 @@ export default function Summary() {
                 textStyle={{ color: '#fff' }}
                 overlayColor="rgba(0, 0, 0, 0.7)"
             />
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
             <Text style={styles.sessionLabel}>Session Name</Text>
             <TextInput
                 style={styles.sessionTextInput}
@@ -118,11 +122,12 @@ export default function Summary() {
                 multiline
                 blurOnSubmit={true}
             />
+            <SessionStatsGrid sessionStats={sessionStats} /> 
 
             {/* Boulders Section */}
             {boulderClimbs.length > 0 && (
                 <>
-                    <Text style={styles.label}>Boulder Sends</Text>
+                    <Text style={styles.label}>Boulder Sends ({boulderClimbs.length})</Text>
                     <FlatList
                         data={boulderClimbs}
                         keyExtractor={(climb) => climb.id.toString()}
@@ -146,7 +151,7 @@ export default function Summary() {
             {/* Routes Section */}
             {routeClimbs.length > 0 && (
                 <>
-                    <Text style={styles.label}>Route Sends</Text>
+                    <Text style={styles.label}>Route Sends ({routeClimbs.length})</Text>
                     <FlatList
                         data={routeClimbs}
                         keyExtractor={(climb) => climb.id.toString()}
@@ -163,6 +168,7 @@ export default function Summary() {
                     />
                 </>
             )}
+            </ScrollView>
 
             {/* Confirmation Modal */}
             <Modal
@@ -197,6 +203,7 @@ export default function Summary() {
                 </View>
             </Modal>
         </View>
+        
     );
 }
 
@@ -211,8 +218,10 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
+        backgroundColor: '#f8f8f8',
+    },
+    scrollContainer: {
         padding: 20,
-        backgroundColor: "#f8f8f8",
     },
     sessionLabel: {
         textAlign: 'center',

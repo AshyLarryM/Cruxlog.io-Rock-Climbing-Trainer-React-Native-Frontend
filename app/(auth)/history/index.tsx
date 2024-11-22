@@ -24,7 +24,7 @@ export default function History() {
     if (isLoading || isFetching && !refreshing) {
         return (
             <View style={styles.center}>
-                <ActivityIndicator size="large" color="#000" />
+                <ActivityIndicator size="large" />
                 <Text>Loading sessions...</Text>
             </View>
         );
