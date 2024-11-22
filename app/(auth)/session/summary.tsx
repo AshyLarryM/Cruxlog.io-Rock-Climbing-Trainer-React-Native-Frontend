@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, TextInput, Button, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, TextInput, Image, Modal } from 'react-native';
 import { useFetchSession } from '@/lib/state/serverState/user/session/useFetchSession';
 import Slider from '@react-native-community/slider';
 import { useEffect, useState } from 'react';
@@ -18,6 +18,8 @@ export default function Summary() {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+    const boulderClimbs = climbingSession?.climbs?.filter(climb => climb.type === 'Boulder' && climb.send === true) || [];
+    const routeClimbs = climbingSession?.climbs?.filter(climb => climb.type === 'Top Rope' && climb.send === true || climb.type === 'Lead' && climb.send === true) || [];
 
     if (isLoading) return <ActivityIndicator />;
     if (isError) return <Text>Error loading session summary</Text>;
@@ -72,7 +74,7 @@ export default function Summary() {
                 textStyle={{ color: '#fff' }}
                 overlayColor="rgba(0, 0, 0, 0.7)"
             />
-            <Text style={styles.label}>Session Name</Text>
+            <Text style={styles.sessionLabel}>Session Name</Text>
             <TextInput
                 style={styles.sessionTextInput}
                 placeholder="Enter session name"
@@ -98,7 +100,7 @@ export default function Summary() {
             <Text style={styles.intensity}>Selected Intensity: {intensity}</Text>
 
             {/* Notes Field */}
-            <Text style={styles.label}>Add Notes</Text>
+            <Text style={styles.label}>Notes</Text>
             <TextInput
                 style={styles.textInput}
                 placeholder="Add notes..."
@@ -108,16 +110,40 @@ export default function Summary() {
                 blurOnSubmit={true}
             />
 
-            <Text style={styles.label}>Climbs</Text>
-            {climbingSession?.climbs?.length ? (
+            {/* Boulders Section */}
+            <Text style={styles.label}>Boulder Sends</Text>
+            {boulderClimbs.length ? (
                 <FlatList
-                    data={climbingSession.climbs}
+                    data={boulderClimbs}
                     keyExtractor={(climb) => climb.id.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.horizontalCard}>
                             <Text style={styles.cardTitle}>{item.name}</Text>
-                            <Text style={styles.cardText}>Style: {item.style} {item.type}</Text>
-                            <Text style={styles.cardText}>Grade: {item.grade}</Text>
+                            <Text style={styles.cardText}>Style: {item.style}</Text>
+                            <Text style={styles.cardText}>Grade: <Text style={styles.boulderGradeText}>{item.grade}</Text></Text>
+                        </View>
+                        
+                    )}
+                    
+                    contentContainerStyle={styles.horizontalCardContainer}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                />
+            ) : (
+                <Text>No Boulder climbs available</Text>
+            )}
+
+            {/* Routes Section */}
+            <Text style={styles.label}>Route Sends</Text>
+            {routeClimbs.length ? (
+                <FlatList
+                    data={routeClimbs}
+                    keyExtractor={(climb) => climb.id.toString()}
+                    renderItem={({ item }) => (
+                        <View style={styles.horizontalCard}>
+                            <Text style={styles.cardTitle}>{item.name}</Text>
+                            <Text style={styles.cardText}>Style: {item.style}</Text>
+                            <Text style={styles.cardText}>Grade: <Text style={styles.routeGradeText}>{item.grade}</Text></Text>
                         </View>
                     )}
                     contentContainerStyle={styles.horizontalCardContainer}
@@ -125,7 +151,7 @@ export default function Summary() {
                     showsHorizontalScrollIndicator={false}
                 />
             ) : (
-                <Text>No climbs available</Text>
+                <Text>No Routes available</Text>
             )}
 
             {/* Confirmation Modal */}
@@ -170,6 +196,12 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: "#f8f8f8",
     },
+    sessionLabel: {
+        textAlign: 'center',
+        color: '#555',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
     date: {
         fontSize: 16,
         color: '#666',
@@ -177,9 +209,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     label: {
-        textAlign: 'center',
-        fontSize: 18,
-        marginVertical: 4,
+        fontSize: 16,
+        marginVertical: 2,
         fontWeight: '500',
     },
     slider: {
@@ -278,7 +309,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     cardTitle: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
         marginBottom: 5,
     },
@@ -287,12 +318,23 @@ const styles = StyleSheet.create({
         color: '#666',
         marginBottom: 3,
     },
+    boulderGradeText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 3,
+        color: "#6c47ff",
+    },
+    routeGradeText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 3,
+        color: '#DE8A43',
+    },
     horizontalCardContainer: {
         paddingVertical: 10,
         paddingHorizontal: 20,
     },
     horizontalCard: {
-        alignItems: 'center',
         backgroundColor: 'white',
         borderRadius: 10,
         padding: 15,
