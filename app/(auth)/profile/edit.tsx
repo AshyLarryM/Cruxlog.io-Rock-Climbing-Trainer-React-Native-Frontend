@@ -167,20 +167,20 @@ export default function EditProfile() {
                 </View>
             </TouchableOpacity>
 
-            <View style={styles.inputGroup}>
-                <Text style={styles.label}>Full Name</Text>
+            <Text style={styles.label}>Full Name</Text>
+            <View style={styles.inputContainer}>
                 <TextInput
-                    style={styles.input}
+                    style={styles.inputFieldWithIcon}
                     placeholder="Enter your full name"
                     value={fullName !== null ? fullName.toString() : ''}
                     onChangeText={setFullName}
                 />
             </View>
 
-            <View style={styles.inputGroup}>
-                <Text style={styles.label}>Age</Text>
+            <Text style={styles.label}>Age</Text>
+            <View style={styles.inputContainer}>
                 <TextInput
-                    style={styles.input}
+                    style={styles.inputFieldWithIcon}
                     placeholder="Enter your age"
                     keyboardType="numeric"
                     value={age !== null ? age.toString() : ''}
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: '#333',
-        marginBottom: 5,
+        // marginBottom: ,
     },
     input: {
         height: 40,
@@ -404,5 +404,23 @@ const styles = StyleSheet.create({
     },
     submitButtonText: {
         color: '#fff',
+    },
+
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 10,
+        height: 48,
+        borderWidth: 1.5,
+        borderColor: '#6c47ff',
+        borderRadius: 24,
+        paddingHorizontal: 10,
+        backgroundColor: '#fff',
+    },
+    inputFieldWithIcon: {
+        flex: 1,
+        fontSize: 14,
+        color: '#333',
+        paddingLeft: 10,
     },
 });
