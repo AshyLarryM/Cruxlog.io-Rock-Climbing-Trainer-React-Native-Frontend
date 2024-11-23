@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Pressable, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Climb } from '@/lib/utils/models/climbModels';
 import { useRouter, usePathname } from 'expo-router';
@@ -15,6 +15,7 @@ export function ClimbCard({ climb }: ClimbCardProps) {
     const router = useRouter();
     const pathname = usePathname();
     const [imageLoading, setImageLoading] = useState<boolean>(true);
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
 
     const isHistoryRoute = pathname.startsWith('/history');
 
@@ -45,20 +46,48 @@ export function ClimbCard({ climb }: ClimbCardProps) {
             </View>
 
             {climb.climbImage && (
-                <View style={styles.climbImageContainer}>
-                    {imageLoading && (
-                        <ActivityIndicator size="large" color="#6c47ff" style={styles.loader} />
-                    )}
-                    <Image
-                        source={{ uri: climb.climbImage }}
-                        style={styles.climbImage}
-                        resizeMode="cover"
-                        onLoad={() => setImageLoading(false)}
-                        onError={() => setImageLoading(false)} // Handle potential errors
-                    />
-                </View>
-            )}
+                <>
+                    <TouchableOpacity
+                        style={styles.climbImageContainer}
+                        onPress={() => setModalVisible(true)}
+                    >
+                        {imageLoading && (
+                            <ActivityIndicator size="large" color="#ccc" style={styles.loader} />
+                        )}
+                        <Image
+                            source={{ uri: climb.climbImage }}
+                            style={styles.climbImage}
+                            resizeMode="cover"
+                            onLoad={() => setImageLoading(false)}
+                            onError={() => setImageLoading(false)}
+                        />
+                    </TouchableOpacity>
 
+                    <Modal
+                        visible={modalVisible}
+                        transparent={true}
+                        animationType="fade"
+                        onRequestClose={() => setModalVisible(false)}
+                    >
+                        <Pressable
+                            style={styles.modalContainer}
+                            onPress={() => setModalVisible(false)}
+                        >
+                            <Image
+                                source={{ uri: climb.climbImage }}
+                                style={styles.fullscreenImage}
+                                resizeMode="contain"
+                            />
+                            <Pressable
+                                style={styles.closeButton}
+                                onPress={() => setModalVisible(false)}
+                            >
+                                <Ionicons name="close" size={32} color="#fff" />
+                            </Pressable>
+                        </Pressable>
+                    </Modal>
+                </>
+            )}
 
             {climb.attempts === 1 && climb.send && (
                 <View style={styles.flashContainer}>
@@ -66,8 +95,6 @@ export function ClimbCard({ climb }: ClimbCardProps) {
                     <Text style={styles.flashText}>Flash!</Text>
                 </View>
             )}
-
-
 
             <View
                 style={[
@@ -86,9 +113,6 @@ export function ClimbCard({ climb }: ClimbCardProps) {
                     </TouchableOpacity>
                 )}
             </View>
-
-
-
         </View>
     );
 }
@@ -202,6 +226,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
         color: '#333',
+        fontWeight: 'bold',
     },
     flashContainer: {
         flexDirection: 'row',
@@ -224,5 +249,24 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
         color: '#333',
         fontSize: 16,
+        fontWeight: 'bold',
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    fullscreenImage: {
+        width: '100%',
+        height: '100%',
+    },
+    closeButton: {
+        position: 'absolute',
+        top: 40,
+        right: 20,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderRadius: 50,
+        padding: 8,
     },
 });
