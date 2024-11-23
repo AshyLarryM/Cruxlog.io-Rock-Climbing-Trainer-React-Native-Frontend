@@ -54,10 +54,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#6c47ff',
         paddingVertical: 12,
         paddingHorizontal: 20,
-        borderRadius: 8,
+        borderRadius: 24,
         marginBottom: 16,
         alignSelf: 'center',
-        maxWidth: 300,
     },
     buttonClimbText: {
         color: 'white',
@@ -178,5 +177,6 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         textAlign: 'center',
         marginBottom: 8,
+        padding: 20,
     }
 });

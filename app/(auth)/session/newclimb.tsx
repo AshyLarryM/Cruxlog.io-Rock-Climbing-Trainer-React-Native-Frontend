@@ -10,6 +10,7 @@ import { useCreateClimb } from '@/lib/state/serverState/user/session/useCreateCl
 import Toast from 'react-native-toast-message';
 import { useGenerateClimbPresignedUrl } from '@/lib/state/serverState/user/climb/useGenerateClimbPresignedUrl';
 import { useUploadImage } from '@/lib/state/serverState/user/useUploadImage';
+import { GradientButton } from '@/components/buttons/GradientButton';
 
 export default function NewClimb() {
 
@@ -318,9 +319,7 @@ export default function NewClimb() {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={handleSave} style={styles.addButton} disabled={loading}>
-                <Text style={styles.addButtonText}>{loading ? "Saving..." : "Add Climb"}</Text>
-            </TouchableOpacity>
+            <GradientButton onPress={handleSave} loading={loading} text='Add Climb' /> 
         </ScrollView>
     );
 }
@@ -328,14 +327,15 @@ export default function NewClimb() {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        justifyContent: 'center',
+        padding:20,
         paddingHorizontal: 24,
         backgroundColor: '#fff',
     },
     label: {
-        fontSize: 16,
-        marginVertical: 0,
         textAlign: 'center',
+        color: '#555',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     picker: {
         marginTop: -20,
@@ -343,12 +343,12 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        fontSize: 18,
+        borderWidth: 1.5,
+        borderColor: '#6c47ff',
+        fontSize: 16,
         marginVertical: 8,
         paddingHorizontal: 8,
-        borderRadius: 24,
+        borderRadius: 20,
         textAlign: 'center',
     },
     inlineContainer: {
@@ -360,6 +360,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginHorizontal: 4,
     },
+    
     attemptsContainer: {
         flexDirection: 'row',
         alignItems: 'flex-start',
@@ -387,6 +388,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 8,
         textAlign: 'center',
+        color: '#555',
+        fontWeight: 'bold',
     },
     attemptsText: {
         fontSize: 24,
@@ -412,7 +415,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#6c47ff',
         paddingVertical: 12,
         paddingHorizontal: 20,
-        borderRadius: 8,
+        borderRadius: 24,
     },
     addButtonText: {
         color: 'white',
@@ -422,7 +425,6 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         alignItems: 'center',
-        marginBottom: 20,
     },
     climbImage: {
         width: 100,

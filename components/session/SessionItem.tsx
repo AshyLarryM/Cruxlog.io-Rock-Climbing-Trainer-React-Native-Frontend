@@ -47,29 +47,29 @@ export function SessionItem({ session }: SessionItemProps) {
 
                 {/* Highlights Container */}
                 <View style={styles.highlightsContainer}>
-                    {session.sessionStats.highestBoulderGrade !== null && (
+                    {session.sessionStats?.highestBoulderGrade !== null && (
                         <View style={styles.column}>
                             <Text style={styles.highlightHeader}>Hardest Boulder</Text>
                             <Text style={styles.hardestBoulderText}>
-                                {session.sessionStats.highestBoulderGrade}
+                                {session.sessionStats?.highestBoulderGrade}
                             </Text>
                         </View>
                     )}
-                    {session.sessionStats.highestBoulderGrade !== null &&
-                        session.sessionStats.highestRouteGrade !== null && (
+                    {session.sessionStats?.highestBoulderGrade !== null &&
+                        session.sessionStats?.highestRouteGrade !== null && (
                             <Text style={styles.verticalSeparator}>|</Text>
                         )}
 
-                    {session.sessionStats.highestRouteGrade !== null && (
+                    {session.sessionStats?.highestRouteGrade !== null && (
                         <View style={styles.column}>
                             <Text style={styles.highlightHeader}>Hardest Route</Text>
                             <Text style={styles.hardestRouteText}>
-                                {session.sessionStats.highestRouteGrade}
+                                {session.sessionStats?.highestRouteGrade}
                             </Text>
                         </View>
                     )}
 
-                    {(session.sessionStats.highestBoulderGrade !== null ||
+                    {(session.sessionStats?.highestBoulderGrade !== null ||
                         session.sessionStats.highestRouteGrade !== null) && (
                             <View style={styles.verticalSeparator} />
                         )}
@@ -78,10 +78,10 @@ export function SessionItem({ session }: SessionItemProps) {
                         <Text style={styles.highlightHeader}>Session Send Stats</Text>
                         <View>
                             <Text style={styles.highlightsText}>
-                                Total: {session.sessionStats.totalSends || "0"}
+                                Total: {session.sessionStats?.totalSends || "0"}
                             </Text>
                             <Text style={styles.highlightsText}>
-                                Flash: {session.sessionStats.totalFlashes || "0"}{" "}
+                                Flash: {session.sessionStats?.totalFlashes || "0"}{" "}
                                 <Ionicons name="flash" size={20} color="#ffcc00" />
                             </Text>
                         </View>
@@ -94,31 +94,31 @@ export function SessionItem({ session }: SessionItemProps) {
                         <Text style={styles.statsHeader}>Additional Session Data</Text>
                         <View style={styles.statsRow}>
                             <Text style={styles.statLabel}>Total Varied Climbs Attempted:</Text>
-                            <Text style={styles.statValue}>{session.sessionStats.totalClimbs}</Text>
+                            <Text style={styles.statValue}>{session.sessionStats?.totalClimbs}</Text>
                         </View>
                         <View style={styles.statsDivider} />
                         <View style={styles.statsRow}>
                             <Text style={styles.statLabel}>Total Attempts:</Text>
-                            <Text style={styles.statValue}>{session.sessionStats.totalAttempts}</Text>
+                            <Text style={styles.statValue}>{session.sessionStats?.totalAttempts}</Text>
                         </View>
                         <View style={styles.statsDivider} />
-                        {session.sessionStats.completedBoulders > 0 && (
+                        {session.sessionStats!.completedBoulders > 0 && (
                             <>
                                 <View style={styles.statsRow}>
                                     <Text style={styles.statLabel}>Completed Boulders:</Text>
                                     <Text style={styles.statValue}>
-                                        {session.sessionStats.completedBoulders}
+                                        {session.sessionStats!.completedBoulders}
                                     </Text>
                                 </View>
                                 <View style={styles.statsDivider} />
                             </>
                         )}
-                        {session.sessionStats.completedRoutes > 0 && (
+                        {session.sessionStats!.completedRoutes > 0 && (
                             <>
                                 <View style={styles.statsRow}>
                                     <Text style={styles.statLabel}>Completed Routes:</Text>
                                     <Text style={styles.statValue}>
-                                        {session.sessionStats.completedRoutes}
+                                        {session.sessionStats!.completedRoutes}
                                     </Text>
                                 </View>
                                 <View style={styles.statsDivider} />

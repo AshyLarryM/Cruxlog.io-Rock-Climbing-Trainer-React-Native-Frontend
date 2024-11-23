@@ -1,18 +1,12 @@
 import { baseUrl } from "@/constants/apiRepository";
 import { Climb } from "@/lib/utils/models/climbModels";
+import { Session, SessionStats } from "@/lib/utils/models/sessionModels";
 import { useAuth } from "@clerk/clerk-expo";
 import { useQuery } from "@tanstack/react-query";
 
 interface ApiResponse {
     message: string,
-    session?: {
-        id: number;
-        userId: string;
-        intensity: number;
-        notes: string;
-        completed: boolean;
-        createdAt: string;
-    };
+    session?: Session,
     climbs?: Climb[];
 }
 

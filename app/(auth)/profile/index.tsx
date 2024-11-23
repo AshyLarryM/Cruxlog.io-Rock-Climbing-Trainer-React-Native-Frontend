@@ -5,6 +5,7 @@ import { useAuth } from '@clerk/clerk-expo';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useUserPr } from '@/lib/state/serverState/user/stats/useUserPr';
+import { LinearGradient } from 'expo-linear-gradient';
 import HardestGrades from '@/components/profile/HardestGrades';
 
 export default function Profile() {
@@ -30,17 +31,21 @@ export default function Profile() {
         <View style={styles.container}>
             <View style={styles.containerCard}>
                 {/* Circular Profile Picture */}
-                <View style={styles.profilePictureContainer}>
-                    <Image
-                        source={
-                            data?.user?.profileImage
-                                ? { uri: data.user.profileImage }
-                                : { uri: '/assets/images/climberIcon.jpeg' }
-                        }
-                        style={styles.profilePicture}
-                    />
-                </View>
-
+                <LinearGradient
+                    colors={['#6c47ff', '#ff6cd9']}
+                    style={styles.gradientBorder}
+                >
+                    <View style={styles.profilePictureContainer}>
+                        <Image
+                            source={
+                                data?.user?.profileImage
+                                    ? { uri: data.user.profileImage }
+                                    : { uri: '/assets/images/climberIcon.jpeg' }
+                            }
+                            style={styles.profilePicture}
+                        />
+                    </View>
+                </LinearGradient>
                 {/* Name and Age Row */}
                 <View style={styles.row}>
                     <Text style={styles.label}>Name: <Text style={styles.text}>{data?.user?.fullName || 'Add'}</Text></Text>
@@ -97,14 +102,18 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         alignItems: 'center',
     },
+    gradientBorder: {
+        width: 150,
+        height: 150,
+        borderRadius: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     profilePictureContainer: {
         width: 140,
         height: 140,
         borderRadius: 100,
-        borderWidth: 3,
-        borderColor: "#6c47ff",
         overflow: 'hidden',
-        marginBottom: 16,
     },
     profilePicture: {
         width: '100%',
@@ -147,7 +156,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#6c47ff',
         paddingVertical: 12,
         paddingHorizontal: 24,
-        borderRadius: 8,
+        borderRadius: 24,
     },
     buttonContent: {
         flexDirection: 'row',

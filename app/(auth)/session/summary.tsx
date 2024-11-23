@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, TextInput, Button, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, TextInput, Image, Modal, ScrollView } from 'react-native';
 import { useFetchSession } from '@/lib/state/serverState/user/session/useFetchSession';
 import Slider from '@react-native-community/slider';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import { router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { SessionStatsGrid } from '@/components/session/SessionStatsGrid';
 
 export default function Summary() {
     const { data: climbingSession, isLoading, isError } = useFetchSession();
@@ -18,6 +19,11 @@ export default function Summary() {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+    const sessionStats = climbingSession?.session?.sessionStats;
+
+    const boulderClimbs = climbingSession?.climbs?.filter(climb => climb.type === 'Boulder' && climb.send === true) || [];
+    const routeClimbs = climbingSession?.climbs?.filter(climb => climb.type === 'Top Rope' && climb.send === true || climb.type === 'Lead' && climb.send === true) || [];
+
 
     if (isLoading) return <ActivityIndicator />;
     if (isError) return <Text>Error loading session summary</Text>;
@@ -26,7 +32,9 @@ export default function Summary() {
         navigation.setOptions({
             headerRight: () => (
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Ionicons name="checkmark" size={24} color={'#89DE43'} />
+                    <View style={styles.iconBackground}>
+                        <Ionicons name="checkmark" size={24} color={'#00ffa2'} />
+                    </View>
                 </TouchableOpacity>
             ),
         });
@@ -39,6 +47,12 @@ export default function Summary() {
     };
 
     function submitSessionUpdate() {
+
+        if (sessionName.length === 0) {
+            alert('Please enter a Session Name to complete session.')
+            return
+        }
+
         updateSession(
             {
                 sessionName,
@@ -72,7 +86,8 @@ export default function Summary() {
                 textStyle={{ color: '#fff' }}
                 overlayColor="rgba(0, 0, 0, 0.7)"
             />
-            <Text style={styles.label}>Session Name</Text>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <Text style={styles.sessionLabel}>Session Name</Text>
             <TextInput
                 style={styles.sessionTextInput}
                 placeholder="Enter session name"
@@ -98,7 +113,7 @@ export default function Summary() {
             <Text style={styles.intensity}>Selected Intensity: {intensity}</Text>
 
             {/* Notes Field */}
-            <Text style={styles.label}>Add Notes</Text>
+            <Text style={styles.label}>Notes</Text>
             <TextInput
                 style={styles.textInput}
                 placeholder="Add notes..."
@@ -107,15 +122,53 @@ export default function Summary() {
                 multiline
                 blurOnSubmit={true}
             />
+            <SessionStatsGrid sessionStats={sessionStats} /> 
 
-            {/* List of Climbs */}
-            {climbingSession?.climbs?.length ? (
-                climbingSession.climbs.map((climb) => (
-                    <Text key={climb.id?.toString()}>{climb.name} - Grade: {climb.grade}</Text>
-                ))
-            ) : (
-                <Text>No climbs available</Text>
+            {/* Boulders Section */}
+            {boulderClimbs.length > 0 && (
+                <>
+                    <Text style={styles.label}>Boulder Sends ({boulderClimbs.length})</Text>
+                    <FlatList
+                        data={boulderClimbs}
+                        keyExtractor={(climb) => climb.id.toString()}
+                        renderItem={({ item }) => (
+                            <View style={styles.horizontalCard}>
+                                <Text style={styles.cardTitle}>{item.name}</Text>
+                                <Text style={styles.cardText}>Style: {item.style}</Text>
+                                <Text style={styles.cardText}>Grade: <Text style={styles.boulderGradeText}>{item.grade}</Text></Text>
+                            </View>
+
+                        )}
+
+                        contentContainerStyle={styles.horizontalCardContainer}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </>
             )}
+
+
+            {/* Routes Section */}
+            {routeClimbs.length > 0 && (
+                <>
+                    <Text style={styles.label}>Route Sends ({routeClimbs.length})</Text>
+                    <FlatList
+                        data={routeClimbs}
+                        keyExtractor={(climb) => climb.id.toString()}
+                        renderItem={({ item }) => (
+                            <View style={styles.horizontalCard}>
+                                <Text style={styles.cardTitle}>{item.name}</Text>
+                                <Text style={styles.cardText}>Style: {item.style}</Text>
+                                <Text style={styles.cardText}>Grade: <Text style={styles.routeGradeText}>{item.grade}</Text></Text>
+                            </View>
+                        )}
+                        contentContainerStyle={styles.horizontalCardContainer}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </>
+            )}
+            </ScrollView>
 
             {/* Confirmation Modal */}
             <Modal
@@ -150,12 +203,31 @@ export default function Summary() {
                 </View>
             </Modal>
         </View>
+        
     );
 }
 
 const styles = StyleSheet.create({
+    iconBackground: {
+        backgroundColor: "#7f5eff",
+        borderRadius: 10,
+        width: 32,
+        height: 32,
+        justifyContent: "center",
+        alignItems: "center",
+    },
     container: {
+        flex: 1,
+        backgroundColor: '#f8f8f8',
+    },
+    scrollContainer: {
         padding: 20,
+    },
+    sessionLabel: {
+        textAlign: 'center',
+        color: '#555',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     date: {
         fontSize: 16,
@@ -164,9 +236,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     label: {
-        textAlign: 'center',
-        fontSize: 18,
-        marginVertical: 10,
+        fontSize: 16,
+        marginVertical: 2,
+        fontWeight: '500',
     },
     slider: {
         width: '100%',
@@ -176,9 +248,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
         marginBottom: 20,
+        fontWeight: '500',
     },
     textInput: {
-        height: 100,
+        height: 75,
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 10,
@@ -189,9 +262,9 @@ const styles = StyleSheet.create({
     },
     sessionTextInput: {
         height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        fontSize: 18,
+        borderColor: '#6c47ff',
+        borderWidth: 2,
+        fontSize: 16,
         marginVertical: 8,
         paddingHorizontal: 8,
         borderRadius: 20,
@@ -230,7 +303,7 @@ const styles = StyleSheet.create({
     modalButton: {
         paddingVertical: 10,
         paddingHorizontal: 35,
-        borderRadius: 5,
+        borderRadius: 24,
         alignItems: 'center',
         borderWidth: 1,
         borderColor: '#6c47ff'
@@ -238,13 +311,67 @@ const styles = StyleSheet.create({
     cancelButtonText: {
         color: '#6c47ff',
         fontSize: 16,
-
     },
     submitButton: {
         backgroundColor: '#6c47ff',
+        borderRadius: 24,
     },
     submitButtonText: {
         color: '#fff',
         fontSize: 16,
+    },
+
+    cardContainer: {
+        paddingVertical: 10,
+    },
+    card: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    cardTitle: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    cardText: {
+        fontSize: 14,
+        color: '#666',
+        marginBottom: 3,
+    },
+    boulderGradeText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 3,
+        color: "#6c47ff",
+    },
+    routeGradeText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 3,
+        color: '#DE8A43',
+    },
+    horizontalCardContainer: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+    horizontalCard: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 15,
+        marginRight: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 5,
+        width: 200,
+        height: 100,
     },
 });

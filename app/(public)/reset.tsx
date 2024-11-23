@@ -1,7 +1,9 @@
+import { GradientButton } from "@/components/buttons/GradientButton";
 import { useSignIn } from "@clerk/clerk-expo";
+import { Ionicons } from "@expo/vector-icons";
 import { Stack } from "expo-router";
-import { useState } from "react";
-import { Image, Pressable, StyleSheet, TextInput, View, Text, Dimensions } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Image, Pressable, StyleSheet, TextInput, View, Text, Dimensions, Animated, Easing } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const { width, height } = Dimensions.get('window');
@@ -12,6 +14,16 @@ export default function Reset() {
     const [code, setCode] = useState<string>('');
     const [successfulCreation, setSuccessfulCreation] = useState<boolean>(false);
     const { signIn, setActive } = useSignIn();
+
+    const slideAnim = useRef(new Animated.Value(height)).current;
+    useEffect(() => {
+        Animated.timing(slideAnim, {
+            toValue: 0,
+            duration: 500,
+            easing: Easing.out(Easing.quad),
+            useNativeDriver: true,
+        }).start();
+    }, []);
 
     const onRequestReset = async () => {
         try {
@@ -53,29 +65,42 @@ export default function Reset() {
                 <View style={styles.header}>
                     <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
                     <Text style={styles.pageHeader}>Reset Password </Text>
-                    <Text style={styles.headerDetails}>Enter your email address to reset password.</Text>
                 </View>
                 <Stack.Screen options={{ headerBackVisible: !successfulCreation }} />
 
-                {!successfulCreation && (
-                    <>
-                        <Text style={styles.label}>Email Address</Text>
-                        <TextInput autoCapitalize="none" placeholder="youremail@email.com" value={emailAddress} onChangeText={setEmailAddress} style={styles.inputField} placeholderTextColor={'#888'} />
-                        <Pressable style={styles.resetButton} onPress={onRequestReset}><Text style={styles.resetButtonText}>Send Reset Email</Text></Pressable>
-                    </>
-                )}
+                <Animated.View style={[styles.registerContainer, { transform: [{ translateY: slideAnim }] }]}>
+                    {!successfulCreation && (
+                        <>
+                            <Text style={styles.headerDetails}>Enter your email address to reset password.</Text>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    autoCapitalize="none"
+                                    placeholder="Email"
+                                    value={emailAddress}
+                                    onChangeText={setEmailAddress}
+                                    style={styles.inputFieldWithIcon}
+                                    placeholderTextColor="#888"
+                                />
+                                <Ionicons name="mail-outline" size={22} color="#ccc" style={styles.iconRight} />
+                            </View>
+                            <GradientButton onPress={onRequestReset} text="Send Reset Email" />
+                        </>
+                    )}
 
-                {successfulCreation && (
-                    <>
-                        <View>
-                            <TextInput value={code} placeholder="Code..." style={styles.inputField} onChangeText={setCode} />
-                            <TextInput placeholder="New password" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputField} />
-                        </View>
-                        <Pressable style={styles.resetButton} onPress={onReset}>
-                            <Text>Reset Password</Text>
-                        </Pressable>
-                    </>
-                )}
+                    {successfulCreation && (
+                        <>
+                            <View style={styles.inputContainer}>
+                                <TextInput value={code} placeholder="Code..." style={styles.inputFieldWithIcon} onChangeText={setCode} />
+                                <Ionicons name="key-outline" size={22} color="#ccc" style={styles.iconRight} />
+                            </View>
+                            <View style={styles.inputContainer}>
+                                <TextInput placeholder="New password" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputFieldWithIcon} />
+                                <Ionicons name="lock-closed-outline" size={22} color="#ccc" style={styles.iconRight} />
+                            </View>
+                            <GradientButton onPress={onReset} text="Reset Password" />
+                        </>
+                    )}
+                </Animated.View>
             </View>
         </KeyboardAwareScrollView>
     );
@@ -92,6 +117,16 @@ const styles = StyleSheet.create({
         padding: 20,
         justifyContent: 'flex-start',
     },
+    registerContainer: {
+        backgroundColor: '#fff',
+        padding: 32,
+        borderRadius: 24,
+        flexGrow: 1,
+        marginBottom: 16,
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+    },
     logo: {
         width: width * 0.3,
         height: width * 0.3,
@@ -102,20 +137,18 @@ const styles = StyleSheet.create({
         height: 44,
         borderWidth: 1.5,
         borderColor: '#6c47ff',
-        borderRadius: 8,
+        borderRadius: 24,
         padding: 10,
         backgroundColor: '#fff',
         fontSize: 14,
+        paddingLeft: 10,
     },
     resetButton: {
-        margin: 8,
+        marginVertical: 16,
         alignItems: 'center',
         backgroundColor: '#6c47ff',
         paddingVertical: 12,
-        paddingHorizontal: 24,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#6347ff'
+        borderRadius: 30,
     },
     resetButtonText: {
         color: "#fff",
@@ -127,11 +160,11 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     pageHeader: {
-        fontSize: 42,
+        fontSize: 36,
         textAlign: 'center',
-        fontWeight: 'bold',
+        fontWeight: '400',
         color: '#6c47ff',
-        marginTop: 8,
+        marginVertical: 16,
     },
     header: {
         alignItems: 'center',
@@ -142,6 +175,26 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         textAlign: 'center',
         marginBottom: 16,
-        color: '#000',
+        color: '#6c47ff',
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 10,
+        height: 48,
+        borderWidth: 1.5,
+        borderColor: '#6c47ff',
+        borderRadius: 24,
+        paddingHorizontal: 10,
+        backgroundColor: '#fff',
+    },
+    iconRight: {
+        paddingRight: 10,
+    },
+    inputFieldWithIcon: {
+        flex: 1,
+        fontSize: 14,
+        color: '#333',
+        paddingLeft: 10,
     },
 });

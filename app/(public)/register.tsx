@@ -1,10 +1,12 @@
-import { TextInput, View, StyleSheet, Pressable, Text, Image, Dimensions } from 'react-native';
+import { TextInput, View, StyleSheet, Pressable, Text, Image, Dimensions, Animated, Easing } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, Stack } from 'expo-router';
 import { useCreateUser } from '@/lib/state/serverState/user/useCreateUser';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Ionicons } from '@expo/vector-icons';
+import { GradientButton } from '@/components/buttons/GradientButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -17,6 +19,17 @@ export default function Register() {
     const [pendingVerification, setPendingVerification] = useState<boolean>(false);
     const [code, setCode] = useState("");
     const [loading, setLoading] = useState<boolean>(false);
+
+    const slideAnim = useRef(new Animated.Value(height)).current;
+    useEffect(() => {
+        Animated.timing(slideAnim, {
+            toValue: 0,
+            duration: 500,
+            easing: Easing.out(Easing.quad),
+            useNativeDriver: true,
+        }).start();
+    }, []);
+
 
     async function onSignUpPress() {
         if (!isLoaded) {
@@ -79,56 +92,72 @@ export default function Register() {
                 <Spinner visible={loading} />
                 <View style={styles.header}>
                     <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
-                    <Text style={styles.pageHeader}>Create an account </Text>
-                    <Text style={styles.headerDetails}>Create an account to begin logging your climbing sessions.</Text>
+                    <Text style={styles.pageHeader}>Create Account</Text>
                 </View>
 
-                {!pendingVerification && (
-                    <>
-                        <Text style={styles.label}>Email Address</Text>
-                        <TextInput
-                            autoCapitalize='none'
-                            placeholder='example@gmail.com'
-                            value={emailAddress}
-                            onChangeText={setEmailAddress}
-                            style={styles.inputField}
-                            placeholderTextColor="#888"
-                        />
+                <Animated.View style={[styles.registerContainer, { transform: [{ translateY: slideAnim }] }]}>
 
-                        <Text style={styles.label}>Password</Text>
-                        <TextInput
-                            placeholder='password'
-                            value={password}
-                            onChangeText={setPassword}
-                            style={styles.inputField}
-                            placeholderTextColor="#888"
-                        />
+                    {!pendingVerification && (
+                        <>
+                            <Text style={styles.headerDetails}>Create an account to begin logging your climbing sessions.</Text>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    autoCapitalize="none"
+                                    placeholder="Email"
+                                    value={emailAddress}
+                                    onChangeText={setEmailAddress}
+                                    style={styles.inputFieldWithIcon}
+                                    placeholderTextColor="#888"
+                                />
+                                <Ionicons name="mail-outline" size={22} color="#ccc" style={styles.iconRight} />
+                            </View>
 
-                        <Pressable onPress={onSignUpPress} style={styles.registerButton}>
-                            <Text style={styles.registerButtonText}>Create Account</Text>
-                        </Pressable>
-                        <View style={styles.inlineTextContainer}>
-                            <Text style={styles.inlineText}>Already have an account?</Text>
-                            <Link href="/login" asChild>
-                                <Pressable onPress={() => {/* Navigate to Login screen */ }}>
-                                    <Text style={styles.signInLink}> Sign In</Text>
-                                </Pressable>
-                            </Link>
-                        </View>
-                    </>
-                )}
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    placeholder="Password"
+                                    secureTextEntry
+                                    value={password}
+                                    onChangeText={setPassword}
+                                    style={styles.inputFieldWithIcon}
+                                    placeholderTextColor="#888"
+                                />
+                                <Ionicons name="lock-closed-outline" size={22} color="#ccc" style={styles.iconRight} />
+                            </View>
 
-                {pendingVerification && (
-                    <>
-                        <View>
-                            <Text style={styles.label}>Verification Code</Text>
-                            <TextInput value={code} placeholder='Code...' style={styles.inputField} onChangeText={setCode} placeholderTextColor={'#888'} />
-                        </View>
-                        <Pressable onPress={onPressVerifiy} style={styles.registerButton}>
-                            <Text style={styles.registerButtonText}>Verify Email</Text>
-                        </Pressable>
-                    </>
-                )}
+                            <GradientButton onPress={onSignUpPress} text='Create Account' />
+
+                            <View style={styles.inlineTextContainer}>
+                                <Text style={styles.inlineText}>Already have an account?</Text>
+                                <Link href="/login" asChild>
+                                    <Pressable onPress={() => {/* Navigate to Login screen */ }}>
+                                        <Text style={styles.signInLink}> Sign In</Text>
+                                    </Pressable>
+                                </Link>
+                            </View>
+                        </>
+                    )}
+                    {/* </View> */}
+
+
+                    {pendingVerification && (
+                        <>
+                            <Text style={styles.headerDetails}>
+                                Enter the verification code sent to your email address.
+                            </Text>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    value={code}
+                                    placeholder="Code..."
+                                    style={styles.inputFieldWithIcon}
+                                    onChangeText={setCode}
+                                    placeholderTextColor="#888"
+                                />
+                                <Ionicons name="key-outline" size={22} color="#ccc" style={styles.iconRight} />
+                            </View>
+                            <GradientButton onPress={onPressVerifiy} text="Verify Email" />
+                        </>
+                    )}
+                </Animated.View>
             </View>
         </KeyboardAwareScrollView>
     );
@@ -142,9 +171,19 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        padding: 20,
-        marginTop: 24,
+        padding: 16,
+        marginTop: 16,
         justifyContent: 'flex-start',
+    },
+    registerContainer: {
+        backgroundColor: '#fff',
+        padding: 32,
+        borderRadius: 24,
+        flexGrow: 1,
+        marginBottom: 16,
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
     },
     logo: {
         width: width * 0.3,
@@ -152,22 +191,22 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     pageHeader: {
-        fontSize: 42,
+        fontSize: 36,
         textAlign: 'center',
-        fontWeight: 'bold',
+        fontWeight: '400',
         color: '#6c47ff',
-        marginTop: 8,
+        marginVertical: 16,
     },
     header: {
         alignItems: 'center',
         marginBottom: 1,
     },
     headerDetails: {
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: '400',
         textAlign: 'center',
         marginBottom: 16,
-        color: '#000',
+        color: '#6c47ff',
     },
     form: {
         flex: 1,
@@ -186,14 +225,13 @@ const styles = StyleSheet.create({
     },
     registerButton: {
         marginVertical: 16,
-        alignItems: 'center',
-        backgroundColor: '#6c47ff',
-        paddingVertical: 12,
-        borderRadius: 8,
+        borderRadius: 30,
+        overflow: 'hidden',
     },
     registerButtonText: {
         color: '#fff',
         fontWeight: 'bold',
+        fontSize: 16,
     },
     button: {
         marginVertical: 8,
@@ -214,13 +252,33 @@ const styles = StyleSheet.create({
         marginTop: 8,
     },
     inlineText: {
-        fontSize: 14,
-        color: '#333',
+        fontSize: 16,
+        color: '#9e9e9e',
     },
     signInLink: {
-        fontSize: 14,
+        fontSize: 16,
         color: '#6c47ff',
         fontWeight: '400',
         marginLeft: 4,
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 10,
+        height: 48,
+        borderWidth: 1.5,
+        borderColor: '#6c47ff',
+        borderRadius: 24,
+        paddingHorizontal: 10,
+        backgroundColor: '#fff',
+    },
+    iconRight: {
+        paddingRight: 10,
+    },
+    inputFieldWithIcon: {
+        flex: 1,
+        fontSize: 14,
+        color: '#333',
+        paddingLeft: 10,
     },
 });
