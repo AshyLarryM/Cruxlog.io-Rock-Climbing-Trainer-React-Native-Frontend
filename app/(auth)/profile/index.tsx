@@ -40,7 +40,7 @@ export default function Profile() {
                             source={
                                 data?.user?.profileImage
                                     ? { uri: data.user.profileImage }
-                                    : { uri: '/assets/images/climberIcon.jpeg' }
+                                    : require('@/assets/images/cruxlogIcon.png')
                             }
                             style={styles.profilePicture}
                         />
