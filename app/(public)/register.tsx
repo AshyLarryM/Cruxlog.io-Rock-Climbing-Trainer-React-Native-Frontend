@@ -6,7 +6,6 @@ import { Link, Stack } from 'expo-router';
 import { useCreateUser } from '@/lib/state/serverState/user/useCreateUser';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { GradientButton } from '@/components/buttons/GradientButton';
 
 const { width, height } = Dimensions.get('window');
