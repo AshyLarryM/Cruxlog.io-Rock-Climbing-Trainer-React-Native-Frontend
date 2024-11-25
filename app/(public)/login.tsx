@@ -1,6 +1,7 @@
 import { GradientButton } from '@/components/buttons/GradientButton';
 import { useSignIn } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
+import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
@@ -26,6 +27,10 @@ export default function Login() {
             useNativeDriver: true,
         }).start();
     }, []);
+
+    
+
+    
 
 
     async function onSigninPress() {
@@ -140,11 +145,12 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     pageHeader: {
-        fontSize: 36,
+        fontSize: 32,
         textAlign: 'center',
-        fontWeight: '400',
+        fontWeight: '800',
         color: '#6c47ff',
-        marginVertical: 16,
+        marginVertical: 24,
+        fontFamily: "PressStart2P",
     },
     header: {
         alignItems: 'center',

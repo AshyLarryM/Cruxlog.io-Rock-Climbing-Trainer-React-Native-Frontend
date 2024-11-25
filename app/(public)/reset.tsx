@@ -161,11 +161,12 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     pageHeader: {
-        fontSize: 36,
+        fontSize: 32,
         textAlign: 'center',
         fontWeight: '400',
         color: '#6c47ff',
-        marginVertical: 16,
+        marginVertical: 24,
+        fontFamily: 'PressStart2P'
     },
     header: {
         alignItems: 'center',

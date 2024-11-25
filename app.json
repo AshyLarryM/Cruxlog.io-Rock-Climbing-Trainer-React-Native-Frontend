@@ -8,7 +8,7 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/cruxlogSplash.png",
+      "image": "./assets/images/splashscreencruxlog1.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

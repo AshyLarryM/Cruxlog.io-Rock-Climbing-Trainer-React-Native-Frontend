@@ -196,7 +196,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '400',
         color: '#6c47ff',
-        marginVertical: 16,
+        marginVertical: 24,
+        fontFamily: 'PressStart2P',
     },
     header: {
         alignItems: 'center',

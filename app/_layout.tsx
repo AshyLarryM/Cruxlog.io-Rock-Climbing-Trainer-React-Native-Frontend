@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
+import { useFonts } from 'expo-font';
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -35,6 +36,7 @@ function InitalLayout() {
 	const { isLoaded, isSignedIn } = useAuth();
 	const segments = useSegments();
 	const router = useRouter();
+	
 
 	useEffect(() => {
 		if (!isLoaded) return;
@@ -53,6 +55,14 @@ function InitalLayout() {
 		}
 
 	}, [isSignedIn]);
+
+	const [loaded] = useFonts({
+		PressStart2P: require('@/assets/fonts/PressStart2P-Regular.ttf')
+	})
+	if (!loaded) {
+        return null;
+    }
+    
 
 	return <Slot />
 }
