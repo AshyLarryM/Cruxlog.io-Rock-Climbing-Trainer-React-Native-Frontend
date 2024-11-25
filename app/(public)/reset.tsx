@@ -63,7 +63,7 @@ export default function Reset() {
         >
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
+                    <Image source={require('@/assets/images/Cruxlog1.jpeg')} style={styles.logo} />
                     <Text style={styles.pageHeader}>Reset Password </Text>
                 </View>
                 <Stack.Screen options={{ headerBackVisible: !successfulCreation }} />
@@ -91,11 +91,11 @@ export default function Reset() {
                         <>
                             <View style={styles.inputContainer}>
                                 <TextInput value={code} placeholder="Code..." style={styles.inputFieldWithIcon} onChangeText={setCode} />
-                                <Ionicons name="key-outline" size={22} color="#ccc" style={styles.iconRight} />
+                                <Ionicons name="key-outline" size={22} color="#888" style={styles.iconRight} />
                             </View>
                             <View style={styles.inputContainer}>
                                 <TextInput placeholder="New password" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputFieldWithIcon} />
-                                <Ionicons name="lock-closed-outline" size={22} color="#ccc" style={styles.iconRight} />
+                                <Ionicons name="lock-closed-outline" size={22} color="#888" style={styles.iconRight} />
                             </View>
                             <GradientButton onPress={onReset} text="Reset Password" />
                         </>
@@ -128,9 +128,10 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
     },
     logo: {
-        width: width * 0.3,
-        height: width * 0.3,
+        width: width * 0.4,
+        height: width * 0.4,
         resizeMode: 'contain',
+        borderRadius: 100,
     },
     inputField: {
         marginVertical: 10,

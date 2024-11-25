@@ -11,7 +11,7 @@ export function GradientButton({ onPress, text, loading = false }: GradientButto
     return (
         <Pressable onPress={!loading ? onPress : undefined} style={styles.container}>
             <LinearGradient
-                colors={['#9479fc', '#3300ff']}
+                colors={['#6c47ff', '#F96300', '#F5C900']}
                 start={[0, 0]}
                 end={[1, 0]}
                 style={styles.gradient}

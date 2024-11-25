@@ -58,7 +58,7 @@ export default function Login() {
             <View style={styles.container}>
                 <Spinner visible={loading} />
                 <View style={styles.header}>
-                    <Image source={require('@/assets/images/cruxlogIcon.png')} style={styles.logo} />
+                    <Image source={require('@/assets/images/Cruxlog1.jpeg')} style={styles.logo} />
                     <Text style={styles.pageHeader}>Sign In</Text>
 
                 </View>
@@ -134,9 +134,10 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
     },
     logo: {
-        width: width * 0.3,
-        height: width * 0.3,
+        width: width * 0.4,
+        height: width * 0.4,
         resizeMode: 'contain',
+        borderRadius: 100,
     },
     pageHeader: {
         fontSize: 36,
