@@ -1,50 +1,85 @@
-# Welcome to your Expo app 👋
+# Cruxlog Frontend
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This repository contains the React Native frontend for Cruxlog, a workout logger designed for rock climbers. The app is built with **React Native**, **Expo Router**, **React Query**, **Redux**, and **TypeScript** to provide a seamless user experience for logging and tracking climbing activities.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Workout Logging**: Users can log their climbing activities, including:
+  - **Boulders**
+  - **Routes**
+  - **Top Rope**
+- **User Authentication**: Integrates with Clerk for secure and seamless user authentication.
+- **State Management**: Uses Redux for managing global state efficiently.
+- **Data Fetching**: Implements React Query for efficient data fetching and caching.
+- **Expo Router**: Simplifies navigation with a file-based routing system.
+- **TypeScript**: Ensures type safety and improved developer experience.
+
+## Tech Stack
+
+- **Framework**: React Native
+- **Navigation**: Expo Router
+- **State Management**: Redux
+- **Data Fetching**: React Query
+- **Language**: TypeScript
+- **Authentication**: Clerk
+
+## Installation and Setup
+
+### Prerequisites
+
+- Node.js (>= 16.x)
+- Expo CLI
+- Yarn or npm
+
+### Steps
+
+1. **Clone the Repository**
 
    ```bash
+   git clone https://github.com/yourusername/cruxlog-frontend.git
+   cd cruxlog-frontend
+   ```
+
+2. **Install Dependencies**
+
+   ```bash
+   yarn install
+   # or
    npm install
    ```
 
-2. Start the app
+3. **Set Up Environment Variables**
 
-   ```bash
-    npx expo start
+   Create a `.env` file in the root directory and configure the following variables:
+
+   ```env
+   EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-publishable-key>
+   BASE_URL=<your-backend-api-url>
    ```
 
-In the output, you'll find options to open the app in a
+4. **Start the Development Server**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   expo start
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+   The app can be accessed through the Expo Go app on your mobile device or an emulator.
 
-## Get a fresh project
+## Folder Structure
 
-When you're ready, run:
+- `src/`
+  - `components/`: Reusable UI components.
+  - `screens/`: App screens managed by Expo Router.
+  - `redux/`: Redux slices and store configuration.
+  - `hooks/`: Custom React hooks.
+  - `services/`: API service functions for data fetching.
 
-```bash
-npm run reset-project
-```
+## License
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 
-## Learn more
+## Acknowledgments
 
-To learn more about developing your project with Expo, look at the following resources:
+- Inspired by the climbing community.
+- Built with the support of modern tools like React Native, Redux, and Expo Router.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
