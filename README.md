@@ -1,4 +1,5 @@
 # Cruxlog Frontend
+## To Download CruxLog.io on the AppStore, head to - https://www.cruxlog.io/
 
 This repository contains the React Native frontend for Cruxlog, a workout logger designed for rock climbers. The app is built with **React Native**, **Expo Router**, **React Query**, **Redux**, and **TypeScript** to provide a seamless user experience for logging and tracking climbing activities.
 
