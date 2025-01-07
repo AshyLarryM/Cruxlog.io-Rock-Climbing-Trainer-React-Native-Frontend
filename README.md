@@ -81,6 +81,6 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 ## Acknowledgments
 
-- Inspired by the climbing community.
+- Inspired by the climbing community and Kaya
 - Built with the support of modern tools like React Native, Redux, and Expo Router.
 
